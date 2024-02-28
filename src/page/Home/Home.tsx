@@ -5,10 +5,12 @@ import Footer from "../../component/footer/Footer.tsx";
 const Home = () => {
     return (<>
             <Header/>
-            <div>Home</div>
+            <div style={{
+                height: '100vh',
+            }}>Home</div>
             <Footer/>
         </>
-    )
+    );
 }
 
 export default Home;

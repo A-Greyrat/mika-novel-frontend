@@ -1,7 +1,9 @@
+import './Header.less';
+
 const Header = () => {
     return (
-        <header>
-            <h1>Header</h1>
+        <header className="mika-novel-header-container">
+            <p className="mika-novel-header-icon">Mika</p>
         </header>
     );
 }

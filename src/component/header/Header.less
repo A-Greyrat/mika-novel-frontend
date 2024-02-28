@@ -1,0 +1,45 @@
+.mika-novel-header-container {
+  width: 100%;
+  height: 35px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  background: white;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+
+  .mika-novel-header-icon {
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    margin-left: 15px;
+    cursor: pointer;
+    user-select: none;
+    color: transparent;
+    -webkit-text-stroke: 0.5px #000;
+
+    @height: 6px;
+    @lineColor: #ffd0d0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      transform: translateY(-@height);
+      background-color: @lineColor;
+      z-index: -1;
+      height: @height;
+
+      width: 0;
+      transition: width 0.3s;
+    }
+
+    &:hover::before {
+      bottom: 0;
+      left: 0;
+      transform: translateY(-@height);
+      width: 100%;
+    }
+  }
+}

@@ -1,7 +1,9 @@
+import './Footer.less';
+
 const Footer = () => {
     return (
         <footer>
-            <p>Footer</p>
+            <p>Mika</p>
         </footer>
     )
 }
