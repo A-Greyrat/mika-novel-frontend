@@ -35,7 +35,7 @@ export const useStyle = (props: CarouselListProps) => {
 };
 
 const useInterval = (props: CarouselListProps) => {
-    const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
+    const intervalRef = React.useRef<number | null>(null);
 
     useEffect(() => {
         return () => {

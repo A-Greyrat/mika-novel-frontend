@@ -5,3 +5,4 @@ export {default as Config, ConfigContext} from './Config';
 export {default as Button} from './Button';
 export {default as Pagination} from './Pagination';
 export {default as Image} from './Image';
+export {default as TabList} from './TabList';

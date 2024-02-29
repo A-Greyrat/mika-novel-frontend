@@ -1,0 +1,17 @@
+.mika-novel-recommend-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 20px 0;
+  padding: 20px 0;
+
+  > * {
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+:has(+.mika-novel-recommend-list-container):is(h1) {
+  margin-bottom: 0;
+}

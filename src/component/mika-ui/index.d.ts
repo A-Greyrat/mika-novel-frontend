@@ -18,3 +18,6 @@ export type {PaginationProps, PaginationCustomButtonProps} from './Pagination';
 
 export {default as Image} from './Image';
 export type {ImageProps} from './Image';
+
+export {default as TabList} from './TabList';
+export type {TabListProps} from './TabList';

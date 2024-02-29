@@ -23,8 +23,8 @@ interface ImageProps extends React.HTMLAttributes<HTMLImageElement> {
 const DefaultLoading = ({width, height}: { width: number; height: number; }) => {
     return (
         <div className='mika-image-loading' style={{
-            width: width + "px",
-            height: height + "px",
+            minWidth: width + "px",
+            minHeight: height + "px",
         }}>
             <svg viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
@@ -40,8 +40,8 @@ const DefaultLoading = ({width, height}: { width: number; height: number; }) => 
 const DefaultError = ({width, height}: { width: number; height: number; }) => {
     return (
         <div className='mika-image-error' style={{
-            width: width + "px",
-            height: height + "px",
+            minWidth: width + "px",
+            minHeight: height + "px",
         }}>
             <svg viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
