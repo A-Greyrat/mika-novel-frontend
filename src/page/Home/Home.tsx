@@ -128,7 +128,7 @@ const cardList = [
 const Home = () => {
     const controller = useCarouselController();
 
-    return (<>
+    return (<div className="mika-novel-home-page-root">
             <Header/>
             <div className="mika-novel-home-page-wrapper">
                 <div>
@@ -152,17 +152,19 @@ const Home = () => {
                                                description="Description 4" tags={["tag1", "tag2"]} url='/'
                                                imgWidth={200}
                                                imgHeight={300}/>,
-                        ]} autoSwitchByTime={0} controller={controller} itemWidth={800} displayNum={1} itemHeight={300}
-                                      rootClass='mika-novel-carouse-list' hiddenBtn/>
+                        ]} autoSwitchByTime={0} controller={controller} itemWidth="50rem" displayNum={1} itemHeight="300px"
+                                      rootClass='mika-novel-carouse-list' />
 
                         <ReadingNovelList items={testList}/>
                         <RecommendList items={cardList}/>
                     </div>
-                    <RankList items={[testList, testList, testList]} rankTitle={["周榜", "月榜", "总榜"]}/>
+                    <div>
+                        <RankList items={[testList, testList, testList]} rankTitle={["周榜", "月榜", "总榜"]}/>
+                    </div>
                 </div>
             </div>
             <Footer/>
-        </>
+        </div>
     );
 }
 

@@ -1,5 +1,6 @@
 import './ReadingNovelList.less';
 import {Image} from "../../component/mika-ui";
+import {memo} from "react";
 
 type ReadingNovelListItem = {
     url: string;
@@ -23,7 +24,7 @@ const ReadingNovelListItem = (props: ReadingNovelListItem) => {
     );
 }
 
-const ReadingNovelList = (props: ReadingNovelListProps) => {
+const ReadingNovelList = memo((props: ReadingNovelListProps) => {
     return (<>
             <h1>正在看的</h1>
             <div className="mika-novel-reading-novel-list-root">
@@ -35,6 +36,6 @@ const ReadingNovelList = (props: ReadingNovelListProps) => {
             </div>
         </>
     );
-}
+});
 
 export default ReadingNovelList;

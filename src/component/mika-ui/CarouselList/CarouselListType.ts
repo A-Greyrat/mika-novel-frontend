@@ -11,9 +11,9 @@ export type CarouselListController = {
 export type CarouselListProps = {
     items: Array<React.ReactNode>;
 
-    itemWidth: number;
-    itemHeight?: number;
-    itemMargin?: number;
+    itemWidth: string;
+    itemHeight?: string;
+    itemMargin?: string;
 
     displayNum: number;
     animationDuration?: number;

@@ -46,7 +46,7 @@ const CarouselList = React.forwardRef((props: CarouselListProps, ref: React.Ref<
             console.error("CarouselList: displayNum is greater than or equal to the number of items.");
         }
     }, [props.displayNum, props.items.length]);
-    console.log("CarouselList render")
+
     return (
         <div className={"mika-carousel-list-root" + (props.rootClass ? " " + props.rootClass : "")} ref={ref}>
             <ul className="mika-carousel-list-container" ref={containerRef}>

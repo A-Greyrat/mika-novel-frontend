@@ -1,0 +1,31 @@
+@import "../../common/theme/theme";
+@import "Login";
+
+.mika-novel-register-root {
+  display: flex;
+  height: 100vh;
+
+  & > :nth-child(1) {
+    flex: 2;
+  }
+
+  & > :nth-child(2) {
+    flex: 3;
+  }
+}
+
+.mika-novel-register-side {
+  .mika-novel-login-side;
+}
+
+.mika-novel-register-container {
+  .mika-novel-login-form-container;
+}
+
+.mika-novel-register-form {
+  .mika-novel-login-form;
+
+  > button {
+    width: 100%;
+  }
+}

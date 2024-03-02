@@ -11,7 +11,7 @@ export type TabListProps = {
     style?: React.CSSProperties;
 }
 
-const TabList = forwardRef((props: TabListProps, ref: any) => {
+const TabList = memo(forwardRef((props: TabListProps, ref: any) => {
     return (
         <ul ref={ref} style={{width: props.width, ...props.style}}
             className={"mika-tab-list-container" + (props.type === 'vertical' ? '-vertical' : '') + (props.className ? ' ' + props.className : '')}>
@@ -22,6 +22,6 @@ const TabList = forwardRef((props: TabListProps, ref: any) => {
             ))}
         </ul>
     );
-});
+}));
 
-export default memo(TabList);
+export default TabList;

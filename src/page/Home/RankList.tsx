@@ -15,7 +15,7 @@ type RankListProps = {
     rankTitle: string[];
 }
 
-const RankList = (props: RankListProps) => {
+const RankList = memo((props: RankListProps) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     if (props.items.length !== props.rankTitle.length) {
@@ -36,6 +36,6 @@ const RankList = (props: RankListProps) => {
             </div>
         </div>
     );
-}
+});
 
-export default memo(RankList);
+export default RankList;

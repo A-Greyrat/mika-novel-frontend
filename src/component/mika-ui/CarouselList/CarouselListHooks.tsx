@@ -6,25 +6,29 @@ export const useStyle = (props: CarouselListProps) => {
     const styleRef = React.useRef<HTMLStyleElement>(document.createElement('style'));
 
     useEffect(() => {
-        const cardMargin = props.itemMargin ?? 0;
-        const item = containerRef.current!.firstChild as HTMLLIElement | null;
-        const cardBorderWidthLeft = item ? (parseFloat(getComputedStyle(item).borderLeftWidth)) : 0;
-        const cardBorderWidthRight = item ? (parseFloat(getComputedStyle(item).borderRightWidth)) : 0;
-        const rootWidth = (props.itemWidth + cardMargin * 2 + cardBorderWidthLeft + cardBorderWidthRight) * props.displayNum;
-
+        const item = containerRef.current!.firstChild as HTMLLIElement;
         const style = styleRef.current;
+
         style.innerHTML = `
             .mika-carousel-list-root {
-                --mika-carousel-list-root-width: ${rootWidth}px;
-                --mika-carousel-list-item-width: ${props.itemWidth}px;
-                --mika-carousel-list-item-height: ${props.itemHeight ? props.itemHeight + "px" : "100px"};
-                --mika-carousel-list-item-margin: ${cardMargin}px;
+                --mika-carousel-list-item-width: ${props.itemWidth};
+                --mika-carousel-list-item-height: ${props.itemHeight ? props.itemHeight : "initial"};
                 --mika-carousel-list-item-animation-duration: ${(props.animationDuration ?? 500) + "ms"};
                 --mika-carousel-list-item-fade-in-out: ${props.fadeInOut ? "1" : "0"};
-                --mika-carousel-list-item-border-width-left: ${cardBorderWidthLeft}px;
-                --mika-carousel-list-item-border-width-right: ${cardBorderWidthRight}px;
+                --mika-carousel-list-item-margin: ${props.itemMargin ?? "0"};
             }`;
         document.head.appendChild(style);
+
+        const cardMargin = parseFloat(getComputedStyle(item).marginRight);
+        const itemWidth = item.offsetWidth + cardMargin * 2;
+        const rootWidth = itemWidth * props.displayNum;
+
+        style.innerHTML += `
+            .mika-carousel-list-root {
+                --mika-carousel-list-root-width: ${rootWidth}px;
+                --mika-carousel-list-item-move: ${itemWidth}px;
+            }    
+        `;
 
         return () => {
             document.head.removeChild(style);

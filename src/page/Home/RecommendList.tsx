@@ -1,5 +1,6 @@
 import NovelCard from "./NovelCard.tsx";
 import './RecommendList.less';
+import {memo} from "react";
 
 type RecommendListItem = {
     url: string;
@@ -14,7 +15,7 @@ type RecommendListProps = {
     items: RecommendListItem[];
 }
 
-const RecommendList = (props: RecommendListProps) => {
+const RecommendList = memo((props: RecommendListProps) => {
     return (
         <div>
             <h1>推荐</h1>
@@ -25,6 +26,6 @@ const RecommendList = (props: RecommendListProps) => {
             </div>
         </div>
     );
-}
+});
 
 export default RecommendList;

@@ -87,7 +87,7 @@
 
     &:hover:enabled {
         filter: brightness(1.08);
-        box-shadow: 2px 0 6px -3px #aaa, -2px 0 6px -3px #aaa;
+        /*box-shadow: 2px 0 6px -3px #aaa, -2px 0 6px -3px #aaa;*/
     }
 
     &:active:enabled {
