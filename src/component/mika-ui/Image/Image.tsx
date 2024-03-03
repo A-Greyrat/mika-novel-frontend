@@ -56,17 +56,12 @@ const DefaultError = ({width, height}: { width: number; height: number; }) => {
 const useLoader = (_src: string, loader?: () => Promise<string>, onLoaded?: () => void, onError?: () => void) => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
-    const [src, setSrc] = React.useState(_src);
+    const src = React.useRef(_src);
 
-    const onLoad = useCallback((src: string) => {
-        setLoading(false);
+    const onLoad = useCallback(() => {
+        setLoading(true);
         setError(false);
-        setSrc(src);
-
-        if (onLoaded) {
-            onLoaded();
-        }
-    }, [onLoaded]);
+    }, []);
 
     const onErr = useCallback(() => {
         setError(true);
@@ -90,9 +85,8 @@ const useLoader = (_src: string, loader?: () => Promise<string>, onLoaded?: () =
             });
         });
 
-        _loader().then((src) => {
-            onLoad(src);
-        }).catch(() => {
+        onLoad();
+        _loader().then(onLoaded).catch(() => {
             onErr();
         });
 
@@ -115,11 +109,11 @@ const Image = React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageEleme
     const {loading: _loading, error: _error, src: _src} = useLoader(src, loader, onLoaded, onError);
 
     if (_loading) {
-        return (<>{props.loading || <DefaultLoading width={props.width} height={props.height}/>}</>);
+        return (<>{loading || <DefaultLoading width={props.width} height={props.height}/>}</>);
     }
 
     if (_error) {
-        return (<>{props.error || <DefaultError width={props.width} height={props.height}/>}</>);
+        return (<>{error || <DefaultError width={props.width} height={props.height}/>}</>);
     }
     return (
         <img src={_src} alt={alt} ref={ref} {...rest} />

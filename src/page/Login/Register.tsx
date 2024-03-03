@@ -69,20 +69,20 @@ const text =
     "ギリギリも楽しむの\n";
 
 const textArr = text.split("\n");
+const newArr: string[] = [];
 
 for (let i = 0; i < textArr.length / 3; i++) {
-    textArr[i] = textArr[i * 3];
+    newArr[i] = textArr[i * 3];
     if (i * 3 + 1 < textArr.length) {
-        textArr[i] += "\n" + textArr[i * 3 + 1];
+        newArr[i] += "\n" + textArr[i * 3 + 1];
     }
     if (i * 3 + 2 < textArr.length) {
-        textArr[i] += "\n" + textArr[i * 3 + 2];
+        newArr[i] += "\n" + textArr[i * 3 + 2];
     }
 }
 
-
 const Register = () => {
-    const displayText = useTypePrint(textArr, 100);
+    const displayText = useTypePrint(newArr, 100);
 
     return (<div className="mika-novel-register-root">
         <div className="mika-novel-register-container">

@@ -1,0 +1,99 @@
+@import "../../common/theme/theme.less";
+
+.mika-novel-page-novel-detail {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.1),
+    -3px -3px 15px 0 rgba(0, 0, 0, 0.1);
+
+  > :nth-child(1) {
+    flex: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+
+    > :nth-child(1) {
+      width: 150px;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  }
+
+  .mika-novel-page-novel-info {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 20px 10px;
+
+    > h1 {
+      color: transparent;
+      -webkit-text-stroke: 1px @primary-color;
+      user-select: none;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .mika-novel-page-novel-author {
+      margin-bottom: 5px;
+      svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+
+        > path {
+          fill: @primary-color;
+        }
+      }
+
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      color: @primary-color;
+    }
+
+    .mika-novel-page-novel-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 5px;
+
+      > span {
+        padding: 3px 8px;
+        border-radius: 6px;
+        background: @primary-color;
+        color: white;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.3s;
+
+        &:hover {
+          background: darken(@primary-color, 10%);
+        }
+      }
+    }
+
+    > p {
+      margin: 3px 0;
+      color: @emphasis-color;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+
+      &::selection {
+        background: @primary-color;
+        color: white;
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+@import "../../common/theme/theme.less";
+
+.mika-novel-novel-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  width: 80vw;
+  gap: 30px;
+
+  > :nth-child(2):is(div) {
+    display: flex;
+    width: 100%;
+
+    > :nth-child(1) > div {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      flex: 1;
+
+      width: 550px;
+      height: 300px;
+      background: #8c5b8f;
+      margin: 10px;
+    }
+
+    > :nth-child(2) {
+      flex: 1;
+
+      width: 550px;
+      height: 300px;
+      background: #8c5b8f;
+      margin: 10px 0;
+    }
+  }
+}

@@ -104,16 +104,18 @@
     width: 100%;
     padding: 10px;
     border: none;
-    box-shadow: 0 0 1px @primary-color;
+    box-shadow: 0.25px 0.25px 1px @primary-color,
+    1px 1px 3px @primary-color;
+
     box-sizing: border-box;
     border-radius: 5px;
-    transition: all 0.1s;
     font-size: 1rem;
     color: @primary-color;
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 6px @primary-color;
+      box-shadow: -1px -1px 3px @primary-color,
+       -0.25px -0.25px 1px @primary-color;
 
       &::placeholder {
         color: transparent;

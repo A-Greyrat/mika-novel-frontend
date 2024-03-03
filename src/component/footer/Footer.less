@@ -1,6 +1,8 @@
+
+@footer-height: 60px;
 .mika-novel-footer-container {
   width: 100%;
-  height: 50px;
+  height: @footer-height;
 
   display: flex;
   justify-content: center;
@@ -12,7 +14,9 @@
   bottom: 0;
 }
 
-:has(.mika-novel-footer-container) {
+:has(> .mika-novel-footer-container) {
   position: relative;
   min-height: 100vh;
+  padding-bottom: @footer-height;
+  box-sizing: border-box;
 }
