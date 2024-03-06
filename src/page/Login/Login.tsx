@@ -110,7 +110,9 @@ const Login = () => {
 
     useEffect(() => {
         getCaptcha().then(res => {
-            setCaptcha(res);
+            if (res.code === 200) {
+                setCaptcha(res.data!);
+            }
         });
     }, []);
 

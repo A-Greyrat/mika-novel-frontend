@@ -1,6 +1,5 @@
-import React, {useCallback, useMemo} from "react";
+import React, {forwardRef, memo, useCallback, useMemo} from "react";
 import "./Button.css";
-import {deepEqual} from "../utils";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children?: string | React.ReactNode;
@@ -10,8 +9,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => unknown;
 }
 
-const Button = React.forwardRef((props: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
-    const {styleType, size, className, onClick, ...htmlProps} = props;
+const Button = memo(forwardRef((props: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
+    const {onClick, ...htmlProps} = props;
     const btnRef = React.useRef<HTMLButtonElement>(null);
     React.useImperativeHandle(ref, () => btnRef.current!);
 
@@ -45,8 +44,6 @@ const Button = React.forwardRef((props: ButtonProps, ref: React.Ref<HTMLButtonEl
             {props.styleType === 'link' ? <span>{props.children}</span> : props.children}
         </button>
     );
-});
+}));
 
-export default React.memo(Button, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps)
-});
+export default Button;
