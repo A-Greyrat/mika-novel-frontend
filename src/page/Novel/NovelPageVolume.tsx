@@ -1,3 +1,6 @@
+import './NovelPageVolume.less';
+import {Button} from "../../component/mika-ui";
+
 type NovelPageVolumeProps = {
     volume: {
         id: string;
@@ -10,7 +13,6 @@ type NovelPageVolumeProps = {
 }
 
 const NovelPageVolume = (props: NovelPageVolumeProps) => {
-
     return (
         <div className="mika-novel-page-volume">
             {props.volume.map((volume, index) => {
@@ -21,7 +23,7 @@ const NovelPageVolume = (props: NovelPageVolumeProps) => {
                             {volume.chapters.map((chapter, index) => {
                                 return (
                                     <div key={index}>
-                                        <span>{chapter.title}</span>
+                                        <Button styleType="default">{chapter.title}</Button>
                                     </div>
                                 )
                             })}

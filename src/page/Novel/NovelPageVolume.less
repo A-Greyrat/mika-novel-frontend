@@ -1,0 +1,37 @@
+@import "../../common/theme/theme.less";
+
+.panel-style {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 3px 3px 3px 0 mix(@primary-color, transparent, 15%),
+    -3px -3px 15px 0 mix(@primary-color, transparent, 15%);
+  box-sizing: border-box;
+}
+
+.mika-novel-page-volume {
+  .panel-style;
+
+  display: grid;
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+
+    > h2 {
+      color: @primary-color;
+      user-select: none;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    > div {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+    }
+  }
+}

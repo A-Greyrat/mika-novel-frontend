@@ -4,6 +4,8 @@ import './NovelPage.less';
 import {useState} from "react";
 import NovelPageDetail from "./NovelPageDetail.tsx";
 import NovelPageVolume from "./NovelPageVolume.tsx";
+import NovelPageRecommend from "./NovelPageRecommend.tsx";
+import NovelPageComment from "./NovelPageComment.tsx";
 
 type NovelPageProps = {
     id: string;
@@ -94,6 +96,30 @@ const testData: NovelPageProps = {
 };
 
 
+const testCommentData = [
+    {
+        "id": "1",
+        "content": "这是一条评论",
+        "time": "2021-08-12 12:00:00",
+        "user": {
+            "id": "1",
+            "name": "张三",
+            "avatar": "https://via.placeholder.com/100"
+        }
+    },
+    {
+        "id": "2",
+        "content": "这是一条评论",
+        "time": "2021-08-12 12:00:00",
+        "user": {
+            "id": "1",
+            "name": "张三",
+            "avatar": "https://via.placeholder.com/100"
+        }
+    }
+]
+
+
 const NovelPage = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
@@ -107,9 +133,9 @@ const NovelPage = () => {
                 <div>
                     <div>
                         <NovelPageVolume volume={novelData.volume}/>
-                        <div className="mika-novel-page-novel-comment"></div>
+                        <NovelPageComment comment={testCommentData}/>
                     </div>
-                    <div className="mika-novel-page-novel-recommend"></div>
+                    <NovelPageRecommend/>
                 </div>
             </div>
             <Footer/>

@@ -174,10 +174,11 @@ const Modal = React.forwardRef((props: ModalProps, ref: React.Ref<HTMLDivElement
     )
 });
 
-export const showModal = (props: Omit<ModalProps, 'visible'>) => {
+export const showModal = (props: Omit<Omit<ModalProps, "visible">, "onClose"> & { onClose?: () => unknown }) => {
     const div = document.createElement("div");
     document.body.appendChild(div);
     const root = createRoot(div);
+    const propsCopy: ModalProps = {...props, visible: true, onClose: props.onClose ?? (() => {})};
 
     const ModalWrapper = () => {
         const [visible, setVisible] = React.useState(true);
@@ -189,17 +190,17 @@ export const showModal = (props: Omit<ModalProps, 'visible'>) => {
             }, 300);
         }, []);
 
-        const oldOnClose = props.onClose;
-        props.onClose = () => {
+        const oldOnClose = propsCopy.onClose;
+        propsCopy.onClose = () => {
             const result = oldOnClose?.();
             if (result instanceof Promise) {
                 return result.then(() => close());
             } else close();
         }
 
-        if (props.onOk) {
-            const oldOnOk = props.onOk;
-            props.onOk = () => {
+        if (propsCopy.onOk) {
+            const oldOnOk = propsCopy.onOk;
+            propsCopy.onOk = () => {
                 const result = oldOnOk();
                 if (result instanceof Promise) {
                     return result.then(() => close());
@@ -207,9 +208,9 @@ export const showModal = (props: Omit<ModalProps, 'visible'>) => {
             }
         }
 
-        if (props.onCancel) {
-            const oldOnCancel = props.onCancel;
-            props.onCancel = () => {
+        if (propsCopy.onCancel) {
+            const oldOnCancel = propsCopy.onCancel;
+            propsCopy.onCancel = () => {
                 const result = oldOnCancel();
                 if (result instanceof Promise) {
                     return result.then(() => close());
@@ -217,7 +218,7 @@ export const showModal = (props: Omit<ModalProps, 'visible'>) => {
             }
         }
 
-        return <Modal {...props} visible={visible}/>
+        return <Modal {...propsCopy} visible={visible}/>
     }
     root.render(<ModalWrapper/>);
 };

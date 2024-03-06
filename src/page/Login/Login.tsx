@@ -1,6 +1,8 @@
-import {Button} from "../../component/mika-ui";
+import {Button, Image} from "../../component/mika-ui";
 import "./Login.less";
 import {useTypePrint} from "../../common/hooks";
+import {useEffect, useState} from "react";
+import {getCaptcha} from "../../common/user";
 
 const text =
     "無敵の笑顔で荒らすメディア\n" +
@@ -92,15 +94,30 @@ for (let i = 0; i < textArr.length / 3; i++) {
     }
 }
 
+const TypePrinter = ({texts}: { texts: string[] }) => {
+    const displayText = useTypePrint(texts, 100);
+    return <p>{displayText}</p>;
+}
+
+interface Captcha {
+    verifyCodeId: string;
+    captcha: string;
+}
 
 
 const Login = () => {
-    const displayText = useTypePrint(newArr, 100);
+    const [captcha, setCaptcha] = useState<Captcha | undefined>(undefined);
+
+    useEffect(() => {
+        getCaptcha().then(res => {
+            setCaptcha(res);
+        });
+    }, []);
 
     return (
         <div className="mika-novel-login-root">
             <div className="mika-novel-login-side">
-                <p>{displayText}</p>
+                <TypePrinter texts={newArr}/>
             </div>
             <div className="mika-novel-login-container">
                 <div className="mika-novel-login-form-container">
@@ -109,7 +126,10 @@ const Login = () => {
                         <input type="text" placeholder="账号 / 邮箱"/>
                         <input type="password" placeholder="密码"/>
                         <input type="password" placeholder="确认密码"/>
-                        <input type="text" placeholder="验证码"/>
+                        <div>
+                            <input type="text" placeholder="验证码"/>
+                            <Image src={captcha?.captcha} alt="验证码" width={100} height={40}/>
+                        </div>
                         <div className="mika-novel-login-form-btn-container">
                             <Button type="submit" styleType="primary" size="large">登录</Button>
                             <div>
@@ -117,7 +137,6 @@ const Login = () => {
                                 <Button styleType="link" size="medium" onClick={e => {
                                     e.preventDefault();
                                     window.location.href = "/register";
-
                                 }}>注册</Button>
                             </div>
                         </div>

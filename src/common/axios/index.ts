@@ -1,8 +1,11 @@
 import axios from 'axios';
-
-const instance = axios.create({
-  baseURL: 'http://localhost:3000',
+export default axios.create({
+  baseURL: 'https://118.31.42.183/api',
   timeout: 5000,
 });
 
-export default instance;
+export interface ResponseData {
+  code: number;
+  data: unknown;
+  message: string;
+}

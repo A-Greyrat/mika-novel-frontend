@@ -5,12 +5,12 @@ const Footer = memo(() => {
     return (
         <footer className="mika-novel-footer-container">
             <p style={{
-                fontSize: "22px",
+                fontSize: "20px",
                 fontWeight: "bold",
                 color: "transparent",
                 WebkitTextStroke: "1px #8c5b8f",
                 textAlign: "center",
-            }}>これが最後と決めました</p>
+            }}>平平无奇的Footer</p>
         </footer>
     )
 });

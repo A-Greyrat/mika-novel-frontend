@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from "react";
 import "./Image.css";
 
 interface ImageProps extends React.HTMLAttributes<HTMLImageElement> {
-    src: string;
+    src?: string;
 
     width: number;
     height: number;
@@ -54,26 +54,30 @@ const DefaultError = ({width, height}: { width: number; height: number; }) => {
 };
 
 const useLoader = (_src: string, loader?: () => Promise<string>, onLoaded?: () => void, onError?: () => void) => {
-    const [loading, setLoading] = React.useState(true);
-    const [error, setError] = React.useState(false);
-    const src = React.useRef(_src);
+    const loading = React.useRef(true);
+    const error = React.useRef(false);
+    const [src, setSrc] = React.useState<string | undefined>(undefined);
 
     const onLoad = useCallback(() => {
-        setLoading(true);
-        setError(false);
+        loading.current = true;
+        error.current = false;
     }, []);
 
     const onErr = useCallback(() => {
-        setError(true);
-        setLoading(false);
+        loading.current = false;
+        error.current = true;
+        setSrc("");
 
         if (onError) {
             onError();
         }
     }, [onError]);
 
-
     useEffect(() => {
+        if (!_src) {
+            return;
+        }
+
         const _loader = loader || (async () => {
             return await fetch(_src).then((res) => {
                 if (res.ok) {
@@ -86,15 +90,22 @@ const useLoader = (_src: string, loader?: () => Promise<string>, onLoaded?: () =
         });
 
         onLoad();
-        _loader().then(onLoaded).catch(() => {
+        _loader().then((blob: string) => {
+            setSrc(blob);
+            loading.current = false;
+
+            if (onLoaded) {
+                onLoaded();
+            }
+        }).catch(() => {
             onErr();
         });
 
-    }, [_src, loader, onErr, onLoad]);
+    }, []);
 
 
-    return {loading, error, src};
-}
+    return {loading: loading.current, error: error.current, src: src};
+};
 
 const Image = React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageElement>) => {
     const {
@@ -106,9 +117,13 @@ const Image = React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageEleme
         onError, ...rest
     } = props;
 
-    const {loading: _loading, error: _error, src: _src} = useLoader(src, loader, onLoaded, onError);
-
-    if (_loading) {
+    const {
+        loading: _loading,
+        error: _error,
+        src: _src
+    } = useLoader(typeof src === "string" ? src : "", loader, onLoaded, onError);
+    console.log(_loading, _error, _src)
+    if (_loading || !props.src) {
         return (<>{loading || <DefaultLoading width={props.width} height={props.height}/>}</>);
     }
 

@@ -1,12 +1,37 @@
 import './Header.less';
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
+import {isUserLoggedIn} from "../../common/user";
+import {Image} from "../mika-ui";
 
-const Header = () => {
+const UserSection = () => {
+    const [avatar] = useState("/defaultAvatar.webp");
+
+    useEffect(() => {
+        if (isUserLoggedIn) {
+            // TODO: get user avatar
+        }
+    }, []);
+
     return (
-        <header className="mika-novel-header-container">
-            <p className="mika-novel-header-icon">Mika</p>
-        </header>
+        <div className="mika-novel-header-user">
+            <Image src={avatar} width={48} height={48} alt="" onClick={() => {
+                window.location.href = "/login";
+            }}/>
+        </div>
     );
 }
 
-export default memo(Header);
+const Header = memo(() => {
+    return (
+        <header className="mika-novel-header-container">
+            <p className="mika-novel-header-icon" onClick={() => {
+                window.location.href = "/";
+            }}>Mika</p>
+            <div className="mika-novel-header-left">
+                <UserSection/>
+            </div>
+        </header>
+    );
+});
+
+export default Header;
