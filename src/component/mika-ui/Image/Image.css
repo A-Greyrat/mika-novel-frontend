@@ -40,3 +40,7 @@
         transform: translate3d(200%, 0, 0);
     }
 }
+
+img {
+    aspect-ratio: 16 / 9;
+}

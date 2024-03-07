@@ -1,31 +1,32 @@
-import React, {useCallback, useEffect} from "react";
+import React, {forwardRef, useCallback, useEffect, useImperativeHandle, useMemo} from "react";
 import "./Image.css";
 
 interface ImageProps extends React.HTMLAttributes<HTMLImageElement> {
-    src?: string;
+    src?: string | null;
 
     width: number;
     height: number;
     alt?: string;
 
-    // 当图片加载时显示的内容
-    loading?: React.ReactNode;
-    // 当图片加载失败时显示的内容
-    error?: React.ReactNode;
+    loading?: React.ReactElement;
+    error?: React.ReactElement | string;
+    lazy?: boolean;
 
     onLoaded?: () => unknown;
     onError?: () => unknown;
-
-    // 自定义加载图片的方法
-    loader?: () => Promise<string>;
 }
 
-const DefaultLoading = ({width, height}: { width: number; height: number; }) => {
+const DefaultLoading = forwardRef(({width, height}: {
+    width: number;
+    height: number;
+}, ref: React.Ref<HTMLDivElement>) => {
     return (
         <div className='mika-image-loading' style={{
             minWidth: width + "px",
             minHeight: height + "px",
-        }}>
+            width: width + "px",
+            height: height + "px",
+        }} ref={ref}>
             <svg viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -34,15 +35,19 @@ const DefaultLoading = ({width, height}: { width: number; height: number; }) => 
             </svg>
         </div>
     );
-};
+});
 
-
-const DefaultError = ({width, height}: { width: number; height: number; }) => {
+const DefaultError = forwardRef(({width, height}: {
+    width: number;
+    height: number;
+}, ref: React.Ref<HTMLDivElement>) => {
     return (
         <div className='mika-image-error' style={{
             minWidth: width + "px",
             minHeight: height + "px",
-        }}>
+            width: width + "px",
+            height: height + "px",
+        }} ref={ref}>
             <svg viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -51,87 +56,135 @@ const DefaultError = ({width, height}: { width: number; height: number; }) => {
             </svg>
         </div>
     );
-};
+});
 
-const useLoader = (_src: string, loader?: () => Promise<string>, onLoaded?: () => void, onError?: () => void) => {
+const useLoad = (_src?: string | null, onLoaded?: () => void, onError?: () => void, lazy?: boolean) => {
     const loading = React.useRef(true);
     const error = React.useRef(false);
+    const elementRef = React.useRef<HTMLImageElement | null>(null);
     const [src, setSrc] = React.useState<string | undefined>(undefined);
 
-    const onLoad = useCallback(() => {
-        loading.current = true;
-        error.current = false;
-    }, []);
-
-    const onErr = useCallback(() => {
+    const setError = useCallback(() => {
         loading.current = false;
         error.current = true;
-        setSrc("");
+        setSrc('error');
 
         if (onError) {
             onError();
         }
     }, [onError]);
+    const setLoaded = useCallback((src: string) => {
+        loading.current = false;
+        error.current = false;
+        setSrc(src);
 
-    useEffect(() => {
-        if (!_src) {
+        if (onLoaded) {
+            onLoaded();
+        }
+    }, [onLoaded]);
+    const setLoading = useCallback(() => {
+        loading.current = true;
+        error.current = false;
+        setSrc(undefined);
+    }, []);
+
+    const loadImage = useCallback((src?: string | null) => {
+        if (typeof _src === 'undefined') {
+            setLoading();
             return;
         }
 
-        const _loader = loader || (async () => {
-            return await fetch(_src).then((res) => {
-                if (res.ok) {
-                    return res.blob();
-                }
-                throw new Error("Image load error");
-            }).then((blob) => {
-                return URL.createObjectURL(blob);
-            });
-        });
+        if (_src === null) {
+            setError();
+            return;
+        }
 
-        onLoad();
-        _loader().then((blob: string) => {
-            setSrc(blob);
-            loading.current = false;
+        if (_src.startsWith("data:") || _src.startsWith("blob:")) {
+            setLoaded(_src);
+            return;
+        }
 
-            if (onLoaded) {
-                onLoaded();
+        setLoading();
+        fetch(src!, {
+            mode: "no-cors",
+            cache: "default",
+        }).then((res) => {
+            if (res.ok) {
+                return res.blob();
             }
-        }).catch(() => {
-            onErr();
+            throw new Error("[Mika::Image] Load error");
+        }).then((blob) => {
+            if (!blob.type.startsWith("image")) {
+                throw new Error("[Mika::Image] Blob not an image");
+            }
+            setLoaded(URL.createObjectURL(blob));
+        }).catch(e => {
+            console.error(e);
+            setError();
         });
+    }, [_src, setError, setLoaded, setLoading]);
+    
+    const observer = useMemo(() => new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            loadImage(_src);
+            observer.disconnect();
+        }
+    }, {
+        threshold: 0.1
+    }), [_src, loadImage]);
+    
+    useEffect(() => {
+        if (lazy) {
+            const element = elementRef.current!;
+            observer.observe(element);
+        } else {
+            loadImage(_src);
+        }
 
-    }, []);
+        console.log("useEffect")
+        return () => {
+            observer.disconnect();
+        };
+    }, [_src, lazy, loadImage, observer]);
 
-
-    return {loading: loading.current, error: error.current, src: src};
+    return {loading: loading.current, error: error.current, src: src, elementRef: elementRef};
 };
 
 const Image = React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageElement>) => {
     const {
-        alt, src,
+        alt,
+        src,
         loading,
         error,
-        loader,
         onLoaded,
-        onError, ...rest
+        onError,
+        lazy,
+        ...rest
     } = props;
 
     const {
         loading: _loading,
         error: _error,
-        src: _src
-    } = useLoader(typeof src === "string" ? src : "", loader, onLoaded, onError);
-    console.log(_loading, _error, _src)
-    if (_loading || !props.src) {
-        return (<>{loading || <DefaultLoading width={props.width} height={props.height}/>}</>);
+        src: _src,
+        elementRef,
+    } = useLoad(src, onLoaded, onError, lazy);
+
+    useImperativeHandle(ref, () => elementRef.current!, [elementRef]);
+
+    if (_loading) {
+        return (<>{loading ?? <DefaultLoading ref={elementRef} width={props.width} height={props.height}/>}</>);
     }
 
     if (_error) {
-        return (<>{error || <DefaultError width={props.width} height={props.height}/>}</>);
+        if (typeof error === 'string') {
+            return <img src={error} alt={alt} ref={elementRef} {...rest} />;
+        }
+
+        return (<>{error ?? <DefaultError ref={elementRef} width={props.width} height={props.height}/>}</>);
     }
+
     return (
-        <img src={_src} alt={alt} ref={ref} {...rest} />
+        <img src={_src} alt={alt} ref={elementRef} {...rest} />
     );
 });
 
