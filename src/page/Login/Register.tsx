@@ -1,6 +1,8 @@
 import './Register.less';
 import {useTypePrint} from "../../common/hooks";
 import {Button} from "../../component/mika-ui";
+import React, {memo, useCallback, useEffect, useRef, useState} from "react";
+import {emailTimeLimit, getEmailCaptcha, isUserLoggedIn, register} from "../../common/user";
 
 const text =
     "「はじめまして」した日から\n" +
@@ -81,24 +83,152 @@ for (let i = 0; i < textArr.length / 3; i++) {
     }
 }
 
+const useTimer = <T, >(callback: (arg: T) => void) => {
+    const savedCallback = useRef<(arg: T) => void>();
+    const available = useRef(true);
+    const invoke = useRef<(time: number, arg: T) => void>();
+
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+        invoke.current = (time: number, arg: T) => {
+            if (available.current) {
+                available.current = false;
+                setTimeout(() => {
+                    available.current = true;
+                }, time);
+                savedCallback.current?.(arg);
+            }
+        }
+    }, []);
+
+    return [available, invoke.current] as const;
+}
+const useCountDown = (time: number) => {
+    const [count, setCount] = useState(time);
+    const timer = useRef<number | null>(null);
+    const reset = useRef<(time: number) => void>((time: number) => {
+        setCount(time);
+    });
+
+    useEffect(() => {
+        if (count === 0) {
+            clearTimeout(timer.current!);
+            return;
+        }
+        timer.current = setTimeout(() => {
+            setCount(count - 1);
+        }, 1000);
+        return () => {
+            clearTimeout(timer.current!);
+        }
+    }, [count]);
+
+    return [count, reset.current] as const;
+}
+
+const TypePrinter = memo(({texts}: { texts: string[] }) => {
+    const displayText = useTypePrint(texts, 100);
+    return <p>{displayText}</p>;
+}, (prev, next) => {
+    return prev.texts === next.texts;
+});
+
+const RegisterForm = () => {
+    const emailRef = useRef<HTMLInputElement>(null);
+    const [count, reset] = useCountDown(emailTimeLimit / 1000);
+    const [error, setError] = useState<string | null>(null);
+    const [available, invoke] = useTimer((email: string) => {
+        getEmailCaptcha(email).then(() => {
+            setError("验证码已发送");
+        }).catch(() => {
+            setError("验证码发送失败");
+        });
+
+        reset(emailTimeLimit / 1000);
+    });
+
+    const getEmailCaptchaCallback = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const email = emailRef.current!.value;
+        if (!email) {
+            setError("邮箱不能为空");
+            return;
+        }
+
+        invoke?.(emailTimeLimit, email);
+    }, [invoke]);
+    const submitCallback = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const form = new FormData(e.currentTarget.form!);
+
+        if (form.get("password") !== form.get("confirmPassword")) {
+            setError("输入的两次密码不一致");
+            return;
+        }
+
+        if (!form.get("verifyCode")) {
+            setError("验证码不能为空");
+            return;
+        }
+
+        if (!form.get("email") || !form.get("nickname") || !form.get("password")) {
+            setError("邮箱、昵称或密码不能为空");
+            return;
+        }
+
+        register({
+            email: form.get("email") as string,
+            nickname: form.get("nickname") as string,
+            password: form.get("password") as string,
+            verifyCode: form.get("verifyCode") as string,
+        }).then(res => {
+            if (res.code === 200) {
+                window.location.href = "/";
+            } else {
+                setError("注册失败");
+            }
+        });
+    }, []);
+
+    return (
+        <form className="mika-novel-register-form">
+            <input type="text" placeholder="邮箱" name="email" ref={emailRef}/>
+            <input type="text" placeholder="昵称" name="nickname"/>
+            <input type="password" placeholder="密码" name="password"/>
+            <input type="password" placeholder="确认密码" name="confirmPassword"/>
+            <div className="mika-novel-register-form-captcha">
+                <input type="text" placeholder="验证码" name="verifyCode"/>
+                <button disabled={!available.current} onClick={getEmailCaptchaCallback}>
+                    {available.current ? '获取验证码' : count + "s"}
+                </button>
+            </div>
+            <div className="mika-novel-register-form-error">
+                {error}
+            </div>
+            <Button type="submit" styleType="primary" size="large" onClick={submitCallback}>注册</Button>
+        </form>
+    );
+}
+
+
 const Register = () => {
-    const displayText = useTypePrint(newArr, 100);
+    if (isUserLoggedIn) {
+        window.location.href = "/";
+        return null;
+    }
 
     return (<div className="mika-novel-register-root">
         <div className="mika-novel-register-container">
             <div className="mika-novel-register-container">
                 <h1>注 册</h1>
-                <form className="mika-novel-register-form">
-                    <input type="text" placeholder="账号 / 邮箱"/>
-                    <input type="password" placeholder="密码"/>
-                    <input type="password" placeholder="确认密码"/>
-                    <input type="text" placeholder="验证码"/>
-                    <Button type="submit" styleType="primary" size="large">注册</Button>
-                </form>
+                <RegisterForm/>
             </div>
         </div>
         <div className="mika-novel-register-side">
-            <p>{displayText}</p>
+            <TypePrinter texts={newArr}/>
         </div>
     </div>);
 }

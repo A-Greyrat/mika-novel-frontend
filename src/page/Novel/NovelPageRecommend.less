@@ -1,7 +1,64 @@
 @import "./NovelPageVolume";
 
 .mika-novel-page-novel-recommend {
-    .panel-style;
-    flex: 1;
-    height: fit-content;
+  .panel-style;
+  flex: 1;
+  height: fit-content;
+
+  > h2 {
+    color: @primary-color;
+    user-select: none;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .mika-novel-page-novel-recommend-item {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+    margin-left: -10px;
+
+    > :nth-child(1) {
+      border-radius: 10px;
+      height: 150px;
+    }
+
+    &:hover {
+      background-color: mix(@primary-color, transparent, 15%);
+    }
+
+    > :nth-child(2) {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      > *::selection {
+        background-color: @primary-color;
+        color: white;
+      }
+
+      > h3 {
+        color: @primary-color;
+        font-weight: 500;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+
+      > p {
+        color: @emphasis-color;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+      }
+    }
+  }
 }

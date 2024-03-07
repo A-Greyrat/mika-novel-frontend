@@ -29,7 +29,6 @@ const OmitBtn = (props: { onClick: () => void, children?: React.ReactNode }) => 
             {props.children}
         </button>
     );
-
 }
 
 const PageSelector = (props: {
@@ -81,7 +80,7 @@ const PageSelector = (props: {
             </OmitBtn>}
 
             {Array.from({length: displayNum},
-                (v, i) => {
+                (_v, i) => {
                     if (!omitLeft) {
                         return i + 2;
                     }

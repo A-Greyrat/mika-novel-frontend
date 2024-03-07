@@ -4,6 +4,8 @@ import Login from "../Login/Login.tsx";
 import Register from "../Login/Register.tsx";
 import $404 from "../404/404.tsx";
 import NovelPage from "../Novel/NovelPage.tsx";
+import NovelReader from "../Reader/NovelReader.tsx";
+import Test from "../Test/Test.tsx";
 
 const router = createBrowserRouter([
         {
@@ -23,10 +25,18 @@ const router = createBrowserRouter([
             element: <NovelPage/>,
         },
         {
+            path: '/novel/:novelId/:volumeId/:chapterId',
+            element: <NovelReader/>,
+        },
+        {
+            path: '/test',
+            element: <Test/>,
+        },
+        {
             path: '*',
             element:
                 <$404/>,
-        }
+        },
     ])
 ;
 

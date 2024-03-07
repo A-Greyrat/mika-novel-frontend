@@ -2,6 +2,7 @@ import './NovelPageVolume.less';
 import {Button} from "../../component/mika-ui";
 
 type NovelPageVolumeProps = {
+    nid: string;
     volume: {
         id: string;
         title: string;
@@ -23,7 +24,9 @@ const NovelPageVolume = (props: NovelPageVolumeProps) => {
                             {volume.chapters.map((chapter, index) => {
                                 return (
                                     <div key={index}>
-                                        <Button styleType="default">{chapter.title}</Button>
+                                        <Button styleType="default" onClick={() => {
+                                            window.location.href = `/novel/${props.nid}/${volume.id}/${chapter.id}`;
+                                        }}>{chapter.title}</Button>
                                     </div>
                                 )
                             })}

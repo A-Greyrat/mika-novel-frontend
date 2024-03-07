@@ -71,7 +71,7 @@
     &:hover:enabled {
         color: var(--mika-primary-color);
         border: 1px solid #eee;
-        box-shadow: 2px -0 6px -3px var(--mika-primary-color), -2px 0 6px -3px var(--mika-primary-color);
+        /*box-shadow: 2px -0 6px -3px var(--mika-primary-color), -2px 0 6px -3px var(--mika-primary-color);*/
     }
 
     &:active:enabled {

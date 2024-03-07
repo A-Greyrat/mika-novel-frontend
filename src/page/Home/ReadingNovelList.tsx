@@ -17,7 +17,7 @@ const ReadingNovelListItem = (props: ReadingNovelListItem) => {
     return (
         <div className="mika-novel-reading-novel-list-item">
             <a href={props.url}>
-                <Image src={props.cover} alt={props.title} width={150} height={220}/>
+                <Image lazy src={props.cover} alt={props.title} width={150} height={220}/>
                 <p>{props.title}</p>
             </a>
         </div>

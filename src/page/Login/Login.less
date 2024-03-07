@@ -127,16 +127,28 @@
     }
   }
 
-   > :is(div):not(.mika-novel-login-form-btn-container) {
+   .mika-novel-login-form-captcha {
      display: flex;
      justify-content: space-between;
      width: 100%;
      gap: 20px;
+     align-items: center;
 
-     > :nth-child(2) {
-       border-radius: 5px;
+     > div {
+       height: 40px;
+       > * {
+         border-radius: 5px;
+       }
      }
    }
+
+  .mika-novel-login-form-error {
+    color: @error-color;
+    font-size: 0.85em;
+    text-align: center;
+    align-self: flex-start;
+    margin: -10px 0;
+  }
 
   .mika-novel-login-form-btn-container {
     width: 100%;

@@ -10,7 +10,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const Button = memo(forwardRef((props: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
-    const {onClick, ...htmlProps} = props;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {styleType, size, className, onClick, ...htmlProps} = props;
     const btnRef = React.useRef<HTMLButtonElement>(null);
     React.useImperativeHandle(ref, () => btnRef.current!);
 

@@ -1,8 +1,9 @@
 import {Button, Image} from "../../component/mika-ui";
 import "./Login.less";
 import {useTypePrint} from "../../common/hooks";
-import {useEffect, useState} from "react";
-import {getCaptcha} from "../../common/user";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import {getCaptcha, isUserLoggedIn, login} from "../../common/user";
+import {throttle} from "../../common/utils";
 
 const text =
     "無敵の笑顔で荒らすメディア\n" +
@@ -99,22 +100,119 @@ const TypePrinter = ({texts}: { texts: string[] }) => {
     return <p>{displayText}</p>;
 }
 
-interface Captcha {
-    verifyCodeId: string;
-    captcha: string;
+interface CaptchaData {
+    verifyCodeId: string | null;
+    captcha: string | null;
+}
+
+
+export const Captcha = () => {
+    const [captcha, setCaptcha] = useState<CaptchaData | undefined>(undefined);
+    const lock = useRef(false);
+
+    const resetCaptcha = useCallback(() => {
+        if (lock.current) {
+            return;
+        }
+        lock.current = true;
+        getCaptcha().then(res => {
+            if (res.code === 200) {
+                setCaptcha(res.data!);
+            } else {
+                setCaptcha({
+                    verifyCodeId: null,
+                    captcha: null
+                });
+            }
+        }).finally(() => {
+            lock.current = false;
+        });
+    }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const renewCaptcha = useCallback(throttle(resetCaptcha, 1000), [resetCaptcha]);
+
+    useEffect(() => {
+        resetCaptcha();
+    }, [resetCaptcha]);
+
+    return (
+        <div onClick={() => {
+            if (captcha)
+                setCaptcha(undefined);
+            renewCaptcha(undefined);
+        }}>
+            <input type="hidden" name="verifyCodeId" value={captcha?.verifyCodeId ?? ""}/>
+            <Image src={captcha?.captcha} alt="验证码" width={100} height={40}/>
+        </div>
+    );
+}
+
+export const SubmitButton = () => {
+    const [showError, setShowError] = useState<string | null>(null);
+    const loginCallback = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+
+        const form = new FormData(e.currentTarget.form as HTMLFormElement);
+        const error = validate(form);
+
+        if (error) {
+            setShowError(error);
+            return;
+        }
+
+        const data = {
+            user: form.get("username") as string,
+            password: form.get("password") as string,
+            captcha: form.get("captcha") as string,
+            verifyCodeId: form.get("verifyCodeId") as string,
+        };
+
+        login(data).then(res => {
+            if (res.code === 200) {
+                window.location.href = "/";
+            } else {
+                setShowError("账号或密码或验证码错误");
+            }
+        });
+    }, []);
+
+    return (<>
+            <div className="mika-novel-login-form-error">
+                {showError}
+            </div>
+            <div className="mika-novel-login-form-btn-container">
+                <Button type="submit" styleType="primary" size="large" onClick={loginCallback}>登录</Button>
+                <div>
+                    <Button styleType="link" size="medium">忘记密码</Button>
+                    <Button styleType="link" size="medium" onClick={e => {
+                        e.preventDefault();
+                        window.location.href = "/register";
+                    }}>注册</Button>
+                </div>
+            </div>
+        </>
+    );
+}
+
+const validate = (form: FormData) => {
+    if (!form.get("verifyCodeId") || !form.get("captcha")) {
+        return "验证码不能为空";
+    }
+
+    if (!form.get("username") || !form.get("password")) {
+        return "账号或密码不能为空";
+    }
+
+    return null;
 }
 
 
 const Login = () => {
-    const [captcha, setCaptcha] = useState<Captcha | undefined>(undefined);
-
-    useEffect(() => {
-        getCaptcha().then(res => {
-            if (res.code === 200) {
-                setCaptcha(res.data!);
-            }
-        });
-    }, []);
+    if (isUserLoggedIn) {
+        window.location.href = "/";
+        return null;
+    }
 
     return (
         <div className="mika-novel-login-root">
@@ -125,23 +223,13 @@ const Login = () => {
                 <div className="mika-novel-login-form-container">
                     <h1>登 录</h1>
                     <form className="mika-novel-login-form">
-                        <input type="text" placeholder="账号 / 邮箱"/>
-                        <input type="password" placeholder="密码"/>
-                        <input type="password" placeholder="确认密码"/>
-                        <div>
-                            <input type="text" placeholder="验证码"/>
-                            <Image src={captcha?.captcha} alt="验证码" width={100} height={40}/>
+                        <input type="text" placeholder="邮箱" name="username"/>
+                        <input type="password" placeholder="密码" name="password"/>
+                        <div className="mika-novel-login-form-captcha">
+                            <input type="text" placeholder="验证码" name="captcha"/>
+                            <Captcha/>
                         </div>
-                        <div className="mika-novel-login-form-btn-container">
-                            <Button type="submit" styleType="primary" size="large">登录</Button>
-                            <div>
-                                <Button styleType="link" size="medium">忘记密码</Button>
-                                <Button styleType="link" size="medium" onClick={e => {
-                                    e.preventDefault();
-                                    window.location.href = "/register";
-                                }}>注册</Button>
-                            </div>
-                        </div>
+                        <SubmitButton/>
                     </form>
                 </div>
             </div>

@@ -42,7 +42,7 @@ const fadeOutModal = (modalRef: React.RefObject<HTMLDivElement>) => {
 
 const closeModal = ({modalRef, onClose, type}: {
     modalRef: React.RefObject<HTMLDivElement>,
-    onClose?: () => any,
+    onClose?: () => unknown,
     type?: "ok" | "cancel" | "close"
 }) => {
     if (modalRef.current?.classList.contains("mika-modal-lock")) return;

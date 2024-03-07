@@ -99,7 +99,7 @@ const testData: NovelPageProps = {
 const testCommentData = [
     {
         "id": "1",
-        "content": "这是一条评论",
+        "content": "感觉不如...赛尔号",
         "time": "2021-08-12 12:00:00",
         "user": {
             "id": "1",
@@ -109,17 +109,63 @@ const testCommentData = [
     },
     {
         "id": "2",
-        "content": "这是一条评论",
+        "content": "感觉不如...福利连",
         "time": "2021-08-12 12:00:00",
         "user": {
             "id": "1",
             "name": "张三",
             "avatar": "https://via.placeholder.com/100"
-        }
+        },
+        "reply": [
+            {
+                "id": "1",
+                "content": "感觉你妈不如你妈",
+                "time": "2021-08-12 12:00:00",
+                "replyTo": {
+                    "id": "1",
+                    "name": "张三"
+                },
+                "user": {
+                    "id": "2",
+                    "name": "张四",
+                    "avatar": "https://via.placeholder.com/100"
+                }
+            },
+            {
+                "id": "2",
+                "content": "感觉...感觉不如感觉",
+                "time": "2021-08-12 12:00:00",
+                "replyTo": {
+                    "id": "1",
+                    "name": "张三"
+                },
+                "user": {
+                    "id": "2",
+                    "name": "张四",
+                    "avatar": "https://via.placeholder.com/100"
+                }
+            }
+        ]
     }
 ]
 
 
+const testRData = [
+    {
+        "id": "1",
+        "title": "ラッキースター",
+        "cover": "https://via.placeholder.com/100",
+        "description": "これが最後と決めました アイツは言った「死んだらどうなる？」 そこでナイフが飛び出して 呆気なかった涙よりも早く あのねここで消えたら意味ないし ろうそくのように 固まれ血のワルツ 繋げていない手が こんなにあるのにな ねぇ死んだらどうなる？ そこで誰を恨みますか 矢のように去っては過ぎてく季節 譲れないまま持ち直して 許せばきっと 忘れちゃえ なにもかも 行く先やさしさが断つ帰り道 振り返る背にかなしげな眼差し ありがとうとごめんを 繰り返すまま 踏み出した０１ 毎度最高な未来を どこか期待している 抗うまま生きる不幸を 受け入れるならば自由を探して 赤色の創造が 割り切れないこの理由を 抱きしめては歌う 今日も\n" +
+            "\n",
+    },
+    {
+        "id": "1",
+        "title": "ラッキースター",
+        "cover": "https://via.placeholder.com/100",
+        "description": "これが最後と決めました アイツは言った「死んだらどうなる？」 そこでナイフが飛び出して 呆気なかった涙よりも早く あのねここで消えたら意味ないし ろうそくのように 固まれ血のワルツ 繋げていない手が こんなにあるのにな ねぇ死んだらどうなる？ そこで誰を恨みますか 矢のように去っては過ぎてく季節 譲れないまま持ち直して 許せばきっと 忘れちゃえ なにもかも 行く先やさしさが断つ帰り道 振り返る背にかなしげな眼差し ありがとうとごめんを 繰り返すまま 踏み出した０１ 毎度最高な未来を どこか期待している 抗うまま生きる不幸を 受け入れるならば自由を探して 赤色の創造が 割り切れないこの理由を 抱きしめては歌う 今日も\n" +
+            "\n",
+    },
+]
 const NovelPage = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
@@ -132,10 +178,10 @@ const NovelPage = () => {
                 <NovelPageDetail {...novelData}/>
                 <div>
                     <div>
-                        <NovelPageVolume volume={novelData.volume}/>
+                        <NovelPageVolume nid={novelData.id} volume={novelData.volume}/>
                         <NovelPageComment comment={testCommentData}/>
                     </div>
-                    <NovelPageRecommend/>
+                    <NovelPageRecommend novels={testRData}/>
                 </div>
             </div>
             <Footer/>

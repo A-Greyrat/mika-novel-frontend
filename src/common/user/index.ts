@@ -7,20 +7,56 @@ if (token) {
     isUserLoggedIn = true;
 }
 
-const login = async (user: string, password: string, verifyCodeId: string, captcha: string) => {
-    return httpPost("/login", {
+interface LoginRequest {
+    user: string,
+    password: string,
+    verifyCodeId: string,
+    captcha: string,
+}
+
+export const login = async ({user, password, verifyCodeId, captcha}: LoginRequest) => {
+    return httpPost<string>("/user/login", {
         "username": user,
         "password": password,
         "verifyCodeId": verifyCodeId,
         "captcha": captcha
-    }, {
-        headers: {
-            "Content-Type": "application/json"
+    }).then(res => {
+        if (res.code === 200) {
+            localStorage.setItem("token", res.data!);
+            isUserLoggedIn = true;
         }
-    });
+        return res;
+    })
 }
 
-const logout = () => {
+export const getEmailCaptcha = (email: string) => httpPost(`/common/verify-email`, {email});
+export const emailTimeLimit = 60 * 1000;
+
+interface RegisterRequest {
+    nickname: string,
+    password: string,
+    email: string,
+    verifyCode: string,
+}
+
+export const register = async ({nickname, password, email, verifyCode}: RegisterRequest) => {
+    return httpPost<string>("/user/signup", {
+        "nickname": nickname,
+        "password": password,
+        "email": email,
+        "verifyCode": verifyCode
+    }).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+            localStorage.setItem("token", res.data!);
+            isUserLoggedIn = true;
+        }
+        return res;
+    })
+
+}
+
+export const logout = () => {
     localStorage.removeItem("token");
     isUserLoggedIn = false;
 }
@@ -38,5 +74,8 @@ export default {
     isUserLoggedIn,
     login,
     logout,
-    getCaptcha
+    getCaptcha,
+    getEmailCaptcha,
+    emailTimeLimit,
+    register
 };

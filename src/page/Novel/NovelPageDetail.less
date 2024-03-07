@@ -32,10 +32,14 @@
     flex-direction: column;
     padding: 20px 20px 20px 10px;
 
+    > ::selection {
+      background: @primary-color;
+      color: white;
+    }
+
     > h1 {
       color: transparent;
       -webkit-text-stroke: 1px @primary-color;
-      user-select: none;
       font-weight: 500;
       margin: 0;
     }
@@ -89,11 +93,6 @@
       -webkit-line-clamp: 5;
       -webkit-box-orient: vertical;
       overflow: hidden;
-
-      &::selection {
-        background: @primary-color;
-        color: white;
-      }
     }
   }
 }
