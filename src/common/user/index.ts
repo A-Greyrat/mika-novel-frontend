@@ -1,5 +1,5 @@
 import {httpGet, httpPost} from '../axios';
-
+import {rsaEncrypt} from './encrypt';
 export let isUserLoggedIn = false;
 
 const token = localStorage.getItem("token");
@@ -17,7 +17,7 @@ interface LoginRequest {
 export const login = async ({user, password, verifyCodeId, captcha}: LoginRequest) => {
     return httpPost<string>("/user/login", {
         "username": user,
-        "password": password,
+        "password": rsaEncrypt(password),
         "verifyCodeId": verifyCodeId,
         "captcha": captcha
     }).then(res => {
@@ -42,11 +42,10 @@ interface RegisterRequest {
 export const register = async ({nickname, password, email, verifyCode}: RegisterRequest) => {
     return httpPost<string>("/user/signup", {
         "nickname": nickname,
-        "password": password,
+        "password": rsaEncrypt(password),
         "email": email,
         "verifyCode": verifyCode
     }).then(res => {
-        console.log(res)
         if (res.code === 200) {
             localStorage.setItem("token", res.data!);
             isUserLoggedIn = true;

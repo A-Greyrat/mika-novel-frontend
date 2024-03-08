@@ -1,21 +1,25 @@
 import './Test.less';
 import {Image} from "../../component/mika-ui"
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {rsaEncrypt} from "../../common/user/encrypt.ts";
 
 const Test = () => {
-    const [width, setWidth] = useState(300);
-    const [height, setHeight] = useState(500);
+    const [text, setText] = useState("");
+    useEffect(() => {
+        rsaEncrypt("Hello World").then(res => {
+            setText(res);
+        }, err => {
+            setText(err);
+        });
+    }, []);
+
     return (
         <div className="test-root">
-            <Image lazy
-                   src="https://img.hongyoubizhi.com/picture/pages/regular/2022/07/06/14/100112501_p0_master1200.jpg?x-oss-process=image/resize,w_450/format,jpg"
-                   width={width} height={height}
-            />
-
-            <div>
-                <input type="number" value={width} onChange={(e) => setWidth(Number(e.target.value))}/>
-                <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))}/>
-            </div>
+            {/*<Image lazy*/}
+            {/*       src="https://img.hongyoubizhi.com/picture/pages/regular/2022/07/06/14/100112501_p0_master1200.jpg?x-oss-process=image/resize,w_450/format,jpg"*/}
+            {/*       width={305} height={413}*/}
+            {/*/>*/}
+            {text}
 
         </div>
     );

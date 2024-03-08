@@ -29,7 +29,7 @@ export const useTypePrint = (text: string[], speed = 100) => {
             nowIndex.current++;
         }
 
-        timer.current = window.setTimeout(print, isDeleting.current ? speed / 3 : speed);
+        timer.current = setTimeout(print, isDeleting.current ? speed / 3 : speed);
     }, [speed, text]);
 
     useEffect(() => {

@@ -5,13 +5,23 @@ const instance = axios.create({
     timeout: 5000,
 });
 
-export const httpGet = async <T>(url: string, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
+instance.interceptors.request.use(config => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers['token'] = token;
+    }
+    return config;
+}, error => {
+    return Promise.reject(error);
+});
+
+export const httpGet = async <T,>(url: string, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
     return instance.get(url, config)
         .then(res => res.data as ResponseData<T>)
         .catch(() => errorResponse);
 }
 
-export const httpPost = async <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
+export const httpPost = async <T,>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
     config = config || {};
     config.headers = {
         'Content-Type': 'application/json',

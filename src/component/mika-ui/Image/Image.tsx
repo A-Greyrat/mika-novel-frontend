@@ -11,6 +11,8 @@ interface ImageProps extends React.HTMLAttributes<HTMLImageElement> {
     loading?: React.ReactElement;
     error?: React.ReactElement | string;
     lazy?: boolean;
+    // TODO: Add support for preview
+    preview?: boolean;
 
     onLoaded?: () => unknown;
     onError?: () => unknown;
@@ -106,7 +108,6 @@ const useLoad = (_src?: string | null, onLoaded?: () => void, onError?: () => vo
 
         setLoading();
         fetch(src!, {
-            mode: "no-cors",
             cache: "default",
         }).then((res) => {
             if (res.ok) {
@@ -141,7 +142,6 @@ const useLoad = (_src?: string | null, onLoaded?: () => void, onError?: () => vo
             loadImage(_src);
         }
 
-        console.log("useEffect")
         return () => {
             observer.disconnect();
         };
@@ -149,6 +149,7 @@ const useLoad = (_src?: string | null, onLoaded?: () => void, onError?: () => vo
 
     return {loading: loading.current, error: error.current, src: src, elementRef: elementRef};
 };
+
 
 const Image = React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageElement>) => {
     const {
