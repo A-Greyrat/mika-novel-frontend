@@ -1,23 +1,15 @@
 @import "../../common/theme/theme.less";
 
 .mika-novel-novel-page-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-areas:  "novel-detail novel-detail"
+                        "novel-volume novel-recommend"
+                        "novel-comment .";
+
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+
   margin: auto;
   width: 80vw;
-  gap: 30px;
-
-  > :nth-child(2):is(div) {
-    display: flex;
-    width: 100%;
-    gap: 20px;
-
-    > :nth-child(1):is(div) {
-      flex: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-  }
+  gap: 15px;
 }

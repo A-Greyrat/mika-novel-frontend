@@ -167,7 +167,6 @@ const testRData = [
     },
 ]
 const NovelPage = () => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const [novelData, setNovelData] = useState<NovelPageProps>(testData);
 
@@ -176,13 +175,9 @@ const NovelPage = () => {
             <Header/>
             <div className="mika-novel-novel-page-container">
                 <NovelPageDetail {...novelData}/>
-                <div>
-                    <div>
-                        <NovelPageVolume nid={novelData.id} volume={novelData.volume}/>
-                        <NovelPageComment comment={testCommentData}/>
-                    </div>
-                    <NovelPageRecommend novels={testRData}/>
-                </div>
+                <NovelPageVolume nid={novelData.id} volume={novelData.volume}/>
+                <NovelPageComment comment={testCommentData}/>
+                <NovelPageRecommend novels={testRData}/>
             </div>
             <Footer/>
         </div>
