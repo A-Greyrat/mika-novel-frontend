@@ -9,7 +9,17 @@
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto auto;
 
-  margin: auto;
+  @media (max-width: 768px) {
+    grid-template-areas:  "novel-detail"
+                          "novel-volume"
+                          "novel-comment"
+                          "novel-recommend";
+
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+
+  margin: 20px auto;
   width: 80vw;
   gap: 15px;
 }

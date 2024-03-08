@@ -18,23 +18,19 @@ const NovelPageDetail = (novelData: {
 }) => {
     return (
         <div className="mika-novel-page-novel-detail">
-            <div>
-                <Image src={novelData?.cover} alt={novelData?.title} className="mika-novel-page-novel-cover" width={150}
-                       height={230}/>
+            <Image src={novelData?.cover} alt={novelData?.title} className="mika-novel-page-novel-cover" width={150}
+                   height={230}/>
+            <h1>{novelData?.title}</h1>
+            <div className="mika-novel-page-novel-author">
+                <AuthorIcon/>
+                {novelData?.author}
             </div>
-            <div className="mika-novel-page-novel-info">
-                <h1>{novelData?.title}</h1>
-                <div className="mika-novel-page-novel-author">
-                    <AuthorIcon/>
-                    {novelData?.author}
-                </div>
-                <div className="mika-novel-page-novel-tags">
-                    {novelData?.tags.map((tag, index) => {
-                        return <span key={index}>{tag}</span>
-                    })}
-                </div>
-                <p>{novelData?.description}</p>
+            <div className="mika-novel-page-novel-tags">
+                {novelData?.tags.map((tag, index) => {
+                    return <span key={index}>{tag}</span>
+                })}
             </div>
+            <p>{novelData?.description}</p>
         </div>
     );
 }
