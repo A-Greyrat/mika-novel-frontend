@@ -25,16 +25,16 @@ const ReadingNovelListItem = (props: ReadingNovelListItem) => {
 }
 
 const ReadingNovelList = memo((props: ReadingNovelListProps) => {
-    return (<>
+    return (<div className="mika-novel-reading-novel-list-root">
             <h1>正在看的</h1>
-            <div className="mika-novel-reading-novel-list-root">
+            <div className="mika-novel-reading-novel-list-wrapper">
                 <div className="mika-novel-reading-novel-list-container">
                     {props.items.map((item, index) => (
                         <ReadingNovelListItem key={index} {...item}/>
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     );
 });
 

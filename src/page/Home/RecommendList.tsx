@@ -17,7 +17,7 @@ type RecommendListProps = {
 
 const RecommendList = memo((props: RecommendListProps) => {
     return (
-        <div>
+        <div className="mika-novel-recommend-list-root">
             <h1>推荐</h1>
             <div className="mika-novel-recommend-list-container">
                 {props.items.map((item, index) => (

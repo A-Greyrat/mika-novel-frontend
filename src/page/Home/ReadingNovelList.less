@@ -1,4 +1,8 @@
 .mika-novel-reading-novel-list-root {
+  grid-area: reading-novel-list;
+}
+
+.mika-novel-reading-novel-list-wrapper {
   width: 50rem;
   overflow-x: scroll;
   mask-image: linear-gradient(to right, transparent, black 10px, black 95%, transparent);
@@ -27,7 +31,7 @@
   }
 }
 
-:has(+.mika-novel-reading-novel-list-root) {
+:has(+.mika-novel-reading-novel-list-wrapper) {
   margin-bottom: 0;
 }
 
