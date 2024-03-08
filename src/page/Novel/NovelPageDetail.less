@@ -16,10 +16,12 @@
         ". . novel-description"
         ". . .";
   grid-template-columns: 150px 20px 1fr;
-  grid-template-rows: 36px 10px auto 10px auto 10px auto 12px;
+  grid-template-rows: 36px 10px auto 10px 25px 10px fit-content(100%) auto;
+  min-height: 254px;
 
   @media (max-width: 768px) {
-    grid-template-columns: 100px 20px 1fr;
+    grid-template-columns: 120px 20px 1fr;
+    min-height: 180px;
   }
 
   padding: 12px;
@@ -37,10 +39,10 @@
     border-radius: 10px;
 
     @media (max-width: 768px) {
-      width: 100px !important;
-      height: 150px !important;
-      min-width: 100px !important;
-      min-height: 150px !important;
+      width: 120px !important;
+      height: 180px !important;
+      min-width: 120px !important;
+      min-height: 180px !important;
     }
   }
 
@@ -70,6 +72,8 @@
     color: @primary-color;
     grid-area: novel-author;
 
+    white-space: nowrap;
+
     svg {
       width: 20px;
       height: 20px;
@@ -83,7 +87,7 @@
 
   .mika-novel-page-novel-tags {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 5px;
     grid-area: novel-tags;
 
@@ -97,6 +101,8 @@
       cursor: pointer;
       user-select: none;
       transition: all 0.3s;
+
+      white-space: nowrap;
 
       &:hover {
         background: darken(@primary-color, 10%);
@@ -113,5 +119,9 @@
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
+
+    @media (max-width: 768px) {
+      -webkit-line-clamp: 3;
+    }
   }
 }

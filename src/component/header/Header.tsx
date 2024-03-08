@@ -14,7 +14,7 @@ const UserSection = () => {
 
     return (
         <div className="mika-novel-header-user">
-            <Image src={avatar} width={48} height={48} alt="" onClick={() => {
+            <Image src={avatar} width={42} height={42} alt="" onClick={() => {
                 window.location.href = "/login";
             }}/>
         </div>
@@ -27,7 +27,7 @@ const Header = memo(() => {
             <p className="mika-novel-header-icon" onClick={() => {
                 window.location.href = "/";
             }}>Mika</p>
-            <div className="mika-novel-header-left">
+            <div className="mika-novel-header-right">
                 <UserSection/>
             </div>
         </header>
