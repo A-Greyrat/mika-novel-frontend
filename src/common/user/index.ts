@@ -15,9 +15,11 @@ interface LoginRequest {
 }
 
 export const login = async ({user, password, verifyCodeId, captcha}: LoginRequest) => {
+    password = await rsaEncrypt(password);
+
     return httpPost<string>("/user/login", {
         "username": user,
-        "password": rsaEncrypt(password),
+        "password": password,
         "verifyCodeId": verifyCodeId,
         "captcha": captcha
     }).then(res => {
@@ -40,9 +42,11 @@ interface RegisterRequest {
 }
 
 export const register = async ({nickname, password, email, verifyCode}: RegisterRequest) => {
+    password = await rsaEncrypt(password);
+
     return httpPost<string>("/user/signup", {
         "nickname": nickname,
-        "password": rsaEncrypt(password),
+        "password": password,
         "email": email,
         "verifyCode": verifyCode
     }).then(res => {

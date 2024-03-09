@@ -127,6 +127,8 @@ const cardList = [
 ];
 
 const Home = () => {
+    getCarouselNovelList();
+
     return (<div className="mika-novel-home-page-root">
             <Header/>
             <div className="mika-novel-home-page-wrapper">
