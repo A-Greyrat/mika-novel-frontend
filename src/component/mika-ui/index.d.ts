@@ -21,3 +21,9 @@ export type {ImageProps} from './Image';
 
 export {default as TabList} from './TabList';
 export type {TabListProps} from './TabList';
+
+export {default as Carousel} from './Carousel';
+export type {CarouselProps} from './Carousel';
+
+
+export {withLock, useTimer, isMobile} from "./utils";

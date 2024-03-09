@@ -1,6 +1,5 @@
-import React, {useMemo} from "react";
+import React, {forwardRef, memo, useMemo} from "react";
 import './Dropdown.css';
-import {deepEqual} from "../utils";
 
 type DropdownProps = {
     children: React.ReactNode;
@@ -13,7 +12,7 @@ type DropdownProps = {
 }
 
 
-const Dropdown = React.forwardRef((props: DropdownProps, ref: React.Ref<HTMLDivElement>) => {
+const Dropdown = memo(forwardRef((props: DropdownProps, ref: React.Ref<HTMLDivElement>) => {
     const dropdownRef = React.useRef<HTMLDivElement>(null);
     const [margin, setMargin] = React.useState(0);
 
@@ -23,7 +22,7 @@ const Dropdown = React.forwardRef((props: DropdownProps, ref: React.Ref<HTMLDivE
         if (trigger) {
             trigger.classList.add(props.type === 'click' ? "mika-dropdown-trigger-click" : "mika-dropdown-trigger");
             setMargin(props.direction === 'up' ? parseFloat(getComputedStyle(trigger).marginTop) : parseFloat(getComputedStyle(trigger).marginBottom));
-            props.type === "click" && trigger.addEventListener("click", e => {
+            props.type === "click" && trigger.addEventListener("click", () => {
                 const style = getComputedStyle(dropdownRef.current!);
                 if (style.opacity === '1') {
                     trigger.blur();
@@ -43,7 +42,7 @@ const Dropdown = React.forwardRef((props: DropdownProps, ref: React.Ref<HTMLDivE
         console.error("Dropdown must have children")
     }
 
-    let dropDownStyle = useMemo(() => ({
+    const dropDownStyle = useMemo(() => ({
         ...(props.direction === "up" ? {
             bottom: '100%',
             marginBottom: `-${margin}px`,
@@ -65,8 +64,6 @@ const Dropdown = React.forwardRef((props: DropdownProps, ref: React.Ref<HTMLDivE
         </div>
         {props.children}
     </div>);
-});
+}));
 
-export default React.memo(Dropdown, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps)
-});
+export default Dropdown;

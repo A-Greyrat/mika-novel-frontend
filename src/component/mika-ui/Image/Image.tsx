@@ -24,11 +24,9 @@ const DefaultLoading = forwardRef(({width, height}: {
 }, ref: React.Ref<HTMLDivElement>) => {
     return (
         <div className='mika-image-loading' style={{
-            minWidth: width + "px",
-            minHeight: height + "px",
-            width: width + "px",
-            height: height + "px",
-        }} ref={ref}>
+            "--width": width + "px",
+            "--height": height + "px",
+        } as React.CSSProperties} ref={ref}>
             <svg viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -45,11 +43,9 @@ const DefaultError = forwardRef(({width, height}: {
 }, ref: React.Ref<HTMLDivElement>) => {
     return (
         <div className='mika-image-error' style={{
-            minWidth: width + "px",
-            minHeight: height + "px",
-            width: width + "px",
-            height: height + "px",
-        }} ref={ref}>
+            "--width": width + "px",
+            "--height": height + "px",
+        } as React.CSSProperties} ref={ref}>
             <svg viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -113,10 +109,10 @@ const useLoad = (_src?: string | null, onLoaded?: () => void, onError?: () => vo
             if (res.ok) {
                 return res.blob();
             }
-            throw new Error("[Mika::Image] Load error");
+            throw new Error("[Mika UI] Image: Fetch failed");
         }).then((blob) => {
             if (!blob.type.startsWith("image")) {
-                throw new Error("[Mika::Image] Blob not an image");
+                throw new Error("[Mika UI] Image: Not an image");
             }
             setLoaded(URL.createObjectURL(blob));
         }).catch(e => {

@@ -1,7 +1,6 @@
-import React, {memo, useCallback, useRef} from "react";
+import React, {forwardRef, memo, useCallback, useEffect, useRef} from "react";
 import './Modal.css';
 import {createRoot} from "react-dom/client";
-import {deepEqual} from "../utils";
 
 
 export type ModalController = {
@@ -70,8 +69,6 @@ const Title = memo((props: { title: string | React.ReactNode }) => {
     if (props.title === undefined) return null;
     return typeof props.title === "string" ?
         <div className="mika-modal-title">{props.title}</div> : <>{props.title}</>;
-}, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps);
 });
 
 const Footer = memo((props: {
@@ -97,16 +94,12 @@ const Footer = memo((props: {
             <button className="mika-modal-btn mika-modal-btn-close" onClick={props.onClose}>关闭</button>}
     </div>);
     else return <>{props.footer}</>;
-}, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps);
 });
 
 const Content = memo((props: { content: string | React.ReactNode }) => {
     if (props.content === undefined) return null;
     return typeof props.content === "string" ?
         <div className="mika-modal-content">{props.content}</div> : <>{props.content}</>;
-}, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps);
 });
 
 const CloseIcon = memo((props: {
@@ -116,11 +109,9 @@ const CloseIcon = memo((props: {
     if (props.closeIcon === undefined || props.closeIcon === true)
         return <div className="mika-modal-close" onClick={props.onClose}></div>;
     return props.closeIcon === false ? null : <>{props.closeIcon}</>;
-}, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps);
 });
 
-const Modal = React.forwardRef((props: ModalProps, ref: React.Ref<HTMLDivElement>) => {
+const Modal = memo(forwardRef((props: ModalProps, ref: React.Ref<HTMLDivElement>) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const firstRender = React.useRef(true);
     React.useImperativeHandle(ref, () => modalRef.current!);
@@ -130,7 +121,7 @@ const Modal = React.forwardRef((props: ModalProps, ref: React.Ref<HTMLDivElement
     }, [props.onClose]);
 
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (props.modalController) {
             props.modalController.close = () => fadeOutModal(modalRef);
         }
@@ -172,7 +163,7 @@ const Modal = React.forwardRef((props: ModalProps, ref: React.Ref<HTMLDivElement
             </div>
         </div>
     )
-});
+}));
 
 export const showModal = (props: Omit<Omit<ModalProps, "visible">, "onClose"> & { onClose?: () => unknown }) => {
     const div = document.createElement("div");
@@ -234,6 +225,4 @@ export const useModal = () => {
     return {modalRef, modalController};
 };
 
-export default React.memo(Modal, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps);
-});
+export default Modal;

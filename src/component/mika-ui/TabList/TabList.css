@@ -19,7 +19,7 @@
         font-weight: 400;
         color: #666;
         position: relative;
-        transition: all 0.3s;
+        transition: color 0.3s;
 
         &:not(.active):hover {
             color: var(--mika-primary-color);

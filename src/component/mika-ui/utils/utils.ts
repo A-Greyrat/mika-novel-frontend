@@ -1,28 +1,63 @@
-export const deepEqual = (a: any, b: any): boolean => {
-    if (a === b) return true;
-    if (a && b && typeof a === 'object' && typeof b === 'object') {
-        if (a.constructor !== b.constructor) return false;
-        let length, i, keys;
-        if (Array.isArray(a)) {
-            length = a.length;
-            if (length !== b.length) return false;
-            for (i = length; i-- !== 0;)
-                if (!deepEqual(a[i], b[i])) return false;
-            return true;
-        }
-        if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
-        if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
-        if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
-        keys = Object.keys(a);
-        length = keys.length;
-        if (length !== Object.keys(b).length) return false;
-        for (i = length; i-- !== 0;)
-            if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
-        for (i = length; i-- !== 0;) {
-            const key = keys[i];
-            if (!deepEqual(a[key], b[key])) return false;
-        }
-        return true;
+import {useCallback, useRef} from "react";
+
+export const withLock = <T extends unknown[]>(fn: (...args: T) => unknown, lockTime = 500) => {
+    let locked = false;
+    return (...args: T) => {
+        if (locked) return;
+        locked = true;
+        fn.call(null, ...args);
+        setTimeout(() => {
+            locked = false;
+        }, lockTime);
     }
-    return a !== a && b !== b;
+}
+
+export const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+export const debounce = <T extends unknown[]>(fn: (...args: T) => unknown, delay: number) => {
+    let timer: number | null = null;
+    return (...args: T) => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn.call(null, ...args);
+            timer = null;
+        }, delay);
+    }
+}
+
+export const throttle = <T extends unknown[]>(fn: (...args: T) => unknown, delay: number) => {
+    let timer: number | null = null;
+    return (arg: T) => {
+        if (timer) {
+            return;
+        }
+        timer = setTimeout(() => {
+            fn.call(null, ...arg);
+            timer = null;
+        }, delay);
+    }
+}
+
+export const useTimer = <T, >(callback: (arg: T) => unknown, interval: number) => {
+    const timer = useRef<number>(0);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const start = useCallback(() => {
+        timer.current = setInterval(callback, interval);
+    }, [callback, interval]);
+
+    const reset = useCallback(() => {
+        clearInterval(timer.current);
+        timer.current = setInterval(callback, interval);
+    }, [callback, interval]);
+
+    const stop = useCallback(() => {
+        clearInterval(timer.current);
+    }, []);
+
+    return interval > 0 ? [start, stop, reset] : [() => {}, () => {}, () => {}];
 }

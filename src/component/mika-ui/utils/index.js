@@ -1,1 +1,1 @@
-export {deepEqual} from './utils';
+export {withLock, useTimer, isMobile} from "./utils.ts";

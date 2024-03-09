@@ -1,11 +1,10 @@
-import React, {useEffect} from "react";
+import React, {forwardRef, memo, useEffect} from "react";
 import {useControl, useStyle} from "./CarouselListHooks";
 import {CarouselListProps} from "./CarouselListType";
 import "./CarouselList.css";
-import {deepEqual} from "../utils";
 
 
-const LeftButton = React.forwardRef((props: React.ButtonHTMLAttributes<HTMLButtonElement>, ref: React.Ref<HTMLButtonElement>) => {
+const LeftButton = forwardRef((props: React.ButtonHTMLAttributes<HTMLButtonElement>, ref: React.Ref<HTMLButtonElement>) => {
     return (
         <button
             className={"mika-carousel-list-btn mika-carousel-list-btn-left" + (props.className ? " " + props.className : "")}
@@ -21,7 +20,7 @@ const LeftButton = React.forwardRef((props: React.ButtonHTMLAttributes<HTMLButto
     );
 });
 
-const RightButton = React.forwardRef((props: React.ButtonHTMLAttributes<HTMLButtonElement>, ref: React.Ref<HTMLButtonElement>) => {
+const RightButton = forwardRef((props: React.ButtonHTMLAttributes<HTMLButtonElement>, ref: React.Ref<HTMLButtonElement>) => {
     return (
         <button
             className={"mika-carousel-list-btn mika-carousel-list-btn-right" + (props.className ? " " + props.className : "")}
@@ -37,7 +36,8 @@ const RightButton = React.forwardRef((props: React.ButtonHTMLAttributes<HTMLButt
     );
 });
 
-const CarouselList = React.forwardRef((props: CarouselListProps, ref: React.Ref<HTMLDivElement>) => {
+
+const CarouselList = memo(forwardRef((props: CarouselListProps, ref: React.Ref<HTMLDivElement>) => {
     const containerRef = useStyle(props);
     const {leftBtnRef, rightBtnRef} = useControl(props, containerRef);
 
@@ -62,8 +62,6 @@ const CarouselList = React.forwardRef((props: CarouselListProps, ref: React.Ref<
             {props.children}
         </div>
     );
-});
+}));
 
-export default React.memo(CarouselList, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps);
-});
+export default CarouselList;

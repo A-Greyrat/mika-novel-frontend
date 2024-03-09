@@ -1,5 +1,4 @@
-import React, {useEffect} from "react";
-import {deepEqual} from "../utils";
+import React, {memo, useEffect} from "react";
 
 export type ThemeConfig = {
     // 主题色
@@ -85,7 +84,7 @@ const defaultConfig: ConfigProps = {
 
 export const ConfigContext = React.createContext(defaultConfig);
 
-const Config = (props: ConfigProps) => {
+const Config = memo((props: ConfigProps) => {
     useEffect(() => {
         if (props.theme && props.theme !== defaultTheme) {
             const style = document.createElement('style');
@@ -105,8 +104,6 @@ const Config = (props: ConfigProps) => {
             {props.children}
         </ConfigContext.Provider>
     );
-}
-
-export default React.memo(Config, (prevProps, nextProps) => {
-    return deepEqual(prevProps, nextProps)
 });
+
+export default Config;

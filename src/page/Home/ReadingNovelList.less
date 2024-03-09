@@ -1,12 +1,14 @@
+@import "../../common/theme/theme";
+
 .mika-novel-reading-novel-list-root {
   grid-area: reading-novel-list;
+  width: 100%;
+  overflow: hidden;
 }
 
 .mika-novel-reading-novel-list-wrapper {
-  width: 50rem;
   overflow-x: scroll;
   mask-image: linear-gradient(to right, transparent, black 10px, black 95%, transparent);
-  margin-left: -10px;
 
   &::-webkit-scrollbar {
     height: 5px;
@@ -31,8 +33,11 @@
   }
 }
 
-:has(+.mika-novel-reading-novel-list-wrapper) {
-  margin-bottom: 0;
+// title
+:has(+.mika-novel-reading-novel-list-wrapper):is(h1) {
+  margin: 0;
+  color: @primary-color;
+  user-select: none;
 }
 
 .mika-novel-reading-novel-list-container {
@@ -43,7 +48,7 @@
   width: fit-content;
 
   gap: 20px;
-  padding: 20px 10px;
+  padding: 20px 10px 15px 0;
 }
 
 .mika-novel-reading-novel-list-item {
@@ -68,6 +73,12 @@
 
     > :first-child {
       border-radius: 10px;
+      height: auto;
+      aspect-ratio: 2 / 3;
+      width: 140px;
+      @media (max-width: 768px) {
+        width: 120px;
+      }
     }
 
     > p {

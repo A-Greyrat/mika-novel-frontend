@@ -2,9 +2,15 @@
 
 .mika-image-error,
 .mika-image-loading {
+    --width: auto;
+    --height: auto;
+
     background-color: #f1f1f1;
     position: relative;
     overflow: hidden;
+
+    width: var(--width);
+    height: var(--height);
 
     & > svg {
         & > path {

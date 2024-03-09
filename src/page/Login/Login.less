@@ -2,7 +2,11 @@
 
 .mika-novel-login-root {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  max-width: 100vw;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .mika-novel-login-side {
@@ -12,6 +16,16 @@
   align-items: center;
   justify-content: center;
   padding: 5%;
+
+  @media (max-width: 768px) {
+    order: 2;
+    flex: 0 0 240px;
+    max-height: 240px;
+    overflow: hidden;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 5%;
+  }
 
   > p {
     font-size: 2rem;
@@ -62,7 +76,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 400px;
 
   padding: 30px;
   border-radius: 10px;
@@ -70,8 +83,13 @@
   > h1 {
     font-size: 1.8rem;
     margin-bottom: 20px;
-    -webkit-text-stroke: 1px @primary-color;
     color: transparent;
+
+    @media (max-width: 768px) {
+      color: @primary-color;
+    }
+
+    -webkit-text-stroke: 1px @primary-color;
     user-select: none;
     align-self: flex-start;
     position: relative;

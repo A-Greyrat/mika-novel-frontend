@@ -1,85 +1,145 @@
 @import "../../common/theme/theme";
 
+.maxLines(@lines) {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: @lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.singleLine() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .mika-novel-novel-card {
-  display: flex;
-  flex-direction: row;
+  --height: 280px;
+  --mobileHeight: calc(var(--height) - 60px);
+  --padding: 16px;
+
+  @cardHeight: var(--height);
+  @cardMobileHeight: var(--mobileHeight);
+  @cardPadding: var(--padding);
+
+  display: grid;
+  grid-template-areas:  "cover . title"
+                        "cover . ."
+                        "cover . author"
+                        "cover . ."
+                        "cover . tags"
+                        "cover . ."
+                        "cover . description"
+                        "cover . .";
+
+  grid-template-columns: calc((@cardHeight - @cardPadding * 2) / 3 * 2) 20px minmax(0, 100%);
+  grid-template-rows: auto minmax(3px, 5px) auto minmax(3px, 5px) auto minmax(3px, 10px) auto auto;
+  padding: @cardPadding;
   cursor: pointer;
 
-  .mika-novel-novel-card-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin-left: 20px;
-    padding: 10px 10px 10px 0;
-    height: 100%;
+  width: 100%;
+  height: @cardHeight;
+  box-sizing: border-box;
 
-    > *::selection {
+  @media (max-width: 768px) {
+    height: @cardMobileHeight;
+    grid-template-columns: calc((@cardMobileHeight - @cardPadding) / 3 * 2) 15px minmax(0, 100%);
+    padding: calc(@cardPadding / 2);
+  }
+
+  > *::selection {
+    background-color: @primary-color;
+    color: white;
+  }
+
+  > :first-child {
+    grid-area: cover;
+
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    height: auto;
+    margin: auto;
+
+    border-radius: 10px;
+  }
+
+  :has(> h1) {
+    grid-area: title;
+    position: relative;
+    width: 100%;
+    margin: 5px 0 0 15px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: 60%;
+      border-radius: 20px;
       background-color: @primary-color;
+      left: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: mix(black, @primary-color, 50%);
+    margin: 0;
+
+    .singleLine();
+  }
+
+  h2 {
+    grid-area: author;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+    color: mix(black, @primary-color, 50%);
+
+    .singleLine();
+  }
+
+  p {
+    grid-area: description;
+    word-break: break-word;
+    font-size: 18px;
+    color: mix(black, @primary-color, 50%);
+    margin: 0;
+
+    .maxLines(5);
+
+    @media (max-width: 768px) {
+      .maxLines(3);
+    }
+  }
+
+  :has(> span) {
+    grid-area: tags;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    overflow: hidden;
+    height: 23px;
+  }
+
+  span {
+    font-size: 12px;
+    color: @primary-color;
+    border: 1px solid @primary-color;
+    padding: 2px 5px;
+    border-radius: 5px;
+    user-select: none;
+    transition: all 0.3s;
+    cursor: pointer;
+    box-sizing: border-box;
+    .singleLine();
+
+    &:hover {
       color: white;
-    }
-
-    h1 {
-      font-size: 30px;
-      font-weight: 600;
-      position: relative;
-      margin: 5px 0 0 15px;
-      color: mix(black, @primary-color, 50%);
-
-      &::before {
-        content: '';
-        position: absolute;
-        width: 3px;
-        height: 60%;
-        border-radius: 20px;
-        background-color: @primary-color;
-        left: -15px;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
-
-    h2 {
-      font-size: 16px;
-      font-weight: 400;
-      margin: 0 0 6px;
-      color: mix(black, @primary-color, 50%);
-    }
-
-    p {
-      word-break: break-word;
-      font-size: 18px;
-      color: mix(black, @primary-color, 50%);
-      @maxLines: 6;
-
-      @supports (-webkit-line-clamp: @maxLines) {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: @maxLines;
-        -webkit-box-orient: vertical;
-      }
-
-      @supports not (-webkit-line-clamp: @maxLines) {
-        overflow: hidden;
-      }
-    }
-
-    span {
-      font-size: 12px;
-      color: @primary-color;
-      border: 1px solid @primary-color;
-      padding: 2px 5px;
-      border-radius: 5px;
-      margin-right: 5px;
-      user-select: none;
-      transition: all 0.3s;
-      cursor: pointer;
-
-      &:hover {
-        color: white;
-        background-color: @primary-color;
-      }
+      background-color: @primary-color;
     }
   }
 }

@@ -7,21 +7,21 @@
 
   display: grid;
   grid-template-areas:
-        ". . novel-title"
-        ". . ."
+        "novel-cover . novel-title"
+        "novel-cover . ."
         "novel-cover . novel-author"
-        ". . ."
-        ". . novel-tags"
-        ". . ."
-        ". . novel-description"
+        "novel-cover . ."
+        "novel-cover . novel-tags"
+        "novel-cover . ."
+        "novel-cover . novel-description"
         ". . .";
   grid-template-columns: 150px 20px 1fr;
-  grid-template-rows: 36px 10px auto 10px 25px 10px fit-content(100%) auto;
+  grid-template-rows: 36px 10px 18px 10px 24px 10px fit-content(100%) auto;
   min-height: 254px;
 
   @media (max-width: 768px) {
     grid-template-columns: 120px 20px 1fr;
-    min-height: 180px;
+    min-height: 204px;
   }
 
   padding: 12px;

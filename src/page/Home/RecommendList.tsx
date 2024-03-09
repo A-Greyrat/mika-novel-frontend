@@ -21,7 +21,7 @@ const RecommendList = memo((props: RecommendListProps) => {
             <h1>推荐</h1>
             <div className="mika-novel-recommend-list-container">
                 {props.items.map((item, index) => (
-                    <NovelCard key={index} {...item} imgWidth={150} imgHeight={220}/>
+                    <NovelCard key={index} {...item} height={240} padding={12}/>
                 ))}
             </div>
         </div>
