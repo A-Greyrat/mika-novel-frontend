@@ -1,7 +1,7 @@
 import './Header.less';
 import {memo, useEffect, useState} from "react";
 import {isUserLoggedIn} from "../../common/user";
-import {Dropdown, Image} from "../mika-ui";
+import {Button, Dropdown, Image} from "../mika-ui";
 import {useNavigate} from "react-router-dom";
 
 const UserSection = () => {
@@ -61,9 +61,24 @@ const Header = memo(() => {
             <SearchSection/>
             <div className="mika-novel-header-right">
                 <UserSection/>
-                <div className="mika-novel-header-collect">收藏</div>
+                <div className="mika-novel-header-collect">书架</div>
                 <div className="mika-novel-header-history">历史</div>
-                <div className="mika-novel-header-upload">上传</div>
+                <div className="mika-novel-header-category">分类</div>
+                <Dropdown menu={<div className="mika-novel-header-dropdown">
+                    <Button styleType="text">书架</Button>
+                    <Button styleType="text">历史</Button>
+                    <Button styleType="text">分类</Button>
+                </div>} position='right'
+                          paddingTrigger={10}
+                          className="mika-novel-header-dropdown-container">
+                    <div className="mika-novel-header-ellipsis">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                            <circle cx="12" cy="12" r="2" fill="#777"/>
+                            <circle cx="6" cy="12" r="2" fill="#777"/>
+                            <circle cx="18" cy="12" r="2" fill="#777"/>
+                        </svg>
+                    </div>
+                </Dropdown>
             </div>
         </header>
     );

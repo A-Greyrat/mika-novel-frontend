@@ -112,8 +112,8 @@ export const removeFavorite = async (novelId: string) => {
     });
 }
 
-export const getFavoriteList = async (pageSize: number) => {
-    return httpGet("/reader/favorites?pageSize=" + pageSize).then((res) => {
+export const getFavoriteList = async (pageSize: number = 1000, page: number = 1) => {
+    return httpGet(`/reader/favorites?pageSize=${pageSize}&page=${page}`).then((res) => {
         return res.data as {
             total: number;
             records: NovelInfo[];

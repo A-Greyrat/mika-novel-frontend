@@ -27,8 +27,6 @@ const RecommendList = memo(() => {
                 });
                 setLoading(false);
             });
-            
-            setLoading(false);
         }, 1000);
     }, 1000), []);
 

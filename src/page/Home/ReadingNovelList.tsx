@@ -16,7 +16,7 @@ const ReadingNovelList = memo(() => {
     const [items, setItems] = useState<NovelInfo[]>([]);
 
     useEffect(() => {
-        getFavoriteList(20).then((res) => {
+        getFavoriteList().then((res) => {
             setItems(res.records);
         });
     }, []);
