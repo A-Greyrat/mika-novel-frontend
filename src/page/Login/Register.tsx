@@ -3,6 +3,7 @@ import {useTypePrint} from "../../common/hooks";
 import {Button} from "../../component/mika-ui";
 import React, {memo, useCallback, useEffect, useRef, useState} from "react";
 import {emailTimeLimit, getEmailCaptcha, isUserLoggedIn, register} from "../../common/user";
+import {useNavigate} from "react-router-dom";
 
 const text =
     "「はじめまして」した日から\n" +
@@ -138,6 +139,7 @@ const TypePrinter = memo(({texts}: { texts: string[] }) => {
 
 const RegisterForm = () => {
     const emailRef = useRef<HTMLInputElement>(null);
+    const nav = useNavigate();
     const [count, reset] = useCountDown(emailTimeLimit / 1000);
     const [error, setError] = useState<string | null>(null);
     const [available, invoke] = useTimer((email: string) => {
@@ -180,18 +182,18 @@ const RegisterForm = () => {
         }
 
         register({
-            email: form.get("email") as string,
-            nickname: form.get("nickname") as string,
-            password: form.get("password") as string,
-            verifyCode: form.get("verifyCode") as string,
+            email: (form.get("email") as string).trim(),
+            nickname: (form.get("nickname") as string).trim(),
+            password: (form.get("password") as string).trim(),
+            verifyCode: (form.get("verifyCode") as string).trim(),
         }).then(res => {
             if (res.code === 200) {
-                window.location.href = "/";
+                nav("/");
             } else {
-                setError("注册失败");
+                setError(res.msg);
             }
         });
-    }, []);
+    }, [nav]);
 
     return (
         <form className="mika-novel-register-form">
@@ -215,10 +217,13 @@ const RegisterForm = () => {
 
 
 const Register = () => {
-    if (isUserLoggedIn) {
-        window.location.href = "/";
-        return null;
-    }
+    const nav = useNavigate();
+
+    useEffect(() => {
+        if (isUserLoggedIn) {
+            nav("/");
+        }
+    }, [nav]);
 
     return (<div className="mika-novel-register-root">
         <div className="mika-novel-register-container">

@@ -1,6 +1,6 @@
 import React, {forwardRef, memo, useCallback, useEffect, useRef} from "react";
 import './Modal.css';
-import {createRoot} from "react-dom/client";
+import {fadeOutModal} from "./ModalUtils.tsx";
 
 
 export type ModalController = {
@@ -13,12 +13,12 @@ export type ModalProps = {
 
     title?: React.ReactNode | string;
     content?: React.ReactNode | string;
-    footer?: React.ReactNode;
+    footer?: React.ReactNode | 'none' | 'ok cancel close' | 'ok cancel' | 'ok close' | 'ok' | 'cancel' | 'close';
     className?: string;
     style?: React.CSSProperties;
     onOk?: () => unknown;
     onCancel?: () => unknown;
-    onClose: () => unknown;
+    onClose?: () => unknown;
     closeOnClickMask?: boolean;
     showMask?: boolean;
     closeIcon?: boolean | React.ReactNode;
@@ -26,18 +26,6 @@ export type ModalProps = {
     position?: "top" | "center" | "bottom";
 }
 
-const fadeOutModal = (modalRef: React.RefObject<HTMLDivElement>) => {
-    modalRef.current?.classList.add("mika-modal-closing");
-    modalRef.current?.addEventListener("animationend", e => {
-        if (e.animationName !== "mika-modal-fade-out") return;
-        modalRef.current?.classList.remove("mika-modal-closing");
-        modalRef.current?.classList.add("mika-modal-closed");
-        modalRef.current?.classList.remove("mika-modal-lock");
-        modalRef.current?.classList.remove("mika-modal-loading-ok");
-        modalRef.current?.classList.remove("mika-modal-loading-cancel");
-        modalRef.current?.classList.remove("mika-modal-loading-close");
-    });
-};
 
 const closeModal = ({modalRef, onClose, type}: {
     modalRef: React.RefObject<HTMLDivElement>,
@@ -72,7 +60,7 @@ const Title = memo((props: { title: string | React.ReactNode }) => {
 });
 
 const Footer = memo((props: {
-    footer?: React.ReactNode | 'none';
+    footer?: React.ReactNode | 'none' | 'ok cancel close' | 'ok cancel' | 'ok' | 'cancel';
     onOk?: () => void;
     onCancel?: () => void;
     onClose?: () => void;
@@ -87,13 +75,19 @@ const Footer = memo((props: {
     }, [props.modalRef, props.onOk]);
 
     if (props.footer === 'none') return null;
-    else if (props.footer === undefined) return (<div className="mika-modal-footer">
-        {!!props.onOk && <button className="mika-modal-btn mika-modal-btn-ok" onClick={ok}>确定</button>}
-        {!!props.onCancel && <button className="mika-modal-btn mika-modal-btn-cancel" onClick={cancel}>取消</button>}
-        {!!props.onClose &&
-            <button className="mika-modal-btn mika-modal-btn-close" onClick={props.onClose}>关闭</button>}
-    </div>);
-    else return <>{props.footer}</>;
+    else if (typeof props.footer === "string" || typeof props.footer === 'undefined') {
+        const showOk = props.footer ? props.footer.includes('ok') : false;
+        const showCancel = props.footer ? props.footer.includes('cancel') : false;
+        const showClose = props.footer ? props.footer.includes('close') : true;
+
+        return (<div className="mika-modal-footer">
+            {showOk && <button className="mika-modal-btn mika-modal-btn-ok" onClick={ok}>确定</button>}
+            {showCancel &&
+                <button className="mika-modal-btn mika-modal-btn-cancel" onClick={cancel}>取消</button>}
+            {showClose &&
+                <button className="mika-modal-btn mika-modal-btn-close" onClick={props.onClose}>关闭</button>}
+        </div>);
+    } else return <>{props.footer}</>;
 });
 
 const Content = memo((props: { content: string | React.ReactNode }) => {
@@ -165,64 +159,5 @@ const Modal = memo(forwardRef((props: ModalProps, ref: React.Ref<HTMLDivElement>
     )
 }));
 
-export const showModal = (props: Omit<Omit<ModalProps, "visible">, "onClose"> & { onClose?: () => unknown }) => {
-    const div = document.createElement("div");
-    document.body.appendChild(div);
-    const root = createRoot(div);
-    const propsCopy: ModalProps = {...props, visible: true, onClose: props.onClose ?? (() => {})};
-
-    const ModalWrapper = () => {
-        const [visible, setVisible] = React.useState(true);
-        const close = useCallback(() => {
-            setVisible(false);
-            setTimeout(() => {
-                root.unmount();
-                document.body.removeChild(div);
-            }, 300);
-        }, []);
-
-        const oldOnClose = propsCopy.onClose;
-        propsCopy.onClose = () => {
-            const result = oldOnClose?.();
-            if (result instanceof Promise) {
-                return result.then(() => close());
-            } else close();
-        }
-
-        if (propsCopy.onOk) {
-            const oldOnOk = propsCopy.onOk;
-            propsCopy.onOk = () => {
-                const result = oldOnOk();
-                if (result instanceof Promise) {
-                    return result.then(() => close());
-                } else close();
-            }
-        }
-
-        if (propsCopy.onCancel) {
-            const oldOnCancel = propsCopy.onCancel;
-            propsCopy.onCancel = () => {
-                const result = oldOnCancel();
-                if (result instanceof Promise) {
-                    return result.then(() => close());
-                } else close();
-            }
-        }
-
-        return <Modal {...propsCopy} visible={visible}/>
-    }
-    root.render(<ModalWrapper/>);
-};
-
-export const useModal = () => {
-    const modalRef = React.useRef<HTMLDivElement>(null);
-    const modalController = React.useMemo((): ModalController => ({
-        close: () => {
-            fadeOutModal(modalRef);
-        }
-    }), [modalRef]);
-
-    return {modalRef, modalController};
-};
 
 export default Modal;

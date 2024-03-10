@@ -1,35 +1,35 @@
 import './ReadingNovelList.less';
 import {Image} from "../../component/mika-ui";
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
+import {getFavoriteList, NovelInfo} from "../../common/novel";
 
-type ReadingNovelListItem = {
-    url: string;
-    title: string;
-    cover: string;
-}
-
-type ReadingNovelListProps = {
-    items: ReadingNovelListItem[];
-}
-
-
-const ReadingNovelListItem = (props: ReadingNovelListItem) => {
+const ReadingNovelListItem = (props: NovelInfo) => {
     return (
         <div className="mika-novel-reading-novel-list-item">
-            <a href={props.url}>
-                <Image lazy src={props.cover} alt={props.title} width={150} height={220}/>
-                <p>{props.title}</p>
-            </a>
+            <Image lazy src={props.cover} alt={props.title} width={120} height={180}/>
+            <p>{props.title}</p>
         </div>
     );
 }
 
-const ReadingNovelList = memo((props: ReadingNovelListProps) => {
+const ReadingNovelList = memo(() => {
+    const [items, setItems] = useState<NovelInfo[]>([]);
+
+    useEffect(() => {
+        getFavoriteList(20).then((res) => {
+            setItems(res.records);
+        });
+    }, []);
+
+    if (!items || items.length === 0) {
+        return null;
+    }
+
     return (<div className="mika-novel-reading-novel-list-root">
             <h1>正在看的</h1>
             <div className="mika-novel-reading-novel-list-wrapper">
                 <div className="mika-novel-reading-novel-list-container">
-                    {props.items.map((item, index) => (
+                    {items.map((item, index) => (
                         <ReadingNovelListItem key={index} {...item}/>
                     ))}
                 </div>

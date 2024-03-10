@@ -1,0 +1,19 @@
+@import "./NovelPageVolume";
+
+.mika-novel-page-novel-desc {
+  display: none;
+  grid-area: novel-desc;
+
+  &::selection {
+    background-color: @primary-color;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .panel-style;
+    display: block;
+    color: @emphasis-color;
+    margin: 0;
+    font-size: 18px;
+  }
+}

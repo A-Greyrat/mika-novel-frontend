@@ -1,7 +1,10 @@
 import './NovelPageComment.less';
 import {Button, Image} from "../../component/mika-ui";
+import {useStore} from "../../common/mika-store";
 
 type NovelPageCommentReply = {
+    parent?: string;
+
     id: string;
     time: string;
     content: string;
@@ -29,8 +32,10 @@ type NovelPageCommentProps = {
     reply?: NovelPageCommentReply[];
 }
 
-
 const NovelPageCommentBox = (props: NovelPageCommentProps) => {
+    const [showInput, setShowInput] = useStore('novel-page-show-input-' + props.id, false);
+    const [closePrevInput, setClosePrevInput] = useStore('novel-page-close-prev-input', () => {});
+
     return (
         <div className="mika-novel-page-comment-box">
             <div className="mika-novel-page-comment-box-container">
@@ -42,16 +47,27 @@ const NovelPageCommentBox = (props: NovelPageCommentProps) => {
                         <p>{props.content}</p>
                     </div>
                     <div>
-                        <Button style={{paddingLeft: 0}} styleType="link">回复</Button>
+                        <Button onClick={() => {
+                            closePrevInput();
+                            setShowInput(!showInput);
+                            setClosePrevInput(() => () => {
+                                setShowInput(false);
+                            });
+                        }} style={{paddingLeft: 0}} styleType="link">回复</Button>
                     </div>
-                    <NovelPageCommentReplyBox reply={props.reply}/>
+                    <NovelPageCommentReplyBox reply={props.reply} id={props.id}/>
                 </div>
+
             </div>
+            {showInput && <NovelPageCommentInput/>}
         </div>
     );
 }
 
 const NovelPageCommentReply = (props: NovelPageCommentReply) => {
+    const [showInput, setShowInput] = useStore('novel-page-show-input-' + props.parent, false);
+    const [closePrevInput, setClosePrevInput] = useStore('novel-page-close-prev-input', () => {});
+
     return (
         <div className="mika-novel-page-comment-box reply">
             <div className="mika-novel-page-comment-box-container">
@@ -63,7 +79,13 @@ const NovelPageCommentReply = (props: NovelPageCommentReply) => {
                         <p>回复<span>@{props.replyTo.name}</span>: {props.content}</p>
                     </div>
                     <div>
-                        <Button style={{paddingLeft: 0}} styleType="link">回复</Button>
+                        <Button onClick={() => {
+                            closePrevInput();
+                            setShowInput(!showInput);
+                            setClosePrevInput(() => () => {
+                                setShowInput(false);
+                            });
+                        }} style={{paddingLeft: 0}} styleType="link">回复</Button>
                     </div>
                 </div>
             </div>
@@ -71,7 +93,7 @@ const NovelPageCommentReply = (props: NovelPageCommentReply) => {
     );
 }
 
-const NovelPageCommentReplyBox = (props: { reply?: NovelPageCommentReply[] }) => {
+const NovelPageCommentReplyBox = (props: { reply?: NovelPageCommentReply[], id: string }) => {
     if (!props.reply) {
         return null;
     }
@@ -80,19 +102,29 @@ const NovelPageCommentReplyBox = (props: { reply?: NovelPageCommentReply[] }) =>
         <div className="mika-novel-page-comment-reply-box">
             {props.reply?.map((reply, index) => {
                 return (
-                    <NovelPageCommentReply key={index} {...reply}/>
+                    <NovelPageCommentReply key={index} {...reply} parent={props.id}/>
                 )
             })}
         </div>
     );
 }
 
+const NovelPageCommentInput = () => {
+    return (
+        <div className="mika-novel-page-comment-input">
+            <Image width={36} height={36} src="/defaultAvatar.webp" error="/defaultAvatar.webp"/>
+            <textarea placeholder="写下你的评论"/>
+            <Button styleType="primary">评论</Button>
+        </div>
+    );
+}
 
 const NovelPageComment = (props: { comment: NovelPageCommentProps[] }) => {
     return (
         <div className="mika-novel-page-novel-comment">
             <h2>评论</h2>
             <div>
+                <NovelPageCommentInput/>
                 {props.comment.map((comment, index) => {
                     return (
                         <NovelPageCommentBox key={index} {...comment}/>

@@ -26,4 +26,4 @@ export {default as Carousel} from './Carousel';
 export type {CarouselProps} from './Carousel';
 
 
-export {withLock, useTimer, isMobile} from "./utils";
+export {withLock, useTimer, isMobile, debounce, throttle} from "./utils";

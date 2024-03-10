@@ -18,6 +18,7 @@
   --height: 280px;
   --mobileHeight: calc(var(--height) - 60px);
   --padding: 16px;
+  --max-display-lines: 6;
 
   @cardHeight: var(--height);
   @cardMobileHeight: var(--mobileHeight);
@@ -34,7 +35,7 @@
                         "cover . .";
 
   grid-template-columns: calc((@cardHeight - @cardPadding * 2) / 3 * 2) 20px minmax(0, 100%);
-  grid-template-rows: auto minmax(3px, 5px) auto minmax(3px, 5px) auto minmax(3px, 10px) auto auto;
+  grid-template-rows: auto minmax(3px, 5px) auto minmax(3px, 5px) auto minmax(8px, 15px) auto auto;
   padding: @cardPadding;
   cursor: pointer;
 
@@ -48,7 +49,7 @@
     padding: calc(@cardPadding / 2);
   }
 
-  > *::selection {
+  *::selection {
     background-color: @primary-color;
     color: white;
   }
@@ -104,15 +105,14 @@
 
   p {
     grid-area: description;
-    word-break: break-word;
-    font-size: 18px;
+    font-size: 16px;
     color: mix(black, @primary-color, 50%);
     margin: 0;
-
-    .maxLines(5);
+    height: fit-content;
+    .maxLines(var(--max-display-lines));
 
     @media (max-width: 768px) {
-      .maxLines(3);
+      .maxLines(calc(var(--max-display-lines) - 2));
     }
   }
 

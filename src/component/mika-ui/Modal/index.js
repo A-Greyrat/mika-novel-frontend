@@ -1,1 +1,2 @@
-export {showModal, useModal, default} from './Modal';
+export {default} from './Modal';
+export {showModal, useModal} from './ModalUtils';

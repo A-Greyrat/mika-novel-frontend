@@ -1,1 +1,1 @@
-export {withLock, useTimer, isMobile} from "./utils.ts";
+export {withLock, useTimer, isMobile, debounce, throttle} from "./utils";

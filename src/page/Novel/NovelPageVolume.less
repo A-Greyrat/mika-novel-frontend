@@ -14,6 +14,10 @@
   grid-area: novel-volume;
   display: grid;
 
+  > :first-child {
+    padding-top: 5px;
+  }
+
   > div {
     display: flex;
     flex-direction: column;
@@ -21,18 +25,33 @@
     padding: 10px;
     box-sizing: border-box;
 
+    .mika-novel-page-volume-chapters {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      @media (max-width: 768px) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      gap: 10px;
+      width: 100%;
+
+      > button {
+        > div {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        justify-content: left;
+        width: 100%;
+      }
+
+    }
+
     > h2 {
       color: @primary-color;
       user-select: none;
       font-weight: 500;
       margin: 0;
-    }
-
-    > div {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-      align-items: center;
     }
   }
 }

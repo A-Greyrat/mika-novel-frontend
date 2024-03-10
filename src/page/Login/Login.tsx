@@ -4,6 +4,7 @@ import {useTypePrint} from "../../common/hooks";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {getCaptcha, isUserLoggedIn, login} from "../../common/user";
 import {throttle} from "../../common/utils";
+import {useNavigate} from "react-router-dom";
 
 const text =
     "無敵の笑顔で荒らすメディア\n" +
@@ -150,6 +151,8 @@ export const Captcha = () => {
 
 export const SubmitButton = () => {
     const [showError, setShowError] = useState<string | null>(null);
+    const nav = useNavigate();
+    
     const loginCallback = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
 
@@ -162,20 +165,20 @@ export const SubmitButton = () => {
         }
 
         const data = {
-            user: form.get("username") as string,
-            password: form.get("password") as string,
-            captcha: form.get("captcha") as string,
-            verifyCodeId: form.get("verifyCodeId") as string,
+            user: (form.get("username") as string).trim(),
+            password: (form.get("password") as string).trim(),
+            captcha: (form.get("captcha") as string).trim(),
+            verifyCodeId: (form.get("verifyCodeId") as string).trim()
         };
 
         login(data).then(res => {
             if (res.code === 200) {
-                window.location.href = "/";
+                nav("/");
             } else {
-                setShowError("账号或密码或验证码错误");
+                setShowError(res.msg);
             }
         });
-    }, []);
+    }, [nav]);
 
     return (<>
             <div className="mika-novel-login-form-error">
@@ -187,7 +190,7 @@ export const SubmitButton = () => {
                     <Button styleType="link" size="medium">忘记密码</Button>
                     <Button styleType="link" size="medium" onClick={e => {
                         e.preventDefault();
-                        window.location.href = "/register";
+                        nav("/register");
                     }}>注册</Button>
                 </div>
             </div>
@@ -209,10 +212,13 @@ const validate = (form: FormData) => {
 
 
 const Login = () => {
-    if (isUserLoggedIn) {
-        window.location.href = "/";
-        return null;
-    }
+    const nav = useNavigate();
+
+    useEffect(() => {
+        if (isUserLoggedIn) {
+            nav("/");
+        }
+    }, [nav]);
 
     return (
         <div className="mika-novel-login-root">

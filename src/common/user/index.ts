@@ -72,13 +72,3 @@ interface Captcha {
 export const getCaptcha = async () => {
     return httpGet<Captcha>("/common/captcha");
 }
-
-export default {
-    isUserLoggedIn,
-    login,
-    logout,
-    getCaptcha,
-    getEmailCaptcha,
-    emailTimeLimit,
-    register
-};

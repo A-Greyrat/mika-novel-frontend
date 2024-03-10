@@ -1,33 +1,33 @@
 import './NovelPageVolume.less';
 import {Button} from "../../component/mika-ui";
+import {useEffect, useState} from "react";
+import {getNovelVolumes, NovelPageVolumeInfo} from "../../common/novel";
+import { useNavigate} from 'react-router-dom';
 
-type NovelPageVolumeProps = {
-    nid: string;
-    volume: {
-        id: string;
-        title: string;
-        chapters: {
-            id: string;
-            title: string;
-        }[];
-    }[];
-}
+const NovelPageVolume = ({nid}: {nid: string}) => {
+    const [volumeData, setVolumeData] = useState<NovelPageVolumeInfo[]>();
+    const nav = useNavigate ();
 
-const NovelPageVolume = (props: NovelPageVolumeProps) => {
+    useEffect(() => {
+        getNovelVolumes(nid).then(setVolumeData);
+    }, [nid]);
+
+    if (!volumeData) {
+        return null;
+    }
+
     return (
         <div className="mika-novel-page-volume">
-            {props.volume.map((volume, index) => {
+            {volumeData.map((volume, index) => {
                 return (
                     <div key={index}>
                         <h2>{volume.title}</h2>
-                        <div>
-                            {volume.chapters.map((chapter, index) => {
+                        <div className="mika-novel-page-volume-chapters">
+                            {volume.chapters.map((chapter: NovelPageVolumeInfo['chapters'][number], index) => {
                                 return (
-                                    <div key={index}>
-                                        <Button styleType="default" onClick={() => {
-                                            window.location.href = `/novel/${props.nid}/${volume.id}/${chapter.id}`;
-                                        }}>{chapter.title}</Button>
-                                    </div>
+                                        <Button key={index} styleType="default" size='large' onClick={() => {
+                                            nav(`/novel/${chapter.novelId}/${chapter.volumeId}/${chapter.id}`);
+                                        }}><div>{chapter.title}</div></Button>
                                 )
                             })}
                         </div>

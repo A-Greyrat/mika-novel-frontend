@@ -1,4 +1,6 @@
 import axios, {AxiosRequestConfig} from 'axios';
+import {showModal} from "../../component/mika-ui";
+import {isUserLoggedIn} from "../user";
 
 const instance = axios.create({
     baseURL: 'http://118.31.42.183:8080',
@@ -12,6 +14,28 @@ instance.interceptors.request.use(config => {
     }
     return config;
 }, error => {
+    return Promise.reject(error);
+});
+
+// 拦截响应，401表示token过期
+instance.interceptors.response.use(response => {
+    return response;
+}, error => {
+    if (error.response.status === 401) {
+        if (isUserLoggedIn) {
+            showModal({
+                title: "登录过期",
+                content: "登录已过期，请重新登录",
+                onOk: () => {
+                    localStorage.removeItem("token");
+                    window.location.reload();
+                },
+                closeIcon: false,
+                closeOnClickMask: false,
+                footer: "ok",
+            });
+        }
+    }
     return Promise.reject(error);
 });
 

@@ -1,15 +1,4 @@
-export const debounce = <T>(fn: (arg: T) => unknown, delay: number) => {
-    let timer: number | null = null;
-    return function (arg: T) {
-        if (timer) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-            fn(arg);
-            timer = null;
-        }, delay);
-    }
-}
+export {debounce} from '../../component/mika-ui';
 
 export const throttle = <T,>(fn: (arg: T) => unknown, delay: number) => {
     let timer: number | null = null;

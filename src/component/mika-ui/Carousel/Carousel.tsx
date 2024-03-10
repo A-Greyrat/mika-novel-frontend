@@ -1,6 +1,6 @@
 import './Carousel.css';
 import React, {forwardRef, memo, ReactElement, useCallback, useEffect, useImperativeHandle, useRef} from "react";
-import {useTimer, withLock} from "../utils";
+import {isMobile, useTimer, withLock} from "../utils";
 
 export interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
     items: ReactElement[];
@@ -180,14 +180,19 @@ const CarouselHorizontal = memo(forwardRef((props: Omit<CarouselProps, "directio
                     {props.items[0]}
                 </li>
             </ul>
-            <PrevButton onClick={() => {
-                handleSwitch(currentIndex.current - 1);
-                reset();
-            }}/>
-            <NextButton onClick={() => {
-                handleSwitch(currentIndex.current + 1);
-                reset();
-            }}/>
+
+            {!isMobile() &&
+                <PrevButton onClick={() => {
+                    handleSwitch(currentIndex.current - 1);
+                    reset();
+                }}/>
+            }
+            {!isMobile() &&
+                <NextButton onClick={() => {
+                    handleSwitch(currentIndex.current + 1);
+                    reset();
+                }}/>
+            }
         </div>
     );
 }));

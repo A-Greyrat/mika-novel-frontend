@@ -1,6 +1,8 @@
-import {Image} from "../../component/mika-ui";
+import {Button, Image} from "../../component/mika-ui";
 import "./NovelPageDetail.less";
 import {memo} from "react";
+import {addFavorite, NovelInfo} from "../../common/novel";
+import {useNavigate} from "react-router-dom";
 
 const AuthorIcon = memo(() => {
     return (<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -9,13 +11,9 @@ const AuthorIcon = memo(() => {
     </svg>);
 });
 
-const NovelPageDetail = (novelData: {
-    title: string;
-    description: string;
-    cover: string;
-    tags: string[];
-    author: string;
-}) => {
+const NovelPageDetail = (novelData: NovelInfo) => {
+    const nav = useNavigate();
+
     return (
         <div className="mika-novel-page-novel-detail">
             <Image src={novelData?.cover} alt={novelData?.title} className="mika-novel-page-novel-cover" width={150}
@@ -27,10 +25,20 @@ const NovelPageDetail = (novelData: {
             </div>
             <div className="mika-novel-page-novel-tags">
                 {novelData?.tags.map((tag, index) => {
-                    return <span key={index}>{tag}</span>
+                    return <span key={index}>{tag.tagName}</span>
                 })}
             </div>
             <p>{novelData?.description}</p>
+            <div className="mika-novel-page-novel-action">
+                <Button styleType="primary" size="large" onClick={() => {
+                    nav(`/novel/${novelData.id}/0/0`);
+                }}>开始阅读</Button>
+                <Button styleType="default" size="large" onClick={() => {
+                    addFavorite(novelData.id).then(() => {
+                        // TODO: 提示加入书架成功
+                    });
+                }}>加入书架</Button>
+            </div>
         </div>
     );
 }

@@ -6,11 +6,12 @@ const Footer = memo(() => {
         <footer className="mika-novel-footer-container">
             <p style={{
                 fontSize: "20px",
-                fontWeight: "bold",
-                color: "transparent",
-                WebkitTextStroke: "1px #8c5b8f",
+                fontWeight: "400",
+                color: "grey",
                 textAlign: "center",
-            }}>平平无奇的Footer</p>
+            }}>
+                已经到底了
+            </p>
         </footer>
     )
 });

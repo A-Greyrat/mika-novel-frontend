@@ -22,7 +22,21 @@
       flex-direction: column;
       position: relative;
 
-      margin-top: 20px;
+      margin: 20px 0;
+
+      &:not(.reply):not(:last-child)::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        right: 0;
+        width: calc(100% - 44px);
+        height: 1px;
+        background-color: mix(@primary-color, transparent, 20%);
+      }
+
+      .mika-novel-page-comment-input {
+        margin-bottom: 20px;
+      }
 
       .mika-novel-page-comment-box-container {
         display: flex;
@@ -49,6 +63,10 @@
             color: #888;
             font-size: 15px;
           }
+
+          > :is(:not(.mika-novel-page-comment-box-content)):is(div) {
+            margin-top: -5px;
+          }
         }
       }
 
@@ -58,20 +76,9 @@
         margin: 3px 0;
       }
 
-      &:not(.reply)::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        height: 1px;
-        background-color: mix(@primary-color, white, 50%);
-      }
-
       .mika-novel-page-comment-reply-box {
         .mika-novel-page-comment-box.reply {
-          margin-top: 5px;
+          margin: 8px 0;
 
           h3 {
             font-size: 14px !important;
@@ -85,7 +92,7 @@
             font-size: 14px;
           }
 
-          span {
+          .mika-novel-page-comment-box-content span {
             color: @primary-color;
             font-weight: 500;
             cursor: pointer;
@@ -93,8 +100,6 @@
         }
       }
     }
-
-
   }
 
   :has(> .mika-novel-page-comment-box-reply) {
@@ -108,5 +113,53 @@
       font-weight: 500;
       cursor: pointer;
     }
+  }
+}
+
+:has(> .reply) > :last-child {
+    margin-bottom: 0 !important;
+}
+
+.mika-novel-page-comment-input {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+  grid-template-areas:  "avatar comment comment"
+                        ". . submit";
+  grid-template-columns: 36px 1fr 60px;
+  grid-template-rows: auto auto;
+
+  > :first-child {
+    border-radius: 50%;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    margin-top: 2px;
+
+    grid-area: avatar;
+  }
+
+  > textarea {
+    padding: 10px;
+    border-radius: 10px;
+    resize: none;
+    border: 1px solid mix(@primary-color, transparent, 40%);
+    grid-area: comment;
+
+    font-size: 14px;
+    line-height: 1.2;
+    font-family: inherit;
+    color: #555;
+
+    height: 50px;
+
+    &:focus {
+      outline: none;
+      border-color: mix(@primary-color, transparent, 60%);
+    }
+
+  }
+
+  > button {
+    grid-area: submit;
   }
 }
