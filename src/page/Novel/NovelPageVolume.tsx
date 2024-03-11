@@ -11,7 +11,7 @@ const NovelPageVolume = ({nid, volumeData}: { nid: string, volumeData: NovelPage
 
     useEffect(() => {
         getHistory(nid).then((res) => {
-            res[0] && setLastRead({
+            res.length > 0 && setLastRead({
                 volumeId: res[0].volumeNumber,
                 chapterId: res[0].chapterNumber
             });

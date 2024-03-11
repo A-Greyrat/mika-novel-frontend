@@ -39,7 +39,7 @@ const NovelPageCommentBox = (props: NovelPageCommentProps) => {
     return (
         <div className="mika-novel-page-comment-box">
             <div className="mika-novel-page-comment-box-container">
-                <Image src={props.user.avatar} width={36} height={36} error="/defaultAvatar.webp"/>
+                <Image lazy src={props.user.avatar} width={36} height={36} error="/defaultAvatar.webp"/>
                 <div>
                     <h3>{props.user.name}</h3>
                     <p>{props.time}</p>

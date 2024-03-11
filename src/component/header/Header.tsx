@@ -1,8 +1,8 @@
 import './Header.less';
-import {memo, useCallback, useEffect, useState} from "react";
+import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {getUserInfo, isUserLoggedIn, logout} from "../../common/user";
 import {Button, Dropdown, Image, withLockTime} from "../mika-ui";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {getFavoriteList, getHistoryList, HistoryItem, NovelInfo} from "../../common/novel";
 
 const UserSection = () => {
@@ -62,15 +62,25 @@ const UserSection = () => {
 }
 const SearchSection = () => {
     const nav = useNavigate();
+    const location = useLocation();
+    const inputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        if (location.pathname.startsWith("/search")) {
+            if (inputRef.current) {
+                inputRef.current.value = decodeURIComponent(location.pathname.split("/")[2]);
+            }
+        }
+    }, [location.pathname, nav]);
+    
     return (
         <div className="mika-novel-header-search">
-            <input type="text" placeholder="搜索" onKeyUp={e => {
+            <input type="text" placeholder="搜索" ref={inputRef} onKeyUp={e => {
                 if (e.key === "Enter") {
                     nav('/');
                     setTimeout(() => {
                         nav(`/search/${(e.target as HTMLInputElement).value}`, {replace: true});
-                    }, 0);
+                    }, 10);
                 }
             }}/>
         </div>

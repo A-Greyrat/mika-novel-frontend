@@ -198,6 +198,7 @@ const NovelPage = () => {
     const [novelData, setNovelData] = useState<NovelInfo>();
     const [volumeData, setVolumeData] = useState<NovelPageVolumeInfo[]>();
     const [recommendNovels, setRecommendNovels] = useState<NovelInfo[]>([]);
+
     useEffect(() => {
         window.scrollTo(0, 0);
 
