@@ -1,4 +1,4 @@
-import React, {forwardRef, memo, useMemo} from "react";
+import React, {forwardRef, memo, useCallback, useMemo} from "react";
 import './Dropdown.css';
 
 type DropdownProps = {
@@ -9,6 +9,7 @@ type DropdownProps = {
     type?: "hover" | "click";
     className?: string;
     position?: "left" | "right" | "center";
+    callback?: () => void;
 }
 
 
@@ -16,27 +17,44 @@ const Dropdown = memo(forwardRef((props: DropdownProps, ref: React.Ref<HTMLDivEl
     const dropdownRef = React.useRef<HTMLDivElement>(null);
     const [margin, setMargin] = React.useState(0);
 
+    const triggerCallback = useCallback(() => {
+        props.callback && props.callback();
+    }, [props]);
+
+
     React.useEffect(() => {
         const dropdown = dropdownRef?.current;
         const trigger = dropdown?.nextElementSibling as HTMLElement
+        const fn = () => {
+            const style = getComputedStyle(dropdownRef.current!);
+            if (style.opacity === '1') {
+                trigger.blur();
+            } else {
+                trigger.focus()
+            }
+        };
+
         if (trigger) {
             trigger.classList.add(props.type === 'click' ? "mika-dropdown-trigger-click" : "mika-dropdown-trigger");
             setMargin(props.direction === 'up' ? parseFloat(getComputedStyle(trigger).marginTop) : parseFloat(getComputedStyle(trigger).marginBottom));
-            props.type === "click" && trigger.addEventListener("click", () => {
-                const style = getComputedStyle(dropdownRef.current!);
-                if (style.opacity === '1') {
-                    trigger.blur();
-                } else {
-                    trigger.focus()
-                }
-            });
+            props.type === "click" && trigger.addEventListener("click", fn);
+
+            if (props.type === "click") {
+                trigger.addEventListener("click", triggerCallback);
+            } else {
+                trigger.addEventListener("mouseenter", triggerCallback);
+            }
         }
 
         if (dropdown) {
             dropdown.style.setProperty('--mika-dropdown-position-X', (props.position === 'center' || props.position === undefined) ? '-50%' : '0');
         }
 
-    }, [props.direction, props.position, props.type]);
+        return () => {
+            trigger && trigger.removeEventListener(props.type === "click" ? "click" : "mouseenter", triggerCallback);
+            trigger && props.type === "click" && trigger.removeEventListener("click", fn);
+        }
+    }, [props, props.direction, props.position, props.type, triggerCallback]);
 
     if (props.children === undefined) {
         console.error("Dropdown must have children")

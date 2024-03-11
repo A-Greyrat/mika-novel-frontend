@@ -2,14 +2,16 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import React, {Suspense} from "react";
 import LoadingPage from "../Loading/LoadingPage";
 
-const Home = React.lazy(() => import('../Home/Home.tsx'));
-const Login = React.lazy(() => import('../Login/Login.tsx'));
-const Register = React.lazy(() => import('../Login/Register.tsx'));
-const $404 = React.lazy(() => import('../404/404.tsx'));
-const NovelPage = React.lazy(() => import('../Novel/NovelPage.tsx'));
-const NovelReader = React.lazy(() => import('../Reader/NovelReader.tsx'));
-const Test = React.lazy(() => import('../Test/Test.tsx'));
-const SearchPage = React.lazy(() => import('../Search/SearchPage.tsx'));
+const Home = React.lazy(() => import('../Home/Home'));
+const Login = React.lazy(() => import('../Login/Login'));
+const Register = React.lazy(() => import('../Login/Register'));
+const $404 = React.lazy(() => import('../404/404'));
+const NovelPage = React.lazy(() => import('../Novel/NovelPage'));
+const NovelReader = React.lazy(() => import('../Reader/NovelReader'));
+const Test = React.lazy(() => import('../Test/Test'));
+const SearchPage = React.lazy(() => import('../Search/SearchPage'));
+const SpacePage = React.lazy(() => import('../SpacePage/SpacePage'));
+
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,10 @@ const router = createBrowserRouter([
     {
         path: '/search/:keyword',
         element: <SearchPage/>,
+    },
+    {
+        path: '/space',
+        element: <SpacePage/>,
     },
     {
         path: '/test',

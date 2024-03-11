@@ -116,8 +116,20 @@ export const getFavoriteList = async (pageSize: number = 1000, page: number = 1)
     return httpGet(`/reader/favorites?pageSize=${pageSize}&page=${page}`).then((res) => {
         return res.data as {
             total: number;
-            records: NovelInfo[];
+            records: (NovelInfo & { novelId: number })[];
         };
+    });
+}
+
+export const getIsFavorite = async (novelId: number) => {
+    // return getFavoriteList().then((res) => {
+    //     return res.records.some((item) => {
+    //         return item.novelId === novelId;
+    //     });
+    // });
+
+    return httpGet(`/reader/favorites/contains?novelId=${novelId}`).then((res) => {
+        return res.data as boolean;
     });
 }
 
@@ -130,7 +142,7 @@ export const getRankList = async (rankName: string, page: number, pageSize: numb
     });
 }
 
-interface HistoryItem {
+export interface HistoryItem {
     novelId: number;
     volumeId: number;
     volumeNumber: number;
@@ -147,7 +159,3 @@ export const getHistoryList = async (pageSize: number = 1000) => {
         return res.data as HistoryItem[];
     });
 }
-
-getHistoryList().then((res) => {
-    console.log(res);
-});

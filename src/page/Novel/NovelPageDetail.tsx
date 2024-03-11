@@ -1,7 +1,7 @@
 import {Button, Image} from "../../component/mika-ui";
 import "./NovelPageDetail.less";
-import {memo} from "react";
-import {addFavorite, NovelInfo} from "../../common/novel";
+import {memo, useEffect, useState} from "react";
+import {addFavorite, getIsFavorite, NovelInfo, removeFavorite} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
 
 const AuthorIcon = memo(() => {
@@ -12,7 +12,14 @@ const AuthorIcon = memo(() => {
 });
 
 const NovelPageDetail = (novelData: NovelInfo) => {
+    const [isFavorite, setIsFavorite] = useState(false);
     const nav = useNavigate();
+
+    useEffect(() => {
+        getIsFavorite(Number(novelData.id)).then((res) => {
+            setIsFavorite(res);
+        });
+    }, [novelData.id]);
 
     return (
         <div className="mika-novel-page-novel-detail">
@@ -33,11 +40,18 @@ const NovelPageDetail = (novelData: NovelInfo) => {
                 <Button styleType="primary" size="large" onClick={() => {
                     nav(`/novel/${novelData.id}/0/0`);
                 }}>开始阅读</Button>
-                <Button styleType="default" size="large" onClick={() => {
+                {!isFavorite &&<Button styleType="default" size="large" onClick={() => {
                     addFavorite(novelData.id).then(() => {
-                        // TODO: 提示加入书架成功
+                        setIsFavorite(true);
                     });
-                }}>加入书架</Button>
+                }}>加入收藏</Button>}
+                {isFavorite && <Button styleType="default" size="large" onClick={() => {
+                    removeFavorite(novelData.id).then(() => {
+                        setIsFavorite(false);
+                    });
+                }}>
+                    移除收藏
+                </Button>}
             </div>
         </div>
     );

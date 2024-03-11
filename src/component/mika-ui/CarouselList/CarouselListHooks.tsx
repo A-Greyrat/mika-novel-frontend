@@ -43,7 +43,6 @@ const useInterval = (props: CarouselListProps) => {
 
     useEffect(() => {
         return () => {
-            console.log("clear interval")
             intervalRef.current && clearInterval(intervalRef.current);
         }
     }, []);

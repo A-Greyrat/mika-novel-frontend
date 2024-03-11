@@ -21,7 +21,6 @@ const NovelReader = () => {
         window.scrollTo(0, 0);
 
         getNovelContent(novelId!, volumeId!, chapterId!).then((res) => {
-            console.log(res)
             setNovelContent(res.content);
             setTitle(res.title);
         });

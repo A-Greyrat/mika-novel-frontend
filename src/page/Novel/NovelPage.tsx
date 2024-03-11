@@ -191,12 +191,14 @@ const NovelPage = () => {
     const [novelData, setNovelData] = useState<NovelInfo>();
     const [volumeData, setVolumeData] = useState<NovelPageVolumeInfo[]>();
     const [recommendNovels, setRecommendNovels] = useState<NovelInfo[]>([]);
+
     useEffect(() => {
         window.scrollTo(0, 0);
 
         getNovelInfo(novelId!).then(setNovelData);
         getNovelVolumes(novelId!).then(setVolumeData);
         getRelatedNovels(novelId!).then(setRecommendNovels);
+
     }, [novelId]);
 
     if (!novelId) {

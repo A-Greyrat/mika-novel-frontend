@@ -29,7 +29,6 @@ const Button = memo(forwardRef((props: ButtonProps, ref: React.Ref<HTMLButtonEle
         if (onClick) {
             const result = onClick(e);
             if (result instanceof Promise) {
-                console.log(btnRef)
                 btnRef.current!.disabled = true;
                 btnRef.current!.classList.add('mika-button-loading');
                 result.finally(() => {

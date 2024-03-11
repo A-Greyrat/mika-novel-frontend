@@ -1,12 +1,9 @@
 import './Test.less';
-import SkeletonCard from "../../component/SkeletonCard/SkeletonCard";
+import LoadingPage from "../Loading/LoadingPage.tsx";
 
 const Test = () => {
-    console.log('test')
     return (
-        <div className="test-root">
-            <SkeletonCard/>
-        </div>
+        <LoadingPage/>
     );
 };
 
