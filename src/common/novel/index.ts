@@ -176,6 +176,15 @@ export const removeHistory = async (novelId: string) => {
     });
 }
 
+// return all tags list
+export const getAvailableTags = async () => {
+    return httpGet("/novel/available-tags").then((res) => {
+        return res.data as {
+            id: string;
+            tagName: string;
+        }[];
+    });
+}
 
 export const addComment = async (novelId: string, toUid: string, content: string) => {
     return httpPost("/novel/comment/add", {

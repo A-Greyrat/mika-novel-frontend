@@ -137,6 +137,41 @@ const TypePrinter = memo(({texts}: { texts: string[] }) => {
     return prev.texts === next.texts;
 });
 
+const validate = (form: HTMLFormElement) => {
+    const email = form.email;
+    const nickname = form.nickname;
+    const password = form.password;
+    const confirmPassword = form.confirmPassword;
+    const verifyCode = form.verifyCode;
+
+    if (!email.checkValidity()) {
+        return "邮箱格式错误";
+    }
+
+    if (!nickname.checkValidity()) {
+        return "昵称格式错误";
+    }
+
+    if (!password.value) {
+        return "密码不能为空";
+    }
+
+    if (!password.checkValidity()) {
+        return "密码强度不够";
+    }
+
+    if (!verifyCode.checkValidity()) {
+        return "验证码格式错误";
+    }
+
+    if (password.value !== confirmPassword.value) {
+        return "输入的两次密码不一致";
+    }
+
+    return null;
+}
+
+
 const RegisterForm = () => {
     const emailRef = useRef<HTMLInputElement>(null);
     const nav = useNavigate();
@@ -169,20 +204,9 @@ const RegisterForm = () => {
         setDisable(true);
         const form = new FormData(e.currentTarget.form!);
 
-        if (form.get("password") !== form.get("confirmPassword")) {
-            setError("输入的两次密码不一致");
-            setDisable(false);
-            return;
-        }
-
-        if (!form.get("verifyCode")) {
-            setError("验证码不能为空");
-            setDisable(false);
-            return;
-        }
-
-        if (!form.get("email") || !form.get("nickname") || !form.get("password")) {
-            setError("邮箱、昵称或密码不能为空");
+        const error = validate(e.currentTarget.form!);
+        if (error) {
+            setError(error);
             setDisable(false);
             return;
         }
@@ -204,12 +228,13 @@ const RegisterForm = () => {
 
     return (
         <form className="mika-novel-register-form">
-            <input type="text" placeholder="邮箱" name="email" ref={emailRef}/>
-            <input type="text" placeholder="昵称" name="nickname"/>
-            <input type="password" placeholder="密码" name="password"/>
-            <input type="password" placeholder="确认密码" name="confirmPassword"/>
+            <input type="text" placeholder="邮箱" name="email" ref={emailRef} required
+                   pattern={"^\\w+(-+.\\w+)*@\\w+(-.\\w+)*.\\w+(-.\\w+)*$"}/>
+            <input type="text" placeholder="昵称" name="nickname" required pattern={"^[\u4e00-\u9fa5_a-zA-Z0-9]+$"}/>
+            <input type="password" placeholder="密码" name="password" required pattern={"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$"}/>
+            <input type="password" placeholder="确认密码" name="confirmPassword" required/>
             <div className="mika-novel-register-form-captcha">
-                <input type="text" placeholder="验证码" name="verifyCode"/>
+                <input type="text" placeholder="验证码" name="verifyCode" required pattern={"^[0-9a-zA-Z]{4}$"}/>
                 <button disabled={!available.current} onClick={getEmailCaptchaCallback}>
                     {available.current ? '获取验证码' : count + "s"}
                 </button>
@@ -217,7 +242,8 @@ const RegisterForm = () => {
             <div className="mika-novel-register-form-error">
                 {error}
             </div>
-            <Button disabled={disable} type="submit" styleType="primary" size="large" onClick={submitCallback}>注册</Button>
+            <Button disabled={disable} type="submit" styleType="primary" size="large"
+                    onClick={submitCallback}>注册</Button>
         </form>
     );
 }

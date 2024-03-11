@@ -153,13 +153,13 @@ export const SubmitButton = () => {
     const [showError, setShowError] = useState<string | null>(null);
     const [disable, setDisable] = useState(false);
     const nav = useNavigate();
-    
+
     const loginCallback = useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
 
         setDisable(true);
         const form = new FormData(e.currentTarget.form as HTMLFormElement);
-        const error = validate(form);
+        const error = validate(e.currentTarget.form as HTMLFormElement);
 
         if (error) {
             setShowError(error);
@@ -189,7 +189,8 @@ export const SubmitButton = () => {
                 {showError}
             </div>
             <div className="mika-novel-login-form-btn-container">
-                <Button disabled={disable} type="submit" styleType="primary" size="large" onClick={loginCallback}>登录</Button>
+                <Button disabled={disable} type="submit" styleType="primary" size="large"
+                        onClick={loginCallback}>登录</Button>
                 <div>
                     <Button styleType="link" size="medium">忘记密码</Button>
                     <Button styleType="link" size="medium" onClick={e => {
@@ -202,13 +203,19 @@ export const SubmitButton = () => {
     );
 }
 
-const validate = (form: FormData) => {
-    if (!form.get("verifyCodeId") || !form.get("captcha")) {
-        return "验证码不能为空";
-    }
+const validate = (form: HTMLFormElement) => {
+    const username = form.username as HTMLInputElement;
+    const password = form.password as HTMLInputElement;
+    const captcha = form.captcha as HTMLInputElement;
 
-    if (!form.get("username") || !form.get("password")) {
-        return "账号或密码不能为空";
+    if (!username.checkValidity()) {
+        return "邮箱格式错误";
+    }
+    if (!password.checkValidity()) {
+        return "密码为空";
+    }
+    if (!captcha.checkValidity()) {
+        return "验证码格式错误";
     }
 
     return null;
@@ -233,10 +240,12 @@ const Login = () => {
                 <div className="mika-novel-login-form-container">
                     <h1>登 录</h1>
                     <form className="mika-novel-login-form">
-                        <input type="text" placeholder="邮箱" name="username"/>
-                        <input type="password" placeholder="密码" name="password"/>
+                        <input type="text" placeholder="邮箱" name="username" required
+                               pattern={"^\\w+(-+.\\w+)*@\\w+(-.\\w+)*.\\w+(-.\\w+)*$"}/>
+                        <input type="password" placeholder="密码" name="password" required/>
                         <div className="mika-novel-login-form-captcha">
-                            <input type="text" placeholder="验证码" name="captcha"/>
+                            <input type="text" placeholder="验证码" name="captcha" required
+                                   pattern={"^[a-zA-Z0-9]{4}$"}/>
                             <Captcha/>
                         </div>
                         <SubmitButton/>
