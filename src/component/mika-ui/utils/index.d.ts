@@ -1,1 +1,1 @@
-export {withLock, useTimer, isMobile, debounce, throttle} from "./utils";
+export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";

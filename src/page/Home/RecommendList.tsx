@@ -2,7 +2,7 @@ import NovelCard from "../../component/NovelCard/NovelCard";
 import './RecommendList.less';
 import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {getRecommendNovelList, NovelInfo} from "../../common/novel";
-import {withLock} from "../../component/mika-ui";
+import {withLockTime} from "../../component/mika-ui";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
 
 const Loading = memo(() => {
@@ -21,7 +21,7 @@ const RecommendList = memo(() => {
     const getMoreRef = useRef<HTMLDivElement>(null);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const getMore = useCallback(withLock(() => {
+    const getMore = useCallback(withLockTime(() => {
         if (loading) return;
         setLoading(true);
         setTimeout(() => {

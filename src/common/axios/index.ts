@@ -1,6 +1,7 @@
 import axios, {AxiosRequestConfig} from 'axios';
 import {showModal} from "../../component/mika-ui";
 import {isUserLoggedIn} from "../user";
+import {withLock} from "../../component/mika-ui/utils/utils.ts";
 
 const instance = axios.create({
     baseURL: 'http://118.31.42.183:8080',
@@ -17,6 +18,21 @@ instance.interceptors.request.use(config => {
     return Promise.reject(error);
 });
 
+const expireModal = withLock((_lock: boolean) => {
+    showModal({
+        title: "登录过期",
+        content: "登录已过期，请重新登录",
+        onOk: () => {
+            _lock = false;
+            localStorage.removeItem("token");
+            window.location.reload();
+        },
+        closeIcon: false,
+        closeOnClickMask: false,
+        footer: "ok",
+    });
+});
+
 instance.interceptors.response.use(response => {
     if (response.headers['token']) {
         localStorage.setItem('token', response.headers['token']);
@@ -26,20 +42,9 @@ instance.interceptors.response.use(response => {
 }, error => {
     if (error.response.status === 401) {
         if (isUserLoggedIn) {
-            showModal({
-                title: "登录过期",
-                content: "登录已过期，请重新登录",
-                onOk: () => {
-                    localStorage.removeItem("token");
-                    window.location.reload();
-                },
-                closeIcon: false,
-                closeOnClickMask: false,
-                footer: "ok",
-            });
+            expireModal();
         }
     }
-
     return Promise.reject(error);
 });
 

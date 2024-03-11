@@ -1,6 +1,6 @@
 import './Carousel.css';
 import React, {forwardRef, memo, ReactElement, useCallback, useEffect, useImperativeHandle, useRef} from "react";
-import {isMobile, useTimer, withLock} from "../utils";
+import {isMobile, useTimer, withLockTime} from "../utils";
 
 export interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
     items: ReactElement[];
@@ -64,7 +64,7 @@ const CarouselHorizontal = memo(forwardRef((props: Omit<CarouselProps, "directio
     useImperativeHandle(ref, () => rootRef.current as HTMLDivElement, []);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const handleSwitch = useCallback(withLock((index: number, nowPosition?: string) => {
+    const handleSwitch = useCallback(withLockTime((index: number, nowPosition?: string) => {
         props.onSwitch && props.onSwitch(index);
         const container = containerRef.current;
         if (!container) {

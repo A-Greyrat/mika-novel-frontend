@@ -1,6 +1,6 @@
 import {useCallback, useRef} from "react";
 
-export const withLock = <T extends unknown[]>(fn: (...args: T) => unknown, lockTime = 500) => {
+export const withLockTime = <T extends unknown[]>(fn: (...args: T) => unknown, lockTime = 500) => {
     let locked = false;
     return (...args: T) => {
         if (locked) return;
@@ -9,6 +9,15 @@ export const withLock = <T extends unknown[]>(fn: (...args: T) => unknown, lockT
         setTimeout(() => {
             locked = false;
         }, lockTime);
+    }
+}
+
+export const withLock = <T extends unknown[]>(fn: (_lock: boolean, ...args: T) => unknown) => {
+    let locked = false;
+    return (...args: T) => {
+        if (locked) return;
+        locked = true;
+        fn.call(null, locked, ...args);
     }
 }
 
@@ -45,7 +54,6 @@ export const throttle = <T extends unknown[]>(fn: (...args: T) => unknown, delay
 export const useTimer = <T, >(callback: (arg: T) => unknown, interval: number) => {
     const timer = useRef<number>(0);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const start = useCallback(() => {
         timer.current = setInterval(callback, interval);
     }, [callback, interval]);

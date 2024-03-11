@@ -9,4 +9,4 @@ export {default as TabList} from './TabList';
 export {default as Carousel} from './Carousel';
 
 
-export {withLock, useTimer, isMobile, debounce, throttle} from "./utils";
+export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";
