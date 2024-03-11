@@ -58,6 +58,7 @@ const HistoryList = memo(() => {
 
     useEffect(() => {
         getHistoryList().then(res => {
+            console.log(res)
             res && setHistoryList(res);
         });
     }, []);
@@ -87,7 +88,7 @@ const HistoryList = memo(() => {
                         <div className='padding'></div>
                         <div>
                             <Button styleType="primary" size="large" onClick={() => {
-                                nav(`/novel/${item.novelId}`);
+                                nav(`/novel/${item.novelId}/${item.volumeNumber}/${item.chapterNumber}`);
                             }}>继续阅读</Button>
                             <Button styleType="default" size="large" onClick={async () => {
                                 return removeHistory(String(item.novelId)).then((res) => {

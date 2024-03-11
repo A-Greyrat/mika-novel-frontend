@@ -202,13 +202,17 @@ const Header = memo(() => {
                 <UserSection/>
                 <FavorDropdown/>
                 <HistoryDropdown/>
-                <div className="mika-novel-header-category">分类</div>
+                <div className="mika-novel-header-category" onClick={() => {
+                    nav("/category");
+                }}>分类</div>
                 <Dropdown menu={
                     <div className="mika-novel-header-dropdown">
                         <Button onClick={() => {
                             nav("/space");
                         }} styleType="text">个人中心</Button>
-                        <Button styleType="text">分类</Button>
+                        <Button styleType="text" onClick={() => {
+                            nav("/category");
+                        }}>分类</Button>
                     </div>} position='right' paddingTrigger={10} className="mika-novel-header-dropdown-container">
                     <div className="mika-novel-header-ellipsis">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
