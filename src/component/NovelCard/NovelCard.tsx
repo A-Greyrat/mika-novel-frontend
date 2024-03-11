@@ -34,7 +34,10 @@ const NovelCard = memo((props: NovelCardProps) => {
             <h2>{"作者：" + props.author}</h2>
             <div className="mika-novel-novel-card-tags">
                 {props.tags.map((tag, index) => (
-                    <span key={index}>{tag.tagName}</span>
+                    <span key={index} onClick={e => {
+                        e.stopPropagation();
+                        nav(`/search/${tag.tagName}`);
+                    }}>{tag.tagName}</span>
                 ))}
             </div>
             <p>{props.description}</p>

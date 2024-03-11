@@ -10,7 +10,7 @@ const NovelPage = React.lazy(() => import('../Novel/NovelPage'));
 const NovelReader = React.lazy(() => import('../Reader/NovelReader'));
 const Test = React.lazy(() => import('../Test/Test'));
 const SearchPage = React.lazy(() => import('../Search/SearchPage'));
-const SpacePage = React.lazy(() => import('../SpacePage/SpacePage'));
+const SpacePage = React.lazy(() => import('../Space/Space.tsx'));
 
 
 const router = createBrowserRouter([

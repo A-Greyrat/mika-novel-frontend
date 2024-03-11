@@ -34,9 +34,12 @@
 
   .mika-novel-search-page-list {
     grid-area: search-list;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+    gap: 20px;
 
     > div {
       box-shadow: 3px 3px 3px 0 mix(@primary-color, transparent, 15%),

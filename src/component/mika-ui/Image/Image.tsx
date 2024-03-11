@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback, useEffect, useImperativeHandle, useMemo} from "react";
+import React, {forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo} from "react";
 import "./Image.css";
 
 interface ImageProps extends React.HTMLAttributes<HTMLImageElement> {
@@ -146,8 +146,7 @@ const useLoad = (_src?: string | null, onLoaded?: () => void, onError?: () => vo
     return {loading: loading.current, error: error.current, src: src, elementRef: elementRef};
 };
 
-
-const Image = React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageElement>) => {
+const Image = memo(React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageElement>) => {
     const {
         alt,
         src,
@@ -167,7 +166,6 @@ const Image = React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageEleme
     } = useLoad(src, onLoaded, onError, lazy);
 
     useImperativeHandle(ref, () => elementRef.current!, [elementRef]);
-
     if (_loading) {
         return (<>{loading ?? <DefaultLoading ref={elementRef} width={props.width} height={props.height}/>}</>);
     }
@@ -183,6 +181,16 @@ const Image = React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImageEleme
     return (
         <img src={_src} alt={alt} ref={elementRef} {...rest} />
     );
+}), (prev, next) => {
+    return prev.src === next.src
+        && prev.width === next.width
+        && prev.height === next.height
+        && prev.alt === next.alt
+        && prev.loading === next.loading
+        && prev.error === next.error
+        && prev.onLoaded === next.onLoaded
+        && prev.onError === next.onError
+        && prev.lazy === next.lazy;
 });
 
 export default Image;

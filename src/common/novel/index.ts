@@ -156,6 +156,53 @@ export interface HistoryItem {
 
 export const getHistoryList = async (pageSize: number = 1000) => {
     return httpGet<HistoryItem[]>(`/reader/history?pageSize=${pageSize}`).then((res) => {
+        res.data?.forEach((item) => {
+            const date = new Date(item.timestamp);
+            item.timestamp = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+        });
         return res.data as HistoryItem[];
+    });
+}
+
+export const getHistory = async (novelId: string, pageSize: number = 1) => {
+    return httpGet(`/reader/history/novel?novelId=${novelId}&pageSize=${pageSize}`).then((res) => {
+        return res.data as HistoryItem[];
+    });
+}
+
+export const removeHistory = async (novelId: string) => {
+    return httpPost("/reader/history/delete", {
+        ids: [novelId]
+    });
+}
+
+
+export const addComment = async (novelId: string, toUid: string, content: string) => {
+    return httpPost("/novel/comment/add", {
+        novelId: novelId,
+        toId: toUid,
+        content: content
+    });
+}
+
+export interface Comment {
+
+
+}
+
+export const getComments = async (novelId: string, pageSize: number) => {
+    return httpGet(`/novel/comment?novelId=${novelId}&pageSize=${pageSize}`).then((res) => {
+        return res.data as {
+            total: number;
+            records: {
+                id: string;
+                fromId: string;
+                fromName: string;
+                toId: string;
+                toName: string;
+                content: string;
+                timestamp: string;
+            }[];
+        };
     });
 }

@@ -29,11 +29,13 @@ const Button = memo(forwardRef((props: ButtonProps, ref: React.Ref<HTMLButtonEle
         if (onClick) {
             const result = onClick(e);
             if (result instanceof Promise) {
-                btnRef.current!.disabled = true;
-                btnRef.current!.classList.add('mika-button-loading');
+                if (!btnRef.current) return;
+                btnRef.current.disabled = true;
+                btnRef.current.classList.add('mika-button-loading');
                 result.finally(() => {
-                    btnRef.current!.disabled = false;
-                    btnRef.current!.classList.remove('mika-button-loading');
+                    if (!btnRef.current) return;
+                    btnRef.current.disabled = false;
+                    btnRef.current.classList.remove('mika-button-loading');
                 });
             }
         }

@@ -151,16 +151,19 @@ export const Captcha = () => {
 
 export const SubmitButton = () => {
     const [showError, setShowError] = useState<string | null>(null);
+    const [disable, setDisable] = useState(false);
     const nav = useNavigate();
     
-    const loginCallback = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const loginCallback = useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
 
+        setDisable(true);
         const form = new FormData(e.currentTarget.form as HTMLFormElement);
         const error = validate(form);
 
         if (error) {
             setShowError(error);
+            setDisable(false);
             return;
         }
 
@@ -171,21 +174,22 @@ export const SubmitButton = () => {
             verifyCodeId: (form.get("verifyCodeId") as string).trim()
         };
 
-        login(data).then(res => {
+        return login(data).then(res => {
+            setDisable(false);
             if (res.code === 200) {
                 nav("/");
             } else {
                 setShowError(res.msg);
             }
         });
-    }, [nav]);
+    }, [nav, setDisable]);
 
     return (<>
             <div className="mika-novel-login-form-error">
                 {showError}
             </div>
             <div className="mika-novel-login-form-btn-container">
-                <Button type="submit" styleType="primary" size="large" onClick={loginCallback}>登录</Button>
+                <Button disabled={disable} type="submit" styleType="primary" size="large" onClick={loginCallback}>登录</Button>
                 <div>
                     <Button styleType="link" size="medium">忘记密码</Button>
                     <Button styleType="link" size="medium" onClick={e => {

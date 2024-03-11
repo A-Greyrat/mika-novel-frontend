@@ -3,6 +3,7 @@ import "./NovelPageDetail.less";
 import {memo, useEffect, useState} from "react";
 import {addFavorite, getIsFavorite, NovelInfo, removeFavorite} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
+import {useStore} from "../../common/mika-store";
 
 const AuthorIcon = memo(() => {
     return (<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -14,6 +15,7 @@ const AuthorIcon = memo(() => {
 const NovelPageDetail = (novelData: NovelInfo) => {
     const [isFavorite, setIsFavorite] = useState(false);
     const nav = useNavigate();
+    const [lastRead, _setLastRead] = useStore<{ volumeId: number, chapterId: number }>("mika-novel-last-read");
 
     useEffect(() => {
         getIsFavorite(Number(novelData.id)).then((res) => {
@@ -32,15 +34,21 @@ const NovelPageDetail = (novelData: NovelInfo) => {
             </div>
             <div className="mika-novel-page-novel-tags">
                 {novelData?.tags.map((tag, index) => {
-                    return <span key={index}>{tag.tagName}</span>
+                    return <span key={index} onClick={() => {
+                        nav(`/search/${tag.tagName}`);
+                    }}>{tag.tagName}</span>
                 })}
             </div>
             <p>{novelData?.description}</p>
             <div className="mika-novel-page-novel-action">
                 <Button styleType="primary" size="large" onClick={() => {
-                    nav(`/novel/${novelData.id}/0/0`);
-                }}>开始阅读</Button>
-                {!isFavorite &&<Button styleType="default" size="large" onClick={() => {
+                    if (lastRead) {
+                        nav(`/novel/${novelData.id}/${lastRead.volumeId}/${lastRead.chapterId}`);
+                    } else nav(`/novel/${novelData.id}/0/0`);
+                }}>
+                    {lastRead ? '继续阅读' : '开始阅读'}
+                </Button>
+                {!isFavorite && <Button styleType="default" size="large" onClick={() => {
                     addFavorite(novelData.id).then(() => {
                         setIsFavorite(true);
                     });

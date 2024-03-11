@@ -142,6 +142,7 @@ const RegisterForm = () => {
     const nav = useNavigate();
     const [count, reset] = useCountDown(emailTimeLimit / 1000);
     const [error, setError] = useState<string | null>(null);
+    const [disable, setDisable] = useState(false);
     const [available, invoke] = useTimer((email: string) => {
         getEmailCaptcha(email).then(() => {
             setError("验证码已发送");
@@ -162,31 +163,37 @@ const RegisterForm = () => {
 
         invoke?.(emailTimeLimit, email);
     }, [invoke]);
-    const submitCallback = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+
+    const submitCallback = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        setDisable(true);
         const form = new FormData(e.currentTarget.form!);
 
         if (form.get("password") !== form.get("confirmPassword")) {
             setError("输入的两次密码不一致");
+            setDisable(false);
             return;
         }
 
         if (!form.get("verifyCode")) {
             setError("验证码不能为空");
+            setDisable(false);
             return;
         }
 
         if (!form.get("email") || !form.get("nickname") || !form.get("password")) {
             setError("邮箱、昵称或密码不能为空");
+            setDisable(false);
             return;
         }
 
-        register({
+        return register({
             email: (form.get("email") as string).trim(),
             nickname: (form.get("nickname") as string).trim(),
             password: (form.get("password") as string).trim(),
             verifyCode: (form.get("verifyCode") as string).trim(),
         }).then(res => {
+            setDisable(false);
             if (res.code === 200) {
                 nav("/");
             } else {
@@ -210,11 +217,10 @@ const RegisterForm = () => {
             <div className="mika-novel-register-form-error">
                 {error}
             </div>
-            <Button type="submit" styleType="primary" size="large" onClick={submitCallback}>注册</Button>
+            <Button disabled={disable} type="submit" styleType="primary" size="large" onClick={submitCallback}>注册</Button>
         </form>
     );
 }
-
 
 const Register = () => {
     const nav = useNavigate();

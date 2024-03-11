@@ -4,7 +4,14 @@ import './NovelPage.less';
 import {memo, useEffect, useState} from "react";
 import NovelPageRecommend from "./NovelPageRecommend";
 import {useParams} from "react-router-dom";
-import {getNovelInfo, getNovelVolumes, getRelatedNovels, NovelInfo, NovelPageVolumeInfo} from "../../common/novel";
+import {
+    getNovelInfo,
+    getNovelVolumes,
+    getRelatedNovels,
+    NovelInfo,
+    NovelPageVolumeInfo
+} from "../../common/novel";
+
 import $404 from "../404/404";
 import NovelPageDetail from "./NovelPageDetail.tsx";
 import NovelPageDesc from "./NovelPageDesc.tsx";
@@ -191,14 +198,12 @@ const NovelPage = () => {
     const [novelData, setNovelData] = useState<NovelInfo>();
     const [volumeData, setVolumeData] = useState<NovelPageVolumeInfo[]>();
     const [recommendNovels, setRecommendNovels] = useState<NovelInfo[]>([]);
-
     useEffect(() => {
         window.scrollTo(0, 0);
 
         getNovelInfo(novelId!).then(setNovelData);
         getNovelVolumes(novelId!).then(setVolumeData);
         getRelatedNovels(novelId!).then(setRecommendNovels);
-
     }, [novelId]);
 
     if (!novelId) {
@@ -215,7 +220,7 @@ const NovelPage = () => {
             <div className="mika-novel-novel-page-container">
                 <NovelPageDetail {...novelData} />
                 <NovelPageDesc desc={novelData.description}/>
-                <NovelPageVolume volumeData={volumeData}/>
+                <NovelPageVolume volumeData={volumeData} nid={novelId}/>
                 <NovelPageComment comment={testCommentData}/>
                 <NovelPageRecommend novels={recommendNovels}/>
             </div>

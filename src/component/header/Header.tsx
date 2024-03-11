@@ -1,6 +1,6 @@
 import './Header.less';
 import {memo, useCallback, useEffect, useState} from "react";
-import {getUserInfo, isUserLoggedIn} from "../../common/user";
+import {getUserInfo, isUserLoggedIn, logout} from "../../common/user";
 import {Button, Dropdown, Image, withLockTime} from "../mika-ui";
 import {useNavigate} from "react-router-dom";
 import {getFavoriteList, getHistoryList, HistoryItem, NovelInfo} from "../../common/novel";
@@ -38,6 +38,10 @@ const UserSection = () => {
                         <span>账号：{userInfo.nickname}</span>
                         <span style={{marginLeft: 10}}>ID：{userInfo.userId}</span>
                     </p>
+                    <Button styleType="link" onClick={() => {
+                        logout();
+                        window.location.reload();
+                    }}>登出</Button>
                 </div>
             </div>
             }
@@ -147,7 +151,7 @@ const HistoryDropdown = () => {
             {historyList && historyList.map((item, index) => {
                 return (
                     <div className="mika-novel-header-history-item" key={index} onClick={() => {
-                        nav(`/novel/${item.novelId}/volume/${item.volumeId}/chapter/${item.chapterNumber}`);
+                        nav(`/novel/${item.novelId}`);
                     }}>
                         <Image src={item.cover} width={40} height={40} alt=""/>
                         <div className="mika-novel-header-history-item-info">

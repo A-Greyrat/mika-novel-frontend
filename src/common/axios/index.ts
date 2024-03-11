@@ -3,8 +3,10 @@ import {showModal} from "../../component/mika-ui";
 import {isUserLoggedIn} from "../user";
 import {withLock} from "../../component/mika-ui/utils/utils.ts";
 
+export const baseURL = 'http://118.31.42.183:8080';
+
 const instance = axios.create({
-    baseURL: 'http://118.31.42.183:8080',
+    baseURL: baseURL,
     timeout: 5000,
 });
 

@@ -25,7 +25,6 @@
 
   .mika-novel-header-icon {
     grid-area: icon;
-
     font-size: 25pt;
 
     @media (max-width: 768px) {
@@ -120,12 +119,19 @@
 
     > :first-child {
       margin: 0 15px;
+      z-index: 0;
+      position: relative;
+
+      .mika-novel-header-user {
+        border-radius: 50%;
+      }
     }
 
     > .mika-novel-header-favor,
     > .mika-novel-header-history,
     > .mika-novel-header-category {
       white-space: nowrap;
+      background: transparent;
       height: 100%;
       display: flex;
       align-items: center;

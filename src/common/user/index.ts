@@ -17,7 +17,7 @@ interface LoginRequest {
 
 export const login = async ({user, password, verifyCodeId, captcha}: LoginRequest) => {
     password = await rsaEncrypt(password);
-    verifyCodeId = verifyCodeId.toLowerCase();
+    captcha = captcha.toLowerCase();
 
     return httpPost<string>("/user/login", {
         "username": user,
