@@ -70,11 +70,11 @@ const Header = memo(() => {
             <SearchSection/>
             <div className="mika-novel-header-right">
                 <UserSection/>
-                <div className="mika-novel-header-collect">书架</div>
+                <div className="mika-novel-header-collect">收藏</div>
                 <div className="mika-novel-header-history">历史</div>
                 <div className="mika-novel-header-category">分类</div>
                 <Dropdown menu={<div className="mika-novel-header-dropdown">
-                    <Button styleType="text">书架</Button>
+                    <Button styleType="text">收藏</Button>
                     <Button styleType="text">历史</Button>
                     <Button styleType="text">分类</Button>
                 </div>} position='right'

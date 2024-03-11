@@ -1,5 +1,6 @@
 import {httpGet, httpPost} from '../axios';
 import {rsaEncrypt} from './encrypt';
+
 export let isUserLoggedIn = false;
 
 const token = localStorage.getItem("token");
@@ -74,7 +75,7 @@ export const getCaptcha = async () => {
 }
 
 export const freshToken = async () => {
-return httpGet<string>("/user/login/refresh").then(res => {
+    return httpGet<string>("/user/login/refresh").then(res => {
         if (res.code === 200) {
             localStorage.setItem("token", res.data!);
             isUserLoggedIn = true;
@@ -82,4 +83,22 @@ return httpGet<string>("/user/login/refresh").then(res => {
     })
 }
 
-freshToken();
+let userInfo: {
+    userId: 0,
+    nickname: "",
+    avatar: "",
+    signature: ""
+} | null = null;
+
+export const getUserInfo = async () => {
+    if (userInfo) {
+        return userInfo;
+    }
+
+    return httpGet<typeof userInfo>("/reader").then(res => {
+        if (res.code === 200) {
+            userInfo = res.data;
+        }
+        return res.data;
+    });
+}
