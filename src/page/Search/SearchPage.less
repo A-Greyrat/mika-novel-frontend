@@ -1,0 +1,56 @@
+@import "../../common/theme/theme.less";
+
+:has(> .mika-novel-search-page-container) {
+  > .mika-pagination-root {
+    width: fit-content;
+    margin: 15px auto;
+  }
+}
+
+.mika-novel-search-page-container {
+  display: grid;
+  gap: 10px;
+  width: 90vw;
+  max-width: 1200px;
+  margin: 10px auto;
+  grid-template-areas:
+    "search-title"
+    "search-list";
+
+
+  > h1 {
+    font-size: 28px;
+    font-weight: 650;
+    margin: 0 0 10px 0;
+    grid-area: search-title;
+
+    user-select: none;
+    color: white;
+    text-shadow: 1px 1px 1px mix(@primary-color, white, 55%),
+      -1px -1px 1px mix(@primary-color, white, 55%),
+      1px -1px 1px mix(@primary-color, white, 55%);
+  }
+
+
+  .mika-novel-search-page-list {
+    grid-area: search-list;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    > div {
+      box-shadow: 3px 3px 3px 0 mix(@primary-color, transparent, 15%),
+        -3px -3px 15px 0 mix(@primary-color, transparent, 15%);
+
+      padding: 12px;
+      border-radius: 10px;
+    }
+  }
+
+}
+
+.mika-novel-search-page-container.no-result {
+  > :first-child {
+    margin: auto;
+  }
+}

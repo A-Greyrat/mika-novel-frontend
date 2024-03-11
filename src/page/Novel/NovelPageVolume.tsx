@@ -1,16 +1,10 @@
 import './NovelPageVolume.less';
 import {Button} from "../../component/mika-ui";
-import {useEffect, useState} from "react";
-import {getNovelVolumes, NovelPageVolumeInfo} from "../../common/novel";
+import {NovelPageVolumeInfo} from "../../common/novel";
 import { useNavigate} from 'react-router-dom';
 
-const NovelPageVolume = ({nid}: {nid: string}) => {
-    const [volumeData, setVolumeData] = useState<NovelPageVolumeInfo[]>();
+const NovelPageVolume = ({volumeData}: {volumeData: NovelPageVolumeInfo[]}) => {
     const nav = useNavigate ();
-
-    useEffect(() => {
-        getNovelVolumes(nid).then(setVolumeData);
-    }, [nid]);
 
     if (!volumeData) {
         return null;

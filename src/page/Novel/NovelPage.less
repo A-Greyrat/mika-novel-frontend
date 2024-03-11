@@ -25,3 +25,49 @@
   max-width: 1200px;
   gap: 15px;
 }
+
+.mika-novel-novel-page-loading-container {
+  width: 90vw;
+  max-width: 1200px;
+  margin: 20px auto;
+
+  display: grid;
+  grid-template-areas: "novel-detail novel-detail"
+                        "novel-volume novel-recommend"
+                        "novel-volume novel-recommend";
+
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    grid-template-areas:  "novel-detail"
+                          "novel-volume"
+                          "novel-recommend";
+
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto auto;
+  }
+
+  > div {
+    border-radius: 10px;
+    box-shadow: 3px 3px 3px 0 mix(@primary-color, transparent, 15%),
+      -3px -3px 15px 0 mix(@primary-color, transparent, 15%);
+
+    > .gap-20 {
+      padding: 20px;
+    }
+  }
+
+  > :first-child {
+    grid-area: novel-detail;
+  }
+
+  > :nth-child(2),
+  > :nth-child(3) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+  }
+}

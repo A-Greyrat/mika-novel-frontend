@@ -72,3 +72,14 @@ interface Captcha {
 export const getCaptcha = async () => {
     return httpGet<Captcha>("/common/captcha");
 }
+
+export const freshToken = async () => {
+return httpGet<string>("/user/login/refresh").then(res => {
+        if (res.code === 200) {
+            localStorage.setItem("token", res.data!);
+            isUserLoggedIn = true;
+        }
+    })
+}
+
+freshToken();

@@ -42,9 +42,18 @@ const UserSection = () => {
 }
 
 const SearchSection = () => {
+    const nav = useNavigate();
+
     return (
         <div className="mika-novel-header-search">
-            <input type="text" placeholder="搜索"/>
+            <input type="text" placeholder="搜索" onKeyUp={e => {
+                if (e.key === "Enter") {
+                    nav('/');
+                    setTimeout(() => {
+                        nav(`/search/${(e.target as HTMLInputElement).value}`, {replace: true});
+                    }, 0);
+                }
+            }}/>
         </div>
     );
 }

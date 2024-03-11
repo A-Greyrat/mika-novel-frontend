@@ -1,13 +1,14 @@
 import Header from "../../component/header/Header";
 import Footer from "../../component/footer/Footer";
 import {Carousel} from "../../component/mika-ui";
-import CarouselNovelCard from "./NovelCard";
+import NovelCard from "../../component/NovelCard/NovelCard";
 import './Home.less';
 import ReadingNovelList from "./ReadingNovelList";
 import RecommendList from "./RecommendList";
 import {getCarouselNovelList, getRankList, NovelInfo} from "../../common/novel/";
 import {useEffect, useState} from "react";
-import RankList from "./RankList.tsx";
+import RankList from "./RankList";
+import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
 
 const Home = () => {
     const [carouselList, setCarouselList] = useState<NovelInfo[]>([]);
@@ -16,6 +17,8 @@ const Home = () => {
     const [weekRankList, setWeekRankList] = useState<NovelInfo[]>([]);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+
         getCarouselNovelList().then(setCarouselList);
         getRankList("day", 1, 12).then((res) => {
             setDayRankList(res.records);
@@ -28,18 +31,14 @@ const Home = () => {
         });
     }, []);
 
-    if (carouselList.length === 0) {
-        return <div>Loading...</div>;
-    }
-
     return (<div className="mika-novel-home-page-root">
             <Header/>
             <div className="mika-novel-home-page-wrapper">
                 <Carousel items={
-                    carouselList.map((item) => (
-                        <CarouselNovelCard id={item.id} title={item.title} author={item.author} cover={item.cover}
-                                           description={item.description} tags={item.tags}/>
-                    ))
+                    carouselList && carouselList.length > 0 ?
+                        carouselList.map((item) => (
+                            <NovelCard {...item}/>
+                        )) : [1, 2, 3, 4, 5].map((item) => (<SkeletonCard key={item} padding='20px'/>))
                 } className='mika-novel-carouse-list' autoSwitchByTime={3000}/>
                 <ReadingNovelList/>
                 <RecommendList/>

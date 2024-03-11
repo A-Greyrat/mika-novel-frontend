@@ -17,8 +17,11 @@ instance.interceptors.request.use(config => {
     return Promise.reject(error);
 });
 
-// 拦截响应，401表示token过期
 instance.interceptors.response.use(response => {
+    if (response.headers['token']) {
+        localStorage.setItem('token', response.headers['token']);
+    }
+
     return response;
 }, error => {
     if (error.response.status === 401) {
@@ -36,16 +39,17 @@ instance.interceptors.response.use(response => {
             });
         }
     }
+
     return Promise.reject(error);
 });
 
-export const httpGet = async <T,>(url: string, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
+export const httpGet = async <T, >(url: string, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
     return instance.get(url, config)
         .then(res => res.data as ResponseData<T>)
         .catch(() => errorResponse);
 }
 
-export const httpPost = async <T,>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
+export const httpPost = async <T, >(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
     config = config || {};
     config.headers = {
         'Content-Type': 'application/json',
@@ -62,7 +66,7 @@ export interface ResponseData<T> {
     data: T;
 }
 
-export const errorResponse : ResponseData<null> = {
+export const errorResponse: ResponseData<null> = {
     code: 400,
     data: null,
     msg: '网络错误',

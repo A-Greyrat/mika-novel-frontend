@@ -92,7 +92,7 @@ export const getNovelContent = async (novelId: string, volumeId: string, chapter
 }
 
 export const getSearchedNovels = async (keyword: string, page: number, pageSize: number) => {
-    return httpGet(`/novel/search?title=${keyword}&page=${page}&pageSize=${pageSize}`).then((res) => {
+    return httpGet(`/search/book?title=${keyword}&page=${page}&pageSize=${pageSize}`).then((res) => {
         return res.data as {
             total: number;
             records: NovelInfo[];
@@ -122,10 +122,32 @@ export const getFavoriteList = async (pageSize: number = 1000, page: number = 1)
 }
 
 export const getRankList = async (rankName: string, page: number, pageSize: number) => {
-    return httpGet(`/novel/ranklist?rankName=${rankName}&page=${page}&pageSize=${pageSize}`).then((res) => {
+    return httpGet(`/novel/ranklist?timeType=${rankName}&page=${page}&pageSize=${pageSize}`).then((res) => {
         return res.data as {
             total: number;
             records: NovelInfo[];
         };
     });
 }
+
+interface HistoryItem {
+    novelId: number;
+    volumeId: number;
+    volumeNumber: number;
+    chapterNumber: number;
+    timestamp: string;
+    novelTitle: string;
+    author: string;
+    cover: string;
+    chapterTitle: string;
+}
+
+export const getHistoryList = async (pageSize: number = 1000) => {
+    return httpGet<HistoryItem[]>(`/reader/history?pageSize=${pageSize}`).then((res) => {
+        return res.data as HistoryItem[];
+    });
+}
+
+getHistoryList().then((res) => {
+    console.log(res);
+});

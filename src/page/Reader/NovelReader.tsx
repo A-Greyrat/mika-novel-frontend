@@ -18,6 +18,8 @@ const NovelReader = () => {
     const [title, setTitle] = useState<string>();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+
         getNovelContent(novelId!, volumeId!, chapterId!).then((res) => {
             console.log(res)
             setNovelContent(res.content);
