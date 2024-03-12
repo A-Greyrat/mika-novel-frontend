@@ -7,17 +7,23 @@ import {useStore} from "../../common/mika-store";
 
 const NovelPageVolume = ({nid, volumeData}: { nid: string, volumeData: NovelPageVolumeInfo[] }) => {
     const nav = useNavigate();
-    const [lastRead, setLastRead] = useStore<{ volumeId: number, chapterId: number }>("mika-novel-last-read");
-
+    const [lastRead, setLastRead] = useStore<{
+        volumeId: number,
+        chapterId: number
+    } | null>("mika-novel-last-read", null);
+    console.log(lastRead)
     useEffect(() => {
         getHistory(nid).then((res) => {
-            res.length > 0 && setLastRead({
-                volumeId: res[0].volumeNumber,
-                chapterId: res[0].chapterNumber
-            });
+            if (res && res.length > 0) {
+                setLastRead({
+                    volumeId: res[0].volumeNumber,
+                    chapterId: res[0].chapterNumber
+                });
+            } else {
+                setLastRead(null);
+            }
         });
     }, [nid, setLastRead]);
-
 
     if (!volumeData) {
         return null;
@@ -33,7 +39,7 @@ const NovelPageVolume = ({nid, volumeData}: { nid: string, volumeData: NovelPage
                             {volume.chapters.map((chapter: NovelPageVolumeInfo['chapters'][number], index) => {
                                 return (
                                     <Button key={index}
-                                            styleType={lastRead?.volumeId === parseInt(chapter.volumeId) && lastRead?.chapterId === parseInt(chapter.id) ? 'primary' : 'default'}
+                                            styleType={lastRead && lastRead.volumeId === parseInt(chapter.volumeId) && lastRead.chapterId === parseInt(chapter.id) ? 'primary' : 'default'}
                                             size='large' onClick={() => {
                                         nav(`/novel/${chapter.novelId}/${chapter.volumeId}/${chapter.id}`);
                                     }}>

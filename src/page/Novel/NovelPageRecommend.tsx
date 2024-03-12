@@ -2,6 +2,7 @@ import './NovelPageRecommend.less';
 import {Image} from "../../component/mika-ui";
 import {NovelInfo} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
+import {baseURL} from "../../common/axios";
 
 const NovelPageRecommend = ({novels}: { novels: NovelInfo[] }) => {
     const nav = useNavigate();
@@ -24,7 +25,7 @@ const NovelPageRecommend = ({novels}: { novels: NovelInfo[] }) => {
                                 nav(`/novel/${novel.id}`, {replace: true});
                             }, 10);
                         }}>
-                            <Image src={novel.cover} width={100} height={150}/>
+                            <Image src={baseURL + novel.cover} width={100} height={150}/>
                             <div>
                                 <h3>{novel.title}</h3>
                                 <p>{novel.description}</p>

@@ -1,5 +1,5 @@
 import React, {forwardRef, memo, useCallback, useEffect, useRef} from "react";
-import './Modal.css';
+import './Modal.less';
 import {fadeOutModal} from "./ModalUtils.tsx";
 
 

@@ -1,5 +1,5 @@
 import React, {forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo} from "react";
-import "./Image.css";
+import "./Image.less";
 
 interface ImageProps extends React.HTMLAttributes<HTMLImageElement> {
     src?: string | null;

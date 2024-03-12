@@ -3,7 +3,7 @@ import Header from "../../component/header/Header";
 import Footer from "../../component/footer/Footer";
 import {Button, Image, TabList} from "../../component/mika-ui";
 import {memo, useEffect, useState} from "react";
-import {getUserInfo} from "../../common/user";
+import {getUserInfo, isUserLoggedIn} from "../../common/user";
 import {
     getFavoriteList,
     getHistoryList,
@@ -12,7 +12,8 @@ import {
     removeFavorite,
     removeHistory
 } from "../../common/novel";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {baseURL} from "../../common/axios";
 
 const FavorList = memo(() => {
     const [favorList, setFavorList] = useState<(NovelInfo & { novelId: number })[]>([]);
@@ -28,7 +29,7 @@ const FavorList = memo(() => {
         <div className="mika-novel-space-individual-favor-list">
             {favorList && favorList.map((item, index) => {
                 return (<div className="mika-novel-space-individual-favor-item" key={index}>
-                        <Image lazy src={item.cover} width={40} height={40} alt=""/>
+                        <Image lazy src={baseURL + item.cover} width={40} height={40} alt=""/>
                         <div className="mika-novel-space-individual-favor-item-info">
                             <div>{item.title}</div>
                             <p>作者：{item.author}</p>
@@ -61,13 +62,13 @@ const HistoryList = memo(() => {
             console.log(res)
             res && setHistoryList(res);
         });
-    }, []);
+    }, [nav]);
 
     return (<div className="mika-novel-space-individual-history-list">
         {historyList && historyList.map((item, index) => {
             return (
                 <div className="mika-novel-space-individual-history-item" key={index}>
-                    <Image lazy src={item.cover} width={40} height={40} alt=""/>
+                    <Image lazy src={baseURL + item.cover} width={40} height={40} alt=""/>
                     <div className="mika-novel-space-individual-history-item-info">
                         <div>{item.novelTitle}</div>
                         <p>
@@ -113,14 +114,17 @@ const Space = () => {
         avatar: "",
         signature: ""
     });
-
-    const [activeIndex, setActiveIndex] = useState(0);
+    const {action} = useParams();
+    const [activeIndex, setActiveIndex] = useState(action === "history" ? 1 : 0);
+    const nav = useNavigate();
 
     useEffect(() => {
+        if (!isUserLoggedIn)
+            nav('/login', {replace: true});
         getUserInfo().then(res => {
             res && setUserInfo(res);
         });
-    }, []);
+    }, [nav]);
 
     return (
         <div className="mika-novel-space-root">

@@ -26,7 +26,7 @@ export const isMobile = () => {
 }
 
 export const debounce = <T extends unknown[]>(fn: (...args: T) => unknown, delay: number) => {
-    let timer: number | null = null;
+    let timer: NodeJS.Timeout | null = null;
     return (...args: T) => {
         if (timer) {
             clearTimeout(timer);
@@ -39,7 +39,7 @@ export const debounce = <T extends unknown[]>(fn: (...args: T) => unknown, delay
 }
 
 export const throttle = <T extends unknown[]>(fn: (...args: T) => unknown, delay: number) => {
-    let timer: number | null = null;
+    let timer: NodeJS.Timer | null = null;
     return (arg: T) => {
         if (timer) {
             return;
@@ -55,17 +55,24 @@ export const useTimer = <T, >(callback: (arg: T) => unknown, interval: number) =
     const timer = useRef<number>(0);
 
     const start = useCallback(() => {
+        clearInterval(timer.current);
         timer.current = setInterval(callback, interval);
     }, [callback, interval]);
 
     const reset = useCallback(() => {
-        clearInterval(timer.current);
-        timer.current = setInterval(callback, interval);
+        if (timer.current) {
+            clearInterval(timer.current);
+            timer.current = setInterval(callback, interval);
+        }
     }, [callback, interval]);
 
     const stop = useCallback(() => {
         clearInterval(timer.current);
+        timer.current = 0;
     }, []);
 
-    return interval > 0 ? [start, stop, reset] : [() => {}, () => {}, () => {}];
+    return interval > 0 ? [start, stop, reset] : [() => {
+    }, () => {
+    }, () => {
+    }];
 }

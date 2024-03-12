@@ -172,7 +172,7 @@ export const getHistory = async (novelId: string, pageSize: number = 1) => {
 
 export const removeHistory = async (novelId: string) => {
     return httpPost("/reader/history/delete", {
-        ids: [novelId]
+        novelIds: [novelId]
     });
 }
 
@@ -186,6 +186,8 @@ export const getAvailableTags = async () => {
     });
 }
 
+
+
 export const addComment = async (novelId: string, toUid: string, content: string) => {
     return httpPost("/novel/comment/add", {
         novelId: novelId,
@@ -195,23 +197,54 @@ export const addComment = async (novelId: string, toUid: string, content: string
 }
 
 export interface Comment {
+    id: number;
+    userId: number;
+    toId: number;
+    toUserId: number;
+    content: string;
+    timestamp: string;
+}
+
+type NovelPageCommentReply = {
+    parent?: string;
+
+    id: string;
+    time: string;
+    content: string;
+    replyTo: {
+        id: string;
+        name: string;
+    }
+    user: {
+        id: string;
+        name: string;
+        avatar: string;
+    }
+};
 
 
+type NovelPageCommentProps = {
+    id: string;
+    time: string;
+    content: string;
+    user: {
+        id: string;
+        name: string;
+        avatar: string;
+    };
+    reply?: NovelPageCommentReply[];
 }
 
 export const getComments = async (novelId: string, pageSize: number) => {
     return httpGet(`/novel/comment?novelId=${novelId}&pageSize=${pageSize}`).then((res) => {
-        return res.data as {
-            total: number;
-            records: {
-                id: string;
-                fromId: string;
-                fromName: string;
-                toId: string;
-                toName: string;
-                content: string;
-                timestamp: string;
-            }[];
-        };
+        const data = res.data as { total: number, records: Comment[] };
+        const ret: NovelPageCommentProps[] = [];
+        for (const item of data.records) {
+            if (item.toId === -1) {
+
+            }
+        }
+        return ret;
     });
 }
+

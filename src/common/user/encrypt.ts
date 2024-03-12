@@ -1,21 +1,5 @@
 import {httpGet} from "../axios";
-
-"../axios"
-
-async function loadPublicKeyFromBase64(base64String: string) {
-    const binaryDer = Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
-
-    return await crypto.subtle.importKey(
-        "spki",
-        binaryDer,
-        {
-            name: "RSA-OAEP",
-            hash: {name: "SHA-256"},
-        },
-        false,
-        ["encrypt"]
-    );
-}
+import forge from 'node-forge';
 
 let publicKey: string | null = null;
 
@@ -31,16 +15,12 @@ export async function rsaEncrypt(dataToEncrypt: string) {
         return rsaEncrypt(dataToEncrypt);
     }
 
-    const importedPublicKey = await loadPublicKeyFromBase64(publicKey!);
-    const dataUint8Array = new TextEncoder().encode(dataToEncrypt);
+    const pemKey = `-----BEGIN PUBLIC KEY-----\n${publicKey}\n-----END PUBLIC KEY-----`;
 
-    const encryptedBuffer = await window.crypto.subtle.encrypt(
-        {
-            name: "RSA-OAEP",
-        },
-        importedPublicKey,
-        dataUint8Array
-    );
+    const publicKeyObj = forge.pki.publicKeyFromPem(pemKey);
+    const encrypted = publicKeyObj.encrypt(dataToEncrypt, 'RSA-OAEP', {
+        md: forge.md.sha256.create(),
+    });
 
-    return btoa(String.fromCharCode(...new Uint8Array(encryptedBuffer)));
+    return forge.util.encode64(encrypted);
 }

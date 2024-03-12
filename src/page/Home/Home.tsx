@@ -42,7 +42,7 @@ const Home = () => {
                 } className='mika-novel-carouse-list' autoSwitchByTime={3000}/>
                 <ReadingNovelList/>
                 <RecommendList/>
-                <RankList items={[weekRankList, monthRankList, dayRankList]} rankTitle={["周榜", "月榜", "日榜"]}/>
+                <RankList items={[dayRankList, weekRankList, monthRankList]} rankTitle={["日榜", "周榜", "月榜"]}/>
             </div>
             <Footer/>
         </div>

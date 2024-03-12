@@ -1,5 +1,5 @@
 import React, {forwardRef, memo, useCallback, useMemo} from "react";
-import './Dropdown.css';
+import './Dropdown.less';
 
 type DropdownProps = {
     children: React.ReactNode;

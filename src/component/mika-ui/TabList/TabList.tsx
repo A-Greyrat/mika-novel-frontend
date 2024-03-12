@@ -1,5 +1,5 @@
 import React, {forwardRef, memo} from "react";
-import './TabList.css';
+import './TabList.less';
 
 export type TabListProps = {
     items: string[];

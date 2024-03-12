@@ -35,7 +35,7 @@ const useStore = <T, >(name: string, value?: T): [T, (newValue: T | ((prev: T) =
 
     const setState = useCallback((newValue: T | ((prev: T) => T)) => Store.updateState<T>(name, newValue), [name]);
 
-    return [storedState.current!.getValue<T>(), setState];
+    return [storedState.current!.getValue<T>(), setState] as const;
 }
 
 export default useStore;

@@ -1,6 +1,6 @@
-import './Carousel.css';
+import './Carousel.less';
 import React, {forwardRef, memo, ReactElement, useCallback, useEffect, useImperativeHandle, useRef} from "react";
-import {isMobile, useTimer, withLockTime} from "../utils";
+import {useTimer, withLockTime} from "../utils";
 
 export interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
     items: ReactElement[];
@@ -164,7 +164,7 @@ const CarouselHorizontal = memo(forwardRef((props: Omit<CarouselProps, "directio
     return (
         <div className={"mika-carousel-horizontal-root" + (props.className ? " " + props.className : "")}
              ref={rootRef} onTouchStart={TouchStart} onTouchMove={TouchMove}
-             onTouchEnd={TouchEnd}>
+             onMouseEnter={() => {stop();}} onMouseLeave={() => {start();}} onTouchEnd={TouchEnd}>
             <ul className="mika-carousel-horizontal-container" style={{
                 transform: `translateX(-${(currentIndex.current + 1) * 100}%)`,
             }} ref={containerRef}>
@@ -181,18 +181,18 @@ const CarouselHorizontal = memo(forwardRef((props: Omit<CarouselProps, "directio
                 </li>
             </ul>
 
-            {!isMobile() &&
-                <PrevButton onClick={() => {
-                    handleSwitch(currentIndex.current - 1);
-                    reset();
-                }}/>
-            }
-            {!isMobile() &&
-                <NextButton onClick={() => {
-                    handleSwitch(currentIndex.current + 1);
-                    reset();
-                }}/>
-            }
+            <PrevButton onClick={() => {
+                handleSwitch(currentIndex.current - 1);
+                reset();
+            }} onTouchEnd={e => {
+                e.preventDefault();
+            }}/>
+
+            <NextButton onClick={() => {
+                handleSwitch(currentIndex.current + 1);
+                reset();
+            }}/>
+
         </div>
     );
 }));

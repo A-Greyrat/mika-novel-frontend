@@ -1,5 +1,5 @@
 import React, {forwardRef, memo, useCallback, useMemo} from "react";
-import "./Button.css";
+import "./Button.less";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children?: string | React.ReactNode;

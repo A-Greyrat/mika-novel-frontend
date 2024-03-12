@@ -3,6 +3,7 @@ import {Image} from "../../component/mika-ui";
 import {memo, useEffect, useState} from "react";
 import {getFavoriteList, NovelInfo} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
+import {baseURL} from "../../common/axios";
 
 const ReadingNovelListItem = (props: NovelInfo) => {
     const nav = useNavigate();
@@ -11,7 +12,7 @@ const ReadingNovelListItem = (props: NovelInfo) => {
         <div className="mika-novel-reading-novel-list-item" onClick={() => {
             nav(`/novel/${props.id}`);
         }}>
-            <Image lazy src={props.cover} alt={props.title} width={120} height={180}/>
+            <Image lazy src={baseURL + props.cover} alt={props.title} width={120} height={180}/>
             <p>{props.title}</p>
         </div>
     );
@@ -22,7 +23,7 @@ const ReadingNovelList = memo(() => {
 
     useEffect(() => {
         getFavoriteList().then((res) => {
-            setItems(res.records);
+            res && setItems(res.records);
         });
     }, []);
 

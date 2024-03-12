@@ -4,6 +4,7 @@ import {memo, useEffect, useState} from "react";
 import {addFavorite, getIsFavorite, NovelInfo, removeFavorite} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
 import {useStore} from "../../common/mika-store";
+import {baseURL} from "../../common/axios";
 
 const AuthorIcon = memo(() => {
     return (<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -15,7 +16,10 @@ const AuthorIcon = memo(() => {
 const NovelPageDetail = (novelData: NovelInfo) => {
     const [isFavorite, setIsFavorite] = useState(false);
     const nav = useNavigate();
-    const [lastRead, _setLastRead] = useStore<{ volumeId: number, chapterId: number }>("mika-novel-last-read");
+    const [lastRead, _setLastRead] = useStore<{
+        volumeId: number,
+        chapterId: number
+    } | null>("mika-novel-last-read", null);
 
     useEffect(() => {
         getIsFavorite(Number(novelData.id)).then((res) => {
@@ -25,7 +29,8 @@ const NovelPageDetail = (novelData: NovelInfo) => {
 
     return (
         <div className="mika-novel-page-novel-detail">
-            <Image src={novelData?.cover} alt={novelData?.title} className="mika-novel-page-novel-cover" width={150}
+            <Image src={baseURL + novelData?.cover} alt={novelData?.title} className="mika-novel-page-novel-cover"
+                   width={150}
                    height={230}/>
             <h1>{novelData?.title}</h1>
             <div className="mika-novel-page-novel-author">
@@ -49,13 +54,15 @@ const NovelPageDetail = (novelData: NovelInfo) => {
                     {lastRead ? '继续阅读' : '开始阅读'}
                 </Button>
                 {!isFavorite && <Button styleType="default" size="large" onClick={() => {
-                    addFavorite(novelData.id).then(() => {
-                        setIsFavorite(true);
+                    addFavorite(novelData.id).then(res => {
+                        res.code === 200 && setIsFavorite(true);
+                        res.code === 401 && nav("/login");
                     });
                 }}>加入收藏</Button>}
                 {isFavorite && <Button styleType="default" size="large" onClick={() => {
-                    removeFavorite(novelData.id).then(() => {
-                        setIsFavorite(false);
+                    removeFavorite(novelData.id).then(res => {
+                        res.code === 200 && setIsFavorite(false);
+                        res.code === 401 && nav("/login");
                     });
                 }}>
                     移除收藏

@@ -53,7 +53,13 @@ instance.interceptors.response.use(response => {
 export const httpGet = async <T, >(url: string, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
     return instance.get(url, config)
         .then(res => res.data as ResponseData<T>)
-        .catch(() => errorResponse);
+        .catch(res =>{
+            return {
+                code: res.response.status,
+                data: null,
+                msg: res.response.data
+            }
+        });
 }
 
 export const httpPost = async <T, >(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
@@ -64,7 +70,13 @@ export const httpPost = async <T, >(url: string, data?: unknown, config?: AxiosR
 
     return instance.post(url, data, config)
         .then(res => res.data as ResponseData<T>)
-        .catch(() => errorResponse);
+        .catch(res => {
+            return {
+                code: res.response.status,
+                data: null,
+                msg: res.response.data
+            }
+        });
 }
 
 export interface ResponseData<T> {

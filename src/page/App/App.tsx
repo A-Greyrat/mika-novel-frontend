@@ -43,6 +43,10 @@ const router = createBrowserRouter([
         element: <SpacePage/>,
     },
     {
+        path: '/space/:action',
+        element: <SpacePage/>,
+    },
+    {
         path: '/category',
         element: <CategoryPage/>,
     },

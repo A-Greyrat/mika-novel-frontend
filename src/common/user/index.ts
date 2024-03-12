@@ -19,6 +19,8 @@ export const login = async ({user, password, verifyCodeId, captcha}: LoginReques
     password = await rsaEncrypt(password);
     captcha = captcha.toLowerCase();
 
+    console.log('login', {user, password, verifyCodeId, captcha})
+
     return httpPost<string>("/user/login", {
         "username": user,
         "password": password,

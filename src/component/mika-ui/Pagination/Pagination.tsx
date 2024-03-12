@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from "react";
 import {default as _Button} from "../Button/Button";
-import "./Pagination.css";
+import "./Pagination.less";
 
 export type PaginationProps = {
     initIndex?: number;

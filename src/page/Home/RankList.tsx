@@ -3,7 +3,7 @@ import {TabList} from "../../component/mika-ui";
 import './RankList.less';
 import {NovelInfo} from "../../common/novel";
 import Skeleton from "../../component/mika-ui/Skeleton/Skeleton";
-import { Link } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 type RankListProps = {
     items: NovelInfo[][];
@@ -13,10 +13,10 @@ type RankListProps = {
 const Loading = memo(() => {
     return (
         <div className="mika-novel-rank-list-loading-container">
-            <Skeleton type='text' height='20px' />
-            <Skeleton type='text' height='20px' />
-            <Skeleton type='text' height='20px' />
-            <Skeleton type='text' height='20px' />
+            <Skeleton type='text' height='20px'/>
+            <Skeleton type='text' height='20px'/>
+            <Skeleton type='text' height='20px'/>
+            <Skeleton type='text' height='20px'/>
             <Skeleton type='text' height='20px'/>
             <Skeleton type='text' height='20px'/>
             <Skeleton type='text' height='20px'/>
@@ -28,8 +28,8 @@ const Loading = memo(() => {
 
 const RankList = memo((props: RankListProps) => {
     const [activeIndex, setActiveIndex] = useState(0);
-
     const isActiveEmpty = !props.items || !props.items[activeIndex] || props.items[activeIndex].length === 0;
+    const nav = useNavigate();
 
     return (
         <div className="mika-novel-rank-list">
@@ -37,9 +37,11 @@ const RankList = memo((props: RankListProps) => {
                      onChange={setActiveIndex}/>
             <div className="mika-novel-rank-list-content">
                 {!isActiveEmpty && props.items[activeIndex].map((item, index) => (
-                    <div key={index} className="mika-novel-rank-list-item">
+                    <div key={index} className="mika-novel-rank-list-item" onClick={() => {
+                        nav(`/novel/${item.id}`);
+                    }}>
                         <span>{index + 1}</span>
-                        <Link to={`/novel/${item.id}`}>{item.title}</Link>
+                        <a>{item.title}</a>
                     </div>
                 ))}
                 {isActiveEmpty && <Loading/>}

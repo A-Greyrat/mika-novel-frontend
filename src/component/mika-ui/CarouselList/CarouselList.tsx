@@ -1,7 +1,7 @@
 import React, {forwardRef, memo, useEffect} from "react";
 import {useControl, useStyle} from "./CarouselListHooks";
 import {CarouselListProps} from "./CarouselListType";
-import "./CarouselList.css";
+import "./CarouselList.less";
 
 
 const LeftButton = forwardRef((props: React.ButtonHTMLAttributes<HTMLButtonElement>, ref: React.Ref<HTMLButtonElement>) => {

@@ -121,7 +121,7 @@ const useCountDown = (time: number) => {
         }
         timer.current = setTimeout(() => {
             setCount(count - 1);
-        }, 1000);
+        }, 1000) as unknown as number;
         return () => {
             clearTimeout(timer.current!);
         }
@@ -157,15 +157,15 @@ const validate = (form: HTMLFormElement) => {
     }
 
     if (!password.checkValidity()) {
-        return "密码强度不够";
-    }
-
-    if (!verifyCode.checkValidity()) {
-        return "验证码格式错误";
+        return "密码强度不够，至少6位，包含字母和数字";
     }
 
     if (password.value !== confirmPassword.value) {
         return "输入的两次密码不一致";
+    }
+
+    if (!verifyCode.checkValidity()) {
+        return "验证码不能为空";
     }
 
     return null;
@@ -234,7 +234,7 @@ const RegisterForm = () => {
             <input type="password" placeholder="密码" name="password" required pattern={"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$"}/>
             <input type="password" placeholder="确认密码" name="confirmPassword" required/>
             <div className="mika-novel-register-form-captcha">
-                <input type="text" placeholder="验证码" name="verifyCode" required pattern={"^[0-9a-zA-Z]{4}$"}/>
+                <input type="text" placeholder="验证码" name="verifyCode" required/>
                 <button disabled={!available.current} onClick={getEmailCaptchaCallback}>
                     {available.current ? '获取验证码' : count + "s"}
                 </button>

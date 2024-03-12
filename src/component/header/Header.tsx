@@ -4,6 +4,7 @@ import {getUserInfo, isUserLoggedIn, logout} from "../../common/user";
 import {Button, Dropdown, Image, withLockTime} from "../mika-ui";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getFavoriteList, getHistoryList, HistoryItem, NovelInfo} from "../../common/novel";
+import {baseURL} from "../../common/axios";
 
 const UserSection = () => {
     const [avatar] = useState("/defaultAvatar.webp");
@@ -32,7 +33,7 @@ const UserSection = () => {
             boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.1)",
             borderRadius: 5
         }}>
-            { userInfo.userId !== 0 && <div style={{padding: 10, borderBottom: "1px solid #e7e7e7"}}>
+            {userInfo.userId !== 0 && <div style={{padding: 10, borderBottom: "1px solid #e7e7e7"}}>
                 <div style={{marginTop: "30px"}}>
                     <p style={{fontSize: 12, color: "#666", textAlign: 'center'}}>
                         <span>账号：{userInfo.nickname}</span>
@@ -45,7 +46,7 @@ const UserSection = () => {
                 </div>
             </div>
             }
-            { userInfo.userId ===0 && <div style={{padding: 10}}>
+            {userInfo.userId === 0 && <div style={{padding: 10}}>
                 <div style={{marginTop: "30px", display: "flex", justifyContent: "center",}}>
                     <Button styleType="link" onClick={() => {
                         nav("/login");
@@ -72,7 +73,7 @@ const SearchSection = () => {
             }
         }
     }, [location.pathname, nav]);
-    
+
     return (
         <div className="mika-novel-header-search">
             <input type="text" placeholder="搜索" ref={inputRef} onKeyUp={e => {
@@ -92,8 +93,8 @@ const FavorDropdown = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const freshFavorList = useCallback(withLockTime(() => {
-        getFavoriteList(5).then(res => {
-            setFavorList(res.records);
+        getFavoriteList(10).then(res => {
+            res && setFavorList(res.records);
         });
     }, 1000), [setFavorList]);
 
@@ -105,14 +106,16 @@ const FavorDropdown = () => {
         <Dropdown menu={<div className="mika-novel-header-favor-dropdown" style={{
             backgroundColor: "white",
             boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
-            borderRadius: 10
+            borderRadius: 10,
+            overflowY: "auto",
+            maxHeight: "80vh"
         }}>
             {favorList && favorList.length > 0 && favorList.map((item, index) => {
                 return (
                     <div className="mika-novel-header-favor-item" key={index} onClick={() => {
                         nav(`/novel/${item.novelId}`);
                     }}>
-                        <Image src={item.cover} width={40} height={40} alt=""/>
+                        <Image src={baseURL + item.cover} width={40} height={40} alt=""/>
                         <div className="mika-novel-header-favor-item-info">
                             <p>{item.title}</p>
                             <p>作者: {item.author}</p>
@@ -123,14 +126,14 @@ const FavorDropdown = () => {
             })}
 
             {favorList && favorList.length > 0 && <div className="mika-novel-header-favor-more" onClick={() => {
-                nav("/space");
+                nav("/space/favor");
             }}>查看更多</div>}
 
         </div>} paddingTrigger={10} className="mika-novel-header-favor" callback={() => {
             freshFavorList();
         }}>
             <div className='trigger' onClick={() => {
-                nav("/space");
+                nav("/space/favor");
             }}>收藏
             </div>
         </Dropdown>
@@ -143,7 +146,7 @@ const HistoryDropdown = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const freshHistoryList = useCallback(withLockTime(() => {
-        getHistoryList(5).then(res => {
+        getHistoryList(10).then(res => {
             setHistoryList(res);
         });
     }, 1000), [setHistoryList]);
@@ -156,14 +159,16 @@ const HistoryDropdown = () => {
         <Dropdown menu={<div className="mika-novel-header-history-dropdown" style={{
             backgroundColor: "white",
             boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
-            borderRadius: 10
+            borderRadius: 10,
+            overflowY: "auto",
+            maxHeight: "80vh"
         }}>
             {historyList && historyList.map((item, index) => {
                 return (
                     <div className="mika-novel-header-history-item" key={index} onClick={() => {
                         nav(`/novel/${item.novelId}`);
                     }}>
-                        <Image src={item.cover} width={40} height={40} alt=""/>
+                        <Image src={baseURL + item.cover} width={40} height={40} alt=""/>
                         <div className="mika-novel-header-history-item-info">
                             <p>{item.novelTitle}</p>
                             <p>{item.timestamp}</p>
@@ -174,14 +179,14 @@ const HistoryDropdown = () => {
             })}
 
             {historyList && <div className="mika-novel-header-history-more" onClick={() => {
-                nav("/space");
+                nav("/space/history");
             }}>查看更多
             </div>}
         </div>} paddingTrigger={10} className="mika-novel-header-history" callback={() => {
             freshHistoryList();
         }}>
             <div className='trigger' onClick={() => {
-                nav("/space");
+                nav("/space/history");
             }}>历史
             </div>
         </Dropdown>
@@ -204,7 +209,8 @@ const Header = memo(() => {
                 <HistoryDropdown/>
                 <div className="mika-novel-header-category" onClick={() => {
                     nav("/category");
-                }}>分类</div>
+                }}>分类
+                </div>
                 <Dropdown menu={
                     <div className="mika-novel-header-dropdown">
                         <Button onClick={() => {

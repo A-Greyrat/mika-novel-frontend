@@ -3,6 +3,7 @@ import {Image} from "../../component/mika-ui";
 import React, {memo, useMemo} from "react";
 import {useNavigate} from "react-router-dom";
 import {NovelInfo} from "../../common/novel";
+import {baseURL} from "../../common/axios";
 
 interface NovelCardProps extends NovelInfo {
     height?: number;
@@ -29,7 +30,7 @@ const NovelCard = memo((props: NovelCardProps) => {
              onClick={() => {
                  nav(`/novel/${props.id}`);
              }}>
-            <Image lazy src={props.cover} width={0} height={0} alt={props.title}/>
+            <Image lazy src={baseURL + props.cover} width={0} height={0} alt={props.title}/>
             <div><h1>{props.title}</h1></div>
             <h2>{"作者：" + props.author}</h2>
             <div className="mika-novel-novel-card-tags">
