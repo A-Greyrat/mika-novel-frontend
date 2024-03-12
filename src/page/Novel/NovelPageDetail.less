@@ -37,7 +37,7 @@
         "novel-cover . novel-tags"
         "novel-cover . ."
         "novel-cover . novel-action";
-    grid-template-rows: 42px 6px 16px 12px 24px auto auto;
+    grid-template-rows: 5rem minmax(10px, auto) auto minmax(2px, auto) auto minmax(0, 100%)  auto;
   }
 
   padding: 12px;
@@ -74,10 +74,20 @@
     font-weight: 650;
     margin: 0;
     font-size: 32px;
+    height: max-content;
 
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    -webkit-line-clamp: 1;
+
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+      -webkit-line-clamp: 3;
+      -webkit-text-stroke: 0 @primary-color;
+      color: @emphasis-color;
+      font-weight: 500;
+    }
 
     grid-area: novel-title;
   }
@@ -89,12 +99,21 @@
     color: @primary-color;
     grid-area: novel-author;
 
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+    }
+
     white-space: nowrap;
 
     svg {
       width: 20px;
       height: 20px;
       margin-right: 5px;
+
+      @media (max-width: 768px) {
+        width: 0.85rem;
+        height: 0.85rem;
+      }
 
       > path {
         fill: @primary-color;
@@ -108,8 +127,12 @@
     gap: 5px;
     overflow: hidden;
     height: 23px;
-    grid-area: novel-tags;
 
+    @media (max-width: 768px) {
+      height: 1.25rem;
+    }
+
+    grid-area: novel-tags;
     > span {
       color: @primary-color;
       border: 1px solid @primary-color;
@@ -119,6 +142,13 @@
       cursor: pointer;
       user-select: none;
       transition: all 0.3s;
+
+      display: flex;
+      align-items: center;
+      @media (max-width: 768px) {
+        font-size: 0.7rem;
+        padding: 1px 2px;
+      }
 
       box-sizing: border-box;
       white-space: nowrap;

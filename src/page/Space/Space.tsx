@@ -36,10 +36,10 @@ const FavorList = memo(() => {
                             <p>{item.description}</p>
                             <div className='padding'></div>
                             <div>
-                                <Button styleType="primary" size="large" onClick={() => {
+                                <Button styleType="primary" size="medium" onClick={() => {
                                     nav(`/novel/${item.novelId}`);
                                 }}>继续阅读</Button>
-                                <Button styleType="default" size="large" onClick={async () => {
+                                <Button styleType="default" size="medium" onClick={async () => {
                                     return removeFavorite(String(item.novelId)).then((res) => {
                                         if (res.code === 200)
                                             return setFavorList(favorList.filter((value) => value.novelId !== item.novelId));
@@ -88,10 +88,10 @@ const HistoryList = memo(() => {
                         </p>
                         <div className='padding'></div>
                         <div>
-                            <Button styleType="primary" size="large" onClick={() => {
+                            <Button styleType="primary" size="medium" onClick={() => {
                                 nav(`/novel/${item.novelId}/${item.volumeNumber}/${item.chapterNumber}`);
                             }}>继续阅读</Button>
-                            <Button styleType="default" size="large" onClick={async () => {
+                            <Button styleType="default" size="medium" onClick={async () => {
                                 return removeHistory(String(item.novelId)).then((res) => {
                                     if (res.code === 200)
                                         return setHistoryList(historyList.filter((value) => value.novelId !== item.novelId));

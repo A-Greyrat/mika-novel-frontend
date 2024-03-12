@@ -76,16 +76,21 @@ const SearchSection = () => {
 
     return (
         <div className="mika-novel-header-search">
-            <input type="text" placeholder="搜索" ref={inputRef} onKeyUp={e => {
-                if (e.key === "Enter") {
+            <form onSubmit={e => {
+                e.preventDefault();
+                if (inputRef.current) {
                     nav('/');
                     setTimeout(() => {
-                        nav(`/search/${(e.target as HTMLInputElement).value}`, {replace: true});
+                        const formData = new FormData(e.target as HTMLFormElement);
+                        nav(`/search/${(formData.get("search") as string)}`, {replace: true});
                     }, 10);
                 }
-            }}/>
+            }}>
+                <input type="text" name='search' placeholder="搜索" ref={inputRef}/>
+            </form>
         </div>
-    );
+    )
+        ;
 }
 const FavorDropdown = () => {
     const [favorList, setFavorList] = useState<(NovelInfo & { novelId: number })[]>([]);

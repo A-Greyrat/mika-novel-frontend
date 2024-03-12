@@ -149,6 +149,9 @@ const CarouselHorizontal = memo(forwardRef((props: Omit<CarouselProps, "directio
         const deltaX = touch.clientX - startTouch.current;
         const width = rootRef.current?.offsetWidth ?? 0;
 
+        if (deltaX === 0)
+            return;
+
         if (Math.abs(deltaX) > width / 4) {
             if (deltaX > 0) {
                 handleSwitch(currentIndex.current - 1, `translateX(${deltaX}px`);
@@ -184,8 +187,6 @@ const CarouselHorizontal = memo(forwardRef((props: Omit<CarouselProps, "directio
             <PrevButton onClick={() => {
                 handleSwitch(currentIndex.current - 1);
                 reset();
-            }} onTouchEnd={e => {
-                e.preventDefault();
             }}/>
 
             <NextButton onClick={() => {

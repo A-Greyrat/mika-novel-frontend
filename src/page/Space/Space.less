@@ -44,8 +44,6 @@
         padding: 20px;
       }
     }
-
-
   }
 
   .mika-novel-space-individual-nav {
@@ -92,6 +90,12 @@
           width: 140px;
           flex: 0 0 140px;
           border-radius: 10px;
+
+          @media (max-width: 768px) {
+            width: 100px;
+            aspect-ratio: 2 / 3;
+            flex: 0 0 100px;
+          }
         }
 
         > .mika-novel-space-individual-history-item-info {
@@ -110,6 +114,11 @@
             color: mix(@primary-color, black, 50%);
             margin-bottom: 12px;
             margin-top: 3px;
+            font-weight: 300;
+
+            @media (max-width: 768px) {
+              font-size: calc(3.2vw + 4px);
+            }
           }
 
           > :nth-child(3),
@@ -118,6 +127,14 @@
             gap: 8px;
             align-items: center;
             color: mix(@primary-color, black, 50%);
+
+
+            @media (max-width: 768px) {
+              svg {
+                width: calc(2vw + 3px);
+                height: calc(2vw + 3px);
+              }
+            }
 
             path {
               fill: mix(@primary-color, black, 50%);
@@ -133,9 +150,13 @@
             gap: 8px;
             align-items: center;
             align-self: flex-end;
+            white-space: nowrap;
           }
 
           > p {
+            @media (max-width: 768px) {
+              font-size: calc(2vw + 3px);
+            }
             font-size: 16px;
             color: #333;
             margin-bottom: 3px;
@@ -156,6 +177,12 @@
           width: 140px;
           flex: 0 0 140px;
           border-radius: 10px;
+
+          @media (max-width: 768px) {
+            width: 100px;
+            aspect-ratio: 2 / 3;
+            flex: 0 0 100px;
+          }
         }
 
         > .mika-novel-space-individual-favor-item-info {
@@ -174,6 +201,10 @@
             color: mix(@primary-color, black, 50%);
             margin-bottom: 3px;
             margin-top: 3px;
+
+            @media (max-width: 768px) {
+              font-size: calc(3.2vw + 4px);
+            }
           }
 
           > :nth-child(2) {
@@ -182,6 +213,10 @@
             overflow: hidden;
             text-overflow: ellipsis;
             color: mix(@primary-color, black, 50%);
+
+            @media (max-width: 768px) {
+              font-size: calc(2vw + 3px);
+            }
           }
 
           > :nth-child(3) {
@@ -192,6 +227,9 @@
             font-size: 16px;
             text-overflow: ellipsis;
 
+            @media (max-width: 768px) {
+              font-size: calc(2vw + 3px);
+            }
             color: mix(@primary-color, black, 50%);
           }
 

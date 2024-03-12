@@ -228,8 +228,7 @@ const RegisterForm = () => {
 
     return (
         <form className="mika-novel-register-form">
-            <input type="text" placeholder="邮箱" name="email" ref={emailRef} required
-                   pattern={"^\\w+(-+.\\w+)*@\\w+(-.\\w+)*.\\w+(-.\\w+)*$"}/>
+            <input type="email" placeholder="邮箱" name="email" ref={emailRef} required/>
             <input type="text" placeholder="昵称" name="nickname" required pattern={"^[\u4e00-\u9fa5_a-zA-Z0-9]+$"}/>
             <input type="password" placeholder="密码" name="password" required pattern={"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$"}/>
             <input type="password" placeholder="确认密码" name="confirmPassword" required/>

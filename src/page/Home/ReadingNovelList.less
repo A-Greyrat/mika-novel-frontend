@@ -60,6 +60,10 @@
   margin: 0;
   color: @primary-color;
   user-select: none;
+
+  @media (max-width: 768px) {
+    font-size: calc(1.5rem + 1vw);
+  }
 }
 
 .mika-novel-reading-novel-list-container {
@@ -89,12 +93,19 @@
   padding: 5px;
   box-sizing: border-box;
 
+  @itemWidth: 140px;
+  @itemMobileWidth: calc(15vw + 30px);
+
   > :first-child {
     border-radius: 10px;
     height: auto;
     aspect-ratio: 2 / 3;
-    width: 140px;
+    width: @itemWidth;
     min-width: 100px;
+
+    @media (max-width: 768px) {
+      width: @itemMobileWidth;
+    }
   }
 
   > p {
@@ -104,7 +115,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 140px;
+    width: @itemWidth;
+
+    @media (max-width: 768px) {
+      width: @itemMobileWidth
+    }
 
     text-align: center;
   }

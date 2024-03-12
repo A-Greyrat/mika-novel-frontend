@@ -113,7 +113,7 @@ const NovelPageCommentInput = () => {
     return (
         <div className="mika-novel-page-comment-input">
             <Image width={36} height={36} src="/defaultAvatar.webp" error="/defaultAvatar.webp"/>
-            <textarea placeholder="写下你的评论"/>
+            <textarea placeholder="写下你的评论" />
             <Button styleType="primary">评论</Button>
         </div>
     );

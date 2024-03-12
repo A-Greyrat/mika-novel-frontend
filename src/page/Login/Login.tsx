@@ -242,8 +242,7 @@ const Login = () => {
                 <div className="mika-novel-login-form-container">
                     <h1>登 录</h1>
                     <form className="mika-novel-login-form">
-                        <input type="text" placeholder="邮箱" name="username" required
-                               pattern={"^\\w+(-+.\\w+)*@\\w+(-.\\w+)*.\\w+(-.\\w+)*$"}/>
+                        <input type="email" placeholder="邮箱" name="username" required/>
                         <input type="password" placeholder="密码" name="password" required/>
                         <div className="mika-novel-login-form-captcha">
                             <input type="text" placeholder="验证码" name="captcha" required

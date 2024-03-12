@@ -23,7 +23,7 @@ const NovelPageRecommend = ({novels}: { novels: NovelInfo[] }) => {
                             nav('/');
                             setTimeout(() => {
                                 nav(`/novel/${novel.id}`, {replace: true});
-                            }, 10);
+                            }, 100);
                         }}>
                             <Image src={baseURL + novel.cover} width={100} height={150}/>
                             <div>

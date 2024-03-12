@@ -55,7 +55,7 @@ const RecommendList = memo(() => {
             <h1>推荐</h1>
             <div className="mika-novel-recommend-list-container">
                 {items?.map((item, index) => (
-                    <NovelCard key={index} {...item} height={240} padding={12} maxDisplayLines={4}/>
+                    <NovelCard key={index} {...item} height={240} padding={12} maxDisplayLines={3}/>
                 ))}
                 {loading && <Loading/>}
                 <div className="mika-novel-recommend-list-more" ref={getMoreRef}/>
