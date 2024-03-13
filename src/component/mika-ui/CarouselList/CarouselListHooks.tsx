@@ -39,17 +39,17 @@ export const useStyle = (props: CarouselListProps) => {
 };
 
 const useInterval = (props: CarouselListProps) => {
-    const intervalRef = React.useRef<number | null>(null);
+    const intervalRef = React.useRef<NodeJS.Timer | null>(null);
 
     useEffect(() => {
         return () => {
-            intervalRef.current && clearInterval(intervalRef.current);
+            intervalRef.current && clearInterval(intervalRef.current as unknown as number);
         }
     }, []);
 
     return useCallback((next: () => void) => {
         if (props.autoSwitchByTime) {
-            intervalRef.current && clearInterval(intervalRef.current);
+            intervalRef.current && clearInterval(intervalRef.current as unknown as number);
             intervalRef.current = setInterval(() => {
                 next();
             }, props.autoSwitchByTime);
