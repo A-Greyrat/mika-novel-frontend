@@ -1,7 +1,7 @@
 export {debounce} from '../../component/mika-ui';
 
 export const throttle = <T,>(fn: (arg: T) => unknown, delay: number) => {
-    let timer: NodeJS.Timeout | null = null;
+    let timer: number | null = null;
     return function (arg: T) {
         if (timer) {
             return;

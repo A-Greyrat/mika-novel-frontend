@@ -26,7 +26,7 @@ export const isMobile = () => {
 }
 
 export const debounce = <T extends unknown[]>(fn: (...args: T) => unknown, delay: number) => {
-    let timer: NodeJS.Timeout | null = null;
+    let timer: number | null = null;
     return (...args: T) => {
         if (timer) {
             clearTimeout(timer);
@@ -39,7 +39,7 @@ export const debounce = <T extends unknown[]>(fn: (...args: T) => unknown, delay
 }
 
 export const throttle = <T extends unknown[]>(fn: (...args: T) => unknown, delay: number) => {
-    let timer: NodeJS.Timer | null = null;
+    let timer: number | null = null;
     return (arg: T) => {
         if (timer) {
             return;

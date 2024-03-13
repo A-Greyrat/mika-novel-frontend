@@ -1,5 +1,7 @@
 import {httpGet} from "../axios";
+
 let publicKey: string | null = null;
+
 async function loadPublicKeyFromBase64(base64String: string) {
     const binaryDer = Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
 
@@ -14,13 +16,14 @@ async function loadPublicKeyFromBase64(base64String: string) {
         ["encrypt"]
     );
 }
+
 const getPublicKey = async () => {
     return httpGet<string>("/common/public-key").then((res) => {
         return res.data;
     });
 }
 
-export async function rsaEncrypt(dataToEncrypt: string) {
+export async function rsaEncrypt(dataToEncrypt: string): Promise<string> {
     if (publicKey === null) {
         publicKey = await getPublicKey();
         return rsaEncrypt(dataToEncrypt);
