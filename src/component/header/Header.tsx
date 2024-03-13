@@ -89,8 +89,7 @@ const SearchSection = () => {
                 <input type="text" name='search' placeholder="搜索" ref={inputRef}/>
             </form>
         </div>
-    )
-        ;
+    );
 }
 const FavorDropdown = () => {
     const [favorList, setFavorList] = useState<(NovelInfo & { novelId: number })[]>([]);

@@ -7,7 +7,11 @@ export interface NovelReaderSetting {
     lineHeight: string;
     letterSpacing: string;
 
+
+    '--paragraph-spacing': string;
+
     '--text-color': string;
+    '--text-font-weight': string;
 
     '--title-font-size': string;
     '--title-font-weight': string;
@@ -16,27 +20,47 @@ export interface NovelReaderSetting {
     '--content-background-color': string;
 }
 
-
-let readerSetting: NovelReaderSetting = {
+const defaultReaderSetting: NovelReaderSetting = {
     fontSize: "18px",
     fontFamily: "Arial",
-    backgroundColor: "rgb(222,222,222)",
+    backgroundColor: "#dcdcdc",
     lineHeight: "1.5",
     letterSpacing: "0",
 
-    "--text-color": "rgb(0, 0, 0)",
+    '--paragraph-spacing': '10px',
+
+    "--text-color": "#000000",
+    '--text-font-weight': "400",
+
     '--title-font-size': "24px",
     '--title-font-weight': "500",
+
     '--content-width': "60%",
-    '--content-background-color': "rgb(240,240,240)"
+    '--content-background-color': "#f5f5f5"
 };
 
+let readerSetting: NovelReaderSetting | null = null;
 
-export const getReaderSetting = () => {
-    if (localStorage.getItem("readerSetting")) {
-        readerSetting = JSON.parse(localStorage.getItem("readerSetting")!) as NovelReaderSetting;
-    } else {
-        localStorage.setItem("readerSetting", JSON.stringify(readerSetting));
+export const getReaderSetting = (): NovelReaderSetting => {
+    if (readerSetting) {
+        return readerSetting;
     }
-    return readerSetting;
+
+    const setting = localStorage.getItem("readerSetting");
+    if (setting) {
+        readerSetting = JSON.parse(setting);
+    } else {
+        readerSetting = defaultReaderSetting;
+    }
+
+    return readerSetting!;
+}
+
+export const setReaderSetting = (setting: NovelReaderSetting) => {
+    localStorage.setItem("readerSetting", JSON.stringify(setting));
+}
+
+export const resetReaderSetting = () => {
+    readerSetting = defaultReaderSetting;
+    localStorage.removeItem("readerSetting");
 }

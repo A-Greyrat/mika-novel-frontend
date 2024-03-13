@@ -1,60 +1,86 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import "./NovelReader.less";
 import {getNovelContent} from "../../common/novel";
-import {getReaderSetting} from "../../common/setting";
+import {getReaderSetting, resetReaderSetting, setReaderSetting} from "../../common/setting";
 import {Button} from "../../component/mika-ui";
 import {useStore} from "../../common/mika-store";
 
 const SettingPanel = () => {
     const [setting, setSetting] = useStore("mika-novel-reader-setting", getReaderSetting());
-    console.log(setting)
+
+    const changeSetting = useCallback((key: string, value: string) => {
+        setSetting({...setting, [key]: value});
+        setReaderSetting({...setting, [key]: value});
+    }, [setting, setSetting]);
+
     return (
         <div className="mika-novel-reader-setting-panel">
             <label>字体大小</label>
             <input type="range" min={14} max={32} step={1} value={parseInt(setting.fontSize)} onChange={(e) => {
-                setSetting({...setting, fontSize: e.target.value + 'px'});
+                changeSetting('fontSize', e.target.value + 'px');
             }}/>
+            <label>字体粗细</label>
+            <input type="range" min={100} max={900} step={100} value={parseInt(setting['--text-font-weight'])}
+                   onChange={(e) => {
+                       changeSetting('--text-font-weight', e.target.value);
+                   }}/>
 
             <label>行高</label>
             <input type="range" min={1} max={3} step={0.1} value={parseFloat(setting.lineHeight)} onChange={(e) => {
-                setSetting({...setting, lineHeight: e.target.value});
+                changeSetting('lineHeight', e.target.value);
             }}/>
             <label>字间距</label>
             <input type="range" min={0} max={2} step={0.1} value={parseFloat(setting.letterSpacing)}
                    onChange={(e) => {
-                       setSetting({...setting, letterSpacing: e.target.value + 'px'});
+                       changeSetting('letterSpacing', e.target.value + 'px');
                    }}/>
+
+            <label>段间距</label>
+            <input type="range" min={0} max={60} step={2} value={parseFloat(setting['--paragraph-spacing'])}
+                   onChange={(e) => {
+                       changeSetting('--paragraph-spacing', e.target.value + 'px');
+                   }}/>
+
             <label>背景颜色</label>
             <input type="color" value={setting.backgroundColor} onChange={(e) => {
-                setSetting({...setting, backgroundColor: e.target.value});
+                changeSetting('backgroundColor', e.target.value);
             }}/>
             <label>字体颜色</label>
             <input type="color" value={setting['--text-color']} onChange={(e) => {
-                setSetting({...setting, '--text-color': e.target.value});
+                changeSetting('--text-color', e.target.value);
             }}/>
+
             <label>标题字体大小</label>
             <input type="range" min={14} max={32} step={1} value={parseInt(setting['--title-font-size'])}
                    onChange={(e) => {
-                       setSetting({...setting, '--title-font-size': e.target.value + 'px'});
+                       changeSetting('--title-font-size', e.target.value + 'px');
                    }}/>
             <label>标题字体粗细</label>
             <input type="range" min={100} max={900} step={100} value={parseInt(setting['--title-font-weight'])}
                    onChange={(e) => {
-                       setSetting({...setting, '--title-font-weight': e.target.value});
+                       changeSetting('--title-font-weight', e.target.value);
                    }}/>
 
             <label>内容宽度</label>
             <input type="range" min={20} max={100} step={1}
                    value={parseInt(setting['--content-width'].replace('%', ''))} onChange={(e) => {
-                setSetting({...setting, '--content-width': e.target.value + '%'});
+                changeSetting('--content-width', e.target.value + '%');
             }}/>
 
             <label>内容背景颜色</label>
             <input type="color" value={setting['--content-background-color']} onChange={(e) => {
-                setSetting({...setting, '--content-background-color': e.target.value});
+                changeSetting('--content-background-color', e.target.value);
             }}/>
 
+            <Button style={{
+                width: "100%",
+                marginTop: 10,
+                marginBottom: 10
+            }} onClick={() => {
+                resetReaderSetting();
+                setSetting(getReaderSetting());
+            }}>恢复默认</Button>
         </div>
     );
 
@@ -102,7 +128,6 @@ const NovelReader = () => {
     const [title, setTitle] = useState<string>();
     const [setting, _setSetting] = useStore("mika-novel-reader-setting", getReaderSetting());
 
-    console.log(setting)
     useEffect(() => {
         window.scrollTo(0, 0);
 

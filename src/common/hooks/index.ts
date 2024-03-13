@@ -5,7 +5,7 @@ export const useTypePrint = (text: string[], speed = 100) => {
     const isDeleting = useRef(false);
     const nowIndex = useRef(0);
     const nowLine = useRef(0);
-    const timer = useRef<number>();
+    const timer = useRef<NodeJS.Timer>();
 
     const print = useCallback(async () => {
         if (nowIndex.current === text[nowLine.current].length + 1 && !isDeleting.current) {
@@ -35,7 +35,7 @@ export const useTypePrint = (text: string[], speed = 100) => {
     useEffect(() => {
         print();
         return () => {
-            window.clearTimeout(timer.current);
+            window.clearTimeout(timer.current as NodeJS.Timeout);
         }
     }, [print]);
 
