@@ -182,7 +182,7 @@ const HistoryDropdown = () => {
                 );
             })}
 
-            {historyList && <div className="mika-novel-header-history-more" onClick={() => {
+            {historyList && historyList.length > 0 && <div className="mika-novel-header-history-more" onClick={() => {
                 nav("/space/history");
             }}>查看更多
             </div>}
