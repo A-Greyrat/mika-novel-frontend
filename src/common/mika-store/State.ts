@@ -11,12 +11,8 @@ class State {
         return this.value.current as T;
     }
 
-    public setValue<T>(newValue: T | ((prev: T) => T)) {
-        if (typeof newValue === "function") {
-            this.value.current = (newValue as ((prev: T) => T))(this.value.current as T);
-        } else {
-            this.value.current = newValue;
-        }
+    public setValue<T>(newValue: T) {
+        this.value.current = newValue;
     }
 }
 

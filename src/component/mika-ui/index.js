@@ -7,6 +7,7 @@ export {default as Pagination} from './Pagination';
 export {default as Image} from './Image';
 export {default as TabList} from './TabList';
 export {default as Carousel} from './Carousel';
-
+export {default as InfinityList} from './InfinityList';
+export {default as showMessage} from './Message';
 
 export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";

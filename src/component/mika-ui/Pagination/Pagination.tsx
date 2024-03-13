@@ -2,15 +2,18 @@ import React, {useCallback, useMemo} from "react";
 import {default as _Button} from "../Button/Button";
 import "./Pagination.less";
 
-export type PaginationProps = {
+export interface PaginationProps {
     initIndex?: number;
-    pageSize: number;
+    pageNum: number;
     maxDisplayNumber?: number;
     onChange: (page: number) => void;
     fastJumpSize?: number;
     customBtn?: (props: PaginationCustomButtonProps) => React.ReactElement;
     customControlBtn?: React.FC<PaginationCustomButtonProps>;
-};
+
+    className?: string;
+    style?: React.CSSProperties;
+}
 
 export type PaginationCustomButtonProps = {
     onClick: () => void;
@@ -126,7 +129,7 @@ const Pagination = React.forwardRef((props: PaginationProps, ref: React.Ref<HTML
     }, [current, props]);
 
     const next = useCallback(() => {
-        if (current < props.pageSize) {
+        if (current < props.pageNum) {
             setCurrent(current + 1);
             props.onChange(current + 1);
         }
@@ -135,8 +138,9 @@ const Pagination = React.forwardRef((props: PaginationProps, ref: React.Ref<HTML
     const ControlButton = props.customControlBtn || _Button;
 
     return (
-        <div className="mika-pagination-root" ref={ref}>
-            <ControlButton onClick={prev} disabled={current === 1 || props.pageSize <= 0}>
+        <div className={"mika-pagination-root" + (props.className ? " " + props.className : "")}
+             ref={ref} style={props.style}>
+            <ControlButton onClick={prev} disabled={current === 1 || props.pageNum <= 0}>
                 {props.customControlBtn ? null :
                     <svg viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" width="1em" height="1em">
@@ -146,10 +150,10 @@ const Pagination = React.forwardRef((props: PaginationProps, ref: React.Ref<HTML
                         ></path>
                     </svg>}
             </ControlButton>
-            <PageSelector pageSize={props.pageSize} current={current} setCurrent={setCurrent}
+            <PageSelector pageSize={props.pageNum} current={current} setCurrent={setCurrent}
                           onChange={props.onChange} maxDisplayNumber={props.maxDisplayNumber}
                           fastJumpSize={props.fastJumpSize} customBtn={props.customBtn}/>
-            <ControlButton onClick={next} disabled={current === props.pageSize || props.pageSize <= 0}>
+            <ControlButton onClick={next} disabled={current === props.pageNum || props.pageNum <= 0}>
                 {props.customControlBtn ? null :
                     (<svg viewBox="0 0 1024 1024" version="1.1"
                           xmlns="http://www.w3.org/2000/svg" width="1em" height="1em">

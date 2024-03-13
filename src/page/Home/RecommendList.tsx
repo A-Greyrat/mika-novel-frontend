@@ -1,9 +1,10 @@
 import NovelCard from "../../component/NovelCard/NovelCard";
 import './RecommendList.less';
-import {memo, useCallback, useEffect, useRef, useState} from "react";
+import {memo, useCallback, useState} from "react";
 import {getRecommendNovelList, NovelInfo} from "../../common/novel";
 import {withLockTime} from "../../component/mika-ui";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
+import InfinityList from "../../component/mika-ui/InfinityList/InfinityList.tsx";
 
 const Loading = memo(() => {
     return (
@@ -17,49 +18,33 @@ const Loading = memo(() => {
 
 const RecommendList = memo(() => {
     const [items, setItems] = useState<NovelInfo[]>();
-    const [loading, setLoading] = useState(false);
-    const getMoreRef = useRef<HTMLDivElement>(null);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const getMore = useCallback(withLockTime(() => {
-        if (loading) return;
-        setLoading(true);
-        setTimeout(() => {
-            getRecommendNovelList().then((res) => {
-                setItems((prev) => {
-                    return prev ? prev.concat(res) : res;
-                });
-                setLoading(false);
+    const getMore = useCallback(withLockTime((unloading: () => void) => {
+        getRecommendNovelList().then(async (res) => {
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(null);
+                }, 500);
             });
-        }, 500);
-    }, 500), []);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                getMore();
-            }
-        }, {
-            rootMargin: "50px",
-            threshold: 0.1
+            setItems((prev) => {
+                return prev ? prev.concat(res) : res;
+            });
+            unloading();
         });
-
-        getMoreRef.current && observer.observe(getMoreRef.current);
-        return () => {
-            observer.disconnect();
-        }
-    }, [getMore]);
+    }, 500), []);
 
     return (
         <div className="mika-novel-recommend-list-root">
             <h1>推荐</h1>
-            <div className="mika-novel-recommend-list-container">
+            <InfinityList
+                onIntersect={getMore}
+                loading={<Loading/>}
+                className="mika-novel-recommend-list-container">
                 {items?.map((item, index) => (
                     <NovelCard key={index} {...item} height={240} padding={12} maxDisplayLines={3}/>
                 ))}
-                {loading && <Loading/>}
-                <div className="mika-novel-recommend-list-more" ref={getMoreRef}/>
-            </div>
+            </InfinityList>
         </div>
     );
 });

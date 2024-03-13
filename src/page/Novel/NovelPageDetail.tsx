@@ -1,4 +1,4 @@
-import {Button, Image} from "../../component/mika-ui";
+import {Button, Image, showMessage} from "../../component/mika-ui";
 import "./NovelPageDetail.less";
 import {memo, useEffect, useState} from "react";
 import {addFavorite, getIsFavorite, NovelInfo, removeFavorite} from "../../common/novel";
@@ -53,15 +53,21 @@ const NovelPageDetail = (novelData: NovelInfo) => {
                 }}>
                     {lastRead ? '继续阅读' : '开始阅读'}
                 </Button>
-                {!isFavorite && <Button styleType="default" size="large" onClick={() => {
-                    addFavorite(novelData.id).then(res => {
-                        res.code === 200 && setIsFavorite(true);
+                {!isFavorite && <Button styleType="default" size="large" onClick={async () => {
+                    return addFavorite(novelData.id).then(res => {
+                        if (res.code === 200) {
+                            setIsFavorite(true);
+                            showMessage({children: "收藏成功", duration: "0.3s", remainingTime: 1000});
+                        }
                         res.code === 401 && nav("/login");
                     });
                 }}>加入收藏</Button>}
-                {isFavorite && <Button styleType="default" size="large" onClick={() => {
-                    removeFavorite(novelData.id).then(res => {
-                        res.code === 200 && setIsFavorite(false);
+                {isFavorite && <Button styleType="default" size="large" onClick={async () => {
+                    return removeFavorite(novelData.id).then(res => {
+                        if (res.code === 200) {
+                            setIsFavorite(false);
+                            showMessage({children: "移除成功", duration: "0.3s", remainingTime: 1000});
+                        }
                         res.code === 401 && nav("/login");
                     });
                 }}>

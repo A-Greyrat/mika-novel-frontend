@@ -25,5 +25,10 @@ export type {TabListProps} from './TabList';
 export {default as Carousel} from './Carousel';
 export type {CarouselProps} from './Carousel';
 
+export {default as InfinityList} from './InfinityList';
+export type {InfinityListProps} from './InfinityList';
+
+export {default as showMessage} from './Message';
+export type {MessageProps} from './Message';
 
 export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";

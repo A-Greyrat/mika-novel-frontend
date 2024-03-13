@@ -5,7 +5,7 @@ import {getSearchedNovels, NovelInfo} from "../../common/novel";
 import Header from "../../component/header/Header";
 import Footer from "../../component/footer/Footer";
 import NovelCard from "../../component/NovelCard/NovelCard";
-import {Pagination} from "../../component/mika-ui";
+import {isMobile, Pagination} from "../../component/mika-ui";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
 
 const SearchPage = () => {
@@ -76,7 +76,7 @@ const SearchPage = () => {
                     setSearchResult(res.records);
                     curRef.current += res.records.length;
                 });
-            }} pageSize={Math.ceil(totalRef.current / 10)} initIndex={page}/>
+            }} pageNum={Math.ceil(totalRef.current / 10)} maxDisplayNumber={isMobile() ? 3 : 5} initIndex={page}/>
             <Footer/>
         </div>
     )

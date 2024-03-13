@@ -8,8 +8,9 @@ import useForceUpdate from "./useForceUpdate";
  * @template T The type of the state.
  * @param {string} name The name of the state.
  * @param {T} [value] The initial value of the state.
+ * @returns {readonly [T, (newValue: T) => void]} A tuple containing the state and a function to update the state.
  */
-const useStore = <T, >(name: string, value?: T): readonly [T, (newValue: T | ((prev: T) => T)) => void] => {
+const useStore = <T, >(name: string, value?: T): readonly [T, (newValue: T) => void] => {
     const forceUpdate = useForceUpdate();
 
     const state = useRef<T | null | undefined>(null);
@@ -32,7 +33,7 @@ const useStore = <T, >(name: string, value?: T): readonly [T, (newValue: T | ((p
         };
     }, []);
 
-    const setState = useCallback((newValue: T | ((prev: T) => T)) => Store.updateState<T>(name, newValue), [name]);
+    const setState = useCallback((newValue: T) => Store.updateState<T>(name, newValue), [name]);
 
     return [storedState.current!.getValue<T>(), setState] as const;
 }

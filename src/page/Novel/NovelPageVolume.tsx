@@ -11,7 +11,7 @@ const NovelPageVolume = ({nid, volumeData}: { nid: string, volumeData: NovelPage
         volumeId: number,
         chapterId: number
     } | null>("mika-novel-last-read", null);
-    console.log(lastRead)
+
     useEffect(() => {
         getHistory(nid).then((res) => {
             if (res && res.length > 0) {

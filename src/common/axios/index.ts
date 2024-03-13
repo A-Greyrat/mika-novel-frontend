@@ -3,11 +3,10 @@ import {showModal} from "../../component/mika-ui";
 import {isUserLoggedIn} from "../user";
 import {withLock} from "../../component/mika-ui/utils/utils.ts";
 
-export const baseURL = 'https://118.31.42.183/api';
+export const baseURL = 'https://www.abdecd.xyz/api';
 
 const instance = axios.create({
     baseURL: baseURL,
-    timeout: 5000,
 });
 
 instance.interceptors.request.use(config => {
@@ -55,7 +54,7 @@ export const httpGet = async <T, >(url: string, config?: AxiosRequestConfig): Pr
         .then(res => res.data as ResponseData<T>)
         .catch(res =>{
             return {
-                code: res.response.status,
+                code: res.response.status || 400,
                 data: null,
                 msg: res.response.data
             }

@@ -1,5 +1,6 @@
 import {httpGet, httpPost} from '../axios';
 import {rsaEncrypt} from './encrypt';
+import {useEffect, useState} from "react";
 
 export let isUserLoggedIn = false;
 
@@ -100,6 +101,18 @@ export const getUserInfo = async () => {
         if (res.code === 200) {
             userInfo = res.data;
         }
-        return res.data;
+        return userInfo;
     });
+}
+
+export const useUser = () => {
+    const [user, setUser] = useState(userInfo);
+    useEffect(() => {
+        getUserInfo().then(res => {
+            if (res) {
+                setUser(res);
+            }
+        });
+    }, []);
+    return user;
 }

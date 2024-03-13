@@ -122,12 +122,6 @@ export const getFavoriteList = async (pageSize: number = 1000, page: number = 1)
 }
 
 export const getIsFavorite = async (novelId: number) => {
-    // return getFavoriteList().then((res) => {
-    //     return res.records.some((item) => {
-    //         return item.novelId === novelId;
-    //     });
-    // });
-
     return httpGet(`/reader/favorites/contains?novelId=${novelId}`).then((res) => {
         return res.data as boolean;
     });
@@ -154,13 +148,16 @@ export interface HistoryItem {
     chapterTitle: string;
 }
 
-export const getHistoryList = async (pageSize: number = 1000) => {
-    return httpGet<HistoryItem[]>(`/reader/history?pageSize=${pageSize}`).then((res) => {
-        res.data?.forEach((item) => {
+export const getHistoryList = async (pageSize: number = 1000, page: number = 1) => {
+    return httpGet<{
+        total: number;
+        records: HistoryItem[]
+    }>(`/reader/history?page=${page}&pageSize=${pageSize}`).then((res) => {
+        res.data?.records.forEach((item) => {
             const date = new Date(item.timestamp);
             item.timestamp = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
         });
-        return res.data as HistoryItem[];
+        return res.data;
     });
 }
 
@@ -187,7 +184,6 @@ export const getAvailableTags = async () => {
 }
 
 
-
 export const addComment = async (novelId: string, toUid: string, content: string) => {
     return httpPost("/novel/comment/add", {
         novelId: novelId,
@@ -196,16 +192,13 @@ export const addComment = async (novelId: string, toUid: string, content: string
     });
 }
 
-export interface Comment {
-    id: number;
-    userId: number;
-    toId: number;
-    toUserId: number;
-    content: string;
-    timestamp: string;
+export const deleteComment = async (commentId: string) => {
+    return httpPost("/novel/comment/delete", {
+        id: commentId
+    });
 }
 
-type NovelPageCommentReply = {
+export interface NovelPageCommentReply {
     parent?: string;
 
     id: string;
@@ -220,10 +213,9 @@ type NovelPageCommentReply = {
         name: string;
         avatar: string;
     }
-};
+}
 
-
-type NovelPageCommentProps = {
+export interface NovelPageCommentProps {
     id: string;
     time: string;
     content: string;
@@ -232,19 +224,92 @@ type NovelPageCommentProps = {
         name: string;
         avatar: string;
     };
-    reply?: NovelPageCommentReply[];
+    reply: NovelPageCommentReply[];
 }
 
-export const getComments = async (novelId: string, pageSize: number) => {
-    return httpGet(`/novel/comment?novelId=${novelId}&pageSize=${pageSize}`).then((res) => {
-        const data = res.data as { total: number, records: Comment[] };
-        const ret: NovelPageCommentProps[] = [];
-        for (const item of data.records) {
-            if (item.toId === -1) {
+export interface Comment {
+    id: number;
+    userDetail: {
+        id: number;
+        nickname: string;
+        avatar: string;
+    };
+    toId: number;
+    toUserDetail: {
+        id: number;
+        nickname: string;
+        avatar: string;
+    } | null;
+    content: string;
+    timestamp: string;
+}
 
+export const getComments = async (novelId: string, page: number, pageSize: number) => {
+    return httpGet(`/novel/comment?novelId=${novelId}&page=${page}&pageSize=${pageSize}`).then((res) => {
+        const data = res.data as { total: number, records: Comment[][] };
+        const ret: NovelPageCommentProps[] = [];
+        data?.records?.forEach((item) => {
+            const father: NovelPageCommentProps = {
+                id: item[0].id.toString(),
+                time: item[0].timestamp,
+                content: item[0].content,
+                user: {
+                    id: item[0].userDetail.id.toString(),
+                    name: item[0].userDetail.nickname,
+                    avatar: item[0].userDetail.avatar
+                },
+                reply: []
             }
-        }
-        return ret;
+            ret.push(father);
+            item?.slice(1).forEach((reply) => {
+                father.reply?.push({
+                    id: reply.id.toString(),
+                    time: reply.timestamp,
+                    content: reply.content,
+                    replyTo: {
+                        id: reply.toUserDetail?.id.toString() || "0",
+                        name: reply.toUserDetail?.nickname || "我"
+                    },
+                    user: {
+                        id: reply.userDetail.id.toString(),
+                        name: reply.userDetail.nickname,
+                        avatar: reply.userDetail.avatar
+                    }
+                });
+            });
+        });
+
+        return {
+            total: data.total,
+            records: ret
+        };
     });
 }
 
+export const getNextChapter = async (novelId: string, volumeId: string, chapterId: string) => {
+    return httpGet(`/novel/chapter/next?nid=${novelId}&vNum=${volumeId}&cNum=${chapterId}`).then((res) => {
+        return res.data as {
+            id: number,
+            novelId: number,
+            volumeNumber: number,
+            chapterNumber: number,
+            title: string,
+            timestamp: string,
+            content: string
+        };
+    });
+}
+
+export const getPrevChapter = async (novelId: string, volumeId: string, chapterId: string) => {
+    return httpGet(`/novel/chapter/previous?nid=${novelId}&vNum=${volumeId}&cNum=${chapterId}`).then((res) => {
+        return res.data as {
+            id: number,
+            novelId: number,
+            volumeNumber: number,
+            chapterNumber: number,
+            title: string,
+            timestamp: string,
+            content: string
+        };
+    });
+}

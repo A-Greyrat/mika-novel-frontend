@@ -1,6 +1,6 @@
 import './Header.less';
 import {memo, useCallback, useEffect, useRef, useState} from "react";
-import {getUserInfo, isUserLoggedIn, logout} from "../../common/user";
+import {isUserLoggedIn, logout, useUser} from "../../common/user";
 import {Button, Dropdown, Image, withLockTime} from "../mika-ui";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getFavoriteList, getHistoryList, HistoryItem, NovelInfo} from "../../common/novel";
@@ -8,23 +8,8 @@ import {baseURL} from "../../common/axios";
 
 const UserSection = () => {
     const [avatar] = useState("/defaultAvatar.webp");
-    const [userInfo, setUserInfo] = useState({
-        userId: 0,
-        nickname: "",
-        avatar: "",
-        signature: ""
-    });
+    const userInfo = useUser();
     const nav = useNavigate();
-
-    useEffect(() => {
-        if (isUserLoggedIn) {
-            getUserInfo().then(res => {
-                if (res) {
-                    setUserInfo(res);
-                }
-            });
-        }
-    }, []);
 
     return (
         <Dropdown menu={<div style={{
@@ -33,20 +18,20 @@ const UserSection = () => {
             boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.1)",
             borderRadius: 5
         }}>
-            {userInfo.userId !== 0 && <div style={{padding: 10, borderBottom: "1px solid #e7e7e7"}}>
+            {userInfo && userInfo.userId !== 0 && <div style={{padding: 10, borderBottom: "1px solid #e7e7e7"}}>
                 <div style={{marginTop: "30px"}}>
                     <p style={{fontSize: 12, color: "#666", textAlign: 'center'}}>
-                        <span>账号：{userInfo.nickname}</span>
-                        <span style={{marginLeft: 10}}>ID：{userInfo.userId}</span>
+                        <span>账号：{userInfo?.nickname}</span>
+                        <span style={{marginLeft: 10}}>ID：{userInfo?.userId}</span>
                     </p>
                     <Button styleType="link" onClick={() => {
                         logout();
                         window.location.reload();
                     }}>登出</Button>
                 </div>
-            </div>
-            }
-            {userInfo.userId === 0 && <div style={{padding: 10}}>
+            </div>}
+
+            {(!userInfo) && <div style={{padding: 10}}>
                 <div style={{marginTop: "30px", display: "flex", justifyContent: "center",}}>
                     <Button styleType="link" onClick={() => {
                         nav("/login");
@@ -151,7 +136,7 @@ const HistoryDropdown = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const freshHistoryList = useCallback(withLockTime(() => {
         getHistoryList(10).then(res => {
-            setHistoryList(res);
+            res && setHistoryList(res.records);
         });
     }, 1000), [setHistoryList]);
 

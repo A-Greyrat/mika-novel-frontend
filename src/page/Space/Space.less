@@ -257,5 +257,19 @@
       }
     }
   }
+
+  .mika-novel-space-individual-loading {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    > * {
+      box-shadow: 3px 3px 3px 0 mix(@primary-color, transparent, 15%),
+        -3px -3px 15px 0 mix(@primary-color, transparent, 15%);
+    }
+  }
 }
 

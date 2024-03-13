@@ -5,10 +5,11 @@ import {memo, useEffect, useState} from "react";
 import NovelPageRecommend from "./NovelPageRecommend";
 import {useParams} from "react-router-dom";
 import {
+    getComments,
     getNovelInfo,
     getNovelVolumes,
     getRelatedNovels,
-    NovelInfo,
+    NovelInfo, NovelPageCommentProps,
     NovelPageVolumeInfo
 } from "../../common/novel";
 
@@ -19,137 +20,8 @@ import NovelPageVolume from "./NovelPageVolume.tsx";
 import NovelPageComment from "./NovelPageComment.tsx";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
 import Skeleton from "../../component/mika-ui/Skeleton/Skeleton.tsx";
+import {useStore} from "../../common/mika-store";
 
-const testCommentData = [
-    {
-        "id": "1",
-        "content": "感觉不如...赛尔号",
-        "time": "2021-08-12 12:00:00",
-        "user": {
-            "id": "1",
-            "name": "张三",
-            "avatar": "https://via.placeholder.com/100"
-        }
-    },
-    {
-        "id": "2",
-        "content": "感觉不如...福利连",
-        "time": "2021-08-12 12:00:00",
-        "user": {
-            "id": "1",
-            "name": "张三",
-            "avatar": "https://via.placeholder.com/100"
-        },
-        "reply": [
-            {
-                "id": "3",
-                "content": "感觉你妈不如你妈",
-                "time": "2021-08-12 12:00:00",
-                "replyTo": {
-                    "id": "1",
-                    "name": "张三"
-                },
-                "user": {
-                    "id": "2",
-                    "name": "张四",
-                    "avatar": "https://via.placeholder.com/100"
-                }
-            },
-            {
-                "id": "4",
-                "content": "感觉...感觉不如感觉",
-                "time": "2021-08-12 12:00:00",
-                "replyTo": {
-                    "id": "1",
-                    "name": "张三"
-                },
-                "user": {
-                    "id": "2",
-                    "name": "张四",
-                    "avatar": "https://via.placeholder.com/100"
-                }
-            }
-        ]
-    }, {
-        "id": "5",
-        "content": "感觉不如...福利连",
-        "time": "2021-08-12 12:00:00",
-        "user": {
-            "id": "1",
-            "name": "张三",
-            "avatar": "https://via.placeholder.com/100"
-        },
-        "reply": [
-            {
-                "id": "6",
-                "content": "感觉你妈不如你妈",
-                "time": "2021-08-12 12:00:00",
-                "replyTo": {
-                    "id": "1",
-                    "name": "张三"
-                },
-                "user": {
-                    "id": "7",
-                    "name": "张四",
-                    "avatar": "https://via.placeholder.com/100"
-                }
-            },
-            {
-                "id": "7",
-                "content": "感觉...感觉不如感觉",
-                "time": "2021-08-12 12:00:00",
-                "replyTo": {
-                    "id": "1",
-                    "name": "张三"
-                },
-                "user": {
-                    "id": "2",
-                    "name": "张四",
-                    "avatar": "https://via.placeholder.com/100"
-                }
-            }
-        ]
-    }, {
-        "id": "8",
-        "content": "感觉不如...福利连",
-        "time": "2021-08-12 12:00:00",
-        "user": {
-            "id": "1",
-            "name": "张三",
-            "avatar": "https://via.placeholder.com/100"
-        },
-        "reply": [
-            {
-                "id": "9",
-                "content": "感觉你妈不如你妈",
-                "time": "2021-08-12 12:00:00",
-                "replyTo": {
-                    "id": "1",
-                    "name": "张三"
-                },
-                "user": {
-                    "id": "2",
-                    "name": "张四",
-                    "avatar": "https://via.placeholder.com/100"
-                }
-            },
-            {
-                "id": "10",
-                "content": "感觉...感觉不如感觉",
-                "time": "2021-08-12 12:00:00",
-                "replyTo": {
-                    "id": "1",
-                    "name": "张三"
-                },
-                "user": {
-                    "id": "2",
-                    "name": "张四",
-                    "avatar": "https://via.placeholder.com/100"
-                }
-            }
-        ]
-    }
-]
 
 const Loading = memo(() => {
     return (<div className="mika-novel-novel-page-root">
@@ -199,19 +71,27 @@ const NovelPage = () => {
     const [volumeData, setVolumeData] = useState<NovelPageVolumeInfo[]>();
     const [recommendNovels, setRecommendNovels] = useState<NovelInfo[]>([]);
 
+    const [comment, setComment] = useStore<NovelPageCommentProps[]>(`novel-page-comment`);
+    const [_total, setTotal] = useStore<number>(`novel-page-comment-total`, 0);
+
     useEffect(() => {
         window.scrollTo(0, 0);
 
         getNovelInfo(novelId!).then(setNovelData);
         getNovelVolumes(novelId!).then(setVolumeData);
         getRelatedNovels(novelId!).then(setRecommendNovels);
-    }, [novelId]);
+
+        getComments(novelId!, 1, 10).then(res => {
+            setTotal(res.total);
+            setComment(res.records);
+        });
+    }, [novelId, setComment, setTotal]);
 
     if (!novelId) {
         return <$404/>;
     }
 
-    if (!novelData || !volumeData) {
+    if (!novelData || !volumeData || !comment) {
         return <Loading/>;
     }
 
@@ -222,7 +102,7 @@ const NovelPage = () => {
                 <NovelPageDetail {...novelData} />
                 <NovelPageDesc desc={novelData.description}/>
                 <NovelPageVolume volumeData={volumeData} nid={novelId}/>
-                <NovelPageComment comment={testCommentData}/>
+                <NovelPageComment novelId={novelId} />
                 <NovelPageRecommend novels={recommendNovels}/>
             </div>
             <Footer/>
