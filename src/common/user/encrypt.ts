@@ -1,5 +1,5 @@
 import {httpGet} from "../axios";
-import forge from 'node-forge';
+import forge from "node-forge";
 
 let publicKey: string | null = null;
 
