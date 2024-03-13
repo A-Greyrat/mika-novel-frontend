@@ -8,9 +8,8 @@ import useForceUpdate from "./useForceUpdate";
  * @template T The type of the state.
  * @param {string} name The name of the state.
  * @param {T} [value] The initial value of the state.
- * @returns {[T, (newValue: T | ((prev: T) => T)) => void]} A tuple where the first item is the current state and the second item is a function to update the state.
  */
-const useStore = <T, >(name: string, value?: T): [T, (newValue: T | ((prev: T) => T)) => void] => {
+const useStore = <T, >(name: string, value?: T): readonly [T, (newValue: T | ((prev: T) => T)) => void] => {
     const forceUpdate = useForceUpdate();
 
     const state = useRef<T | null | undefined>(null);

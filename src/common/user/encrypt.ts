@@ -1,6 +1,4 @@
 import {httpGet} from "../axios";
-import forge from "node-forge";
-
 let publicKey: string | null = null;
 
 const getPublicKey = async () => {
@@ -9,14 +7,14 @@ const getPublicKey = async () => {
     });
 }
 
-export async function rsaEncrypt(dataToEncrypt: string) {
+export async function rsaEncrypt(dataToEncrypt: string): Promise<string> {
     if (publicKey === null) {
         publicKey = await getPublicKey();
         return rsaEncrypt(dataToEncrypt);
     }
 
     const pemKey = `-----BEGIN PUBLIC KEY-----\n${publicKey}\n-----END PUBLIC KEY-----`;
-
+    const forge = require('node-forge');
     const publicKeyObj = forge.pki.publicKeyFromPem(pemKey);
     const encrypted = publicKeyObj.encrypt(dataToEncrypt, 'RSA-OAEP', {
         md: forge.md.sha256.create(),
