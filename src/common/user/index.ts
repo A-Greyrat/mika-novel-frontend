@@ -16,10 +16,8 @@ interface LoginRequest {
 }
 
 export const login = async ({user, password, verifyCodeId, captcha}: LoginRequest) => {
-    password = await rsaEncrypt(password);
+    password = await rsaEncrypt(password) as string;
     captcha = captcha.toLowerCase();
-
-    console.log('login', {user, password, verifyCodeId, captcha})
 
     return httpPost<string>("/user/login", {
         "username": user,
@@ -46,7 +44,7 @@ interface RegisterRequest {
 }
 
 export const register = async ({nickname, password, email, verifyCode}: RegisterRequest) => {
-    password = await rsaEncrypt(password);
+    password = await rsaEncrypt(password) as string;
 
     return httpPost<string>("/user/signup", {
         "nickname": nickname,

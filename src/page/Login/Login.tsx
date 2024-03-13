@@ -174,8 +174,6 @@ export const SubmitButton = () => {
             verifyCodeId: (form.get("verifyCodeId") as string).trim()
         };
 
-        console.log('login', data)
-
         return login(data).then(res => {
             setDisable(false);
             if (res.code === 200) {
