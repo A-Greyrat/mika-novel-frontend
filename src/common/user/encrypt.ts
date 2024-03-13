@@ -1,21 +1,41 @@
 import {httpGet} from "../axios";
-import {JSEncrypt} from "jsencrypt";
 let publicKey: string | null = null;
+async function loadPublicKeyFromBase64(base64String: string) {
+    const binaryDer = Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
 
+    return await crypto.subtle.importKey(
+        "spki",
+        binaryDer,
+        {
+            name: "RSA-OAEP",
+            hash: {name: "SHA-256"},
+        },
+        false,
+        ["encrypt"]
+    );
+}
 const getPublicKey = async () => {
     return httpGet<string>("/common/public-key").then((res) => {
         return res.data;
     });
 }
 
-export async function rsaEncrypt(dataToEncrypt: string): Promise<string | false> {
+export async function rsaEncrypt(dataToEncrypt: string) {
     if (publicKey === null) {
         publicKey = await getPublicKey();
-        publicKey = '-----BEGIN PUBLIC KEY-----\n' + publicKey + '\n-----END PUBLIC KEY-----';
         return rsaEncrypt(dataToEncrypt);
     }
 
-    const encrypt = new JSEncrypt();
-    encrypt.setPublicKey(publicKey);
-    return encrypt.encrypt(dataToEncrypt);
+    const importedPublicKey = await loadPublicKeyFromBase64(publicKey!);
+    const dataUint8Array = new TextEncoder().encode(dataToEncrypt);
+
+    const encryptedBuffer = await window.crypto.subtle.encrypt(
+        {
+            name: "RSA-OAEP",
+        },
+        importedPublicKey,
+        dataUint8Array
+    );
+
+    return btoa(String.fromCharCode(...new Uint8Array(encryptedBuffer)));
 }
