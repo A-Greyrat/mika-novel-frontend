@@ -288,7 +288,7 @@ const NovelPageComment = memo(({novelId}: { novelId: string }) => {
             <h2>评论</h2>
             <div>
                 <NovelPageCommentInput nid={novelId} toId={'-1'}/>
-                <InfinityList style={{
+                <InfinityList className="mika-novel-page-comment-infinity-list" style={{
                     display: 'flex',
                     flexDirection: 'column-reverse',
                 }} onIntersect={getCommentList} limit={total} itemNum={comment ? comment.length : 0}>
