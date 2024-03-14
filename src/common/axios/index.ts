@@ -41,21 +41,22 @@ instance.interceptors.response.use(response => {
     if (response.headers['token']) {
         localStorage.setItem('token', response.headers['token']);
     }
-
     return response;
 }, error => {
-    const { config, code, message } = error;
+    const {config, code, message} = error;
     if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
-        const { retry } = config as { retry: number };
+        let {retry} = config as { retry: number };
         if (isNaN(retry)) {
-            config.retry = 0;
+            retry = config.retry = 0;
         }
-        console.log('timeout', config.retry );
+        console.log('timeout', config.url, retry, config);
         if (retry >= retryTimes) {
             return Promise.reject(error);
         }
         config.retry = retry + 1;
-        return instance(config);
+        return new Promise(resolve => {
+            resolve(axios(config));
+        });
     }
 
     if (error.response.status === 401) {
@@ -69,11 +70,11 @@ instance.interceptors.response.use(response => {
 export const httpGet = async <T, >(url: string, config?: AxiosRequestConfig): Promise<ResponseData<T | null>> => {
     return instance.get(url, config)
         .then(res => res.data as ResponseData<T>)
-        .catch(res =>{
+        .catch(res => {
             return {
-                code: res.response.status || 400,
+                code: res.response?.status || 400,
                 data: null,
-                msg: res.response.data
+                msg: res.response?.data
             }
         });
 }
@@ -88,9 +89,9 @@ export const httpPost = async <T, >(url: string, data?: unknown, config?: AxiosR
         .then(res => res.data as ResponseData<T>)
         .catch(res => {
             return {
-                code: res.response.status,
+                code: res.response?.status,
                 data: null,
-                msg: res.response.data
+                msg: res.response?.data
             }
         });
 }
