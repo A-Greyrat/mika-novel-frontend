@@ -180,7 +180,7 @@ export const SubmitButton = () => {
         return login(data).then(res => {
             setDisable(false);
             if (res.code === 200) {
-                nav("/");
+                nav(-1);
             } else {
                 setShowError(res.msg);
                 resetCaptchaCallback();
@@ -231,7 +231,7 @@ const Login = () => {
 
     useEffect(() => {
         if (isUserLoggedIn) {
-            nav("/");
+            nav(-1);
         }
     }, [nav]);
 

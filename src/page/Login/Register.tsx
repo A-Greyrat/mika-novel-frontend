@@ -219,7 +219,7 @@ const RegisterForm = () => {
         }).then(res => {
             setDisable(false);
             if (res.code === 200) {
-                nav("/");
+                nav(-1);
             } else {
                 setError(res.msg);
             }

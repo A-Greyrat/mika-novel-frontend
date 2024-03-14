@@ -251,7 +251,7 @@ export const getComments = async (novelId: string, page: number, pageSize: numbe
         data?.records?.forEach((item) => {
             const father: NovelPageCommentProps = {
                 id: item[0].id.toString(),
-                time: item[0].timestamp,
+                time: item[0].timestamp.replace(/-/g, "/").replace("T", " ").replace(/\.\d+/, ""),
                 content: item[0].content,
                 user: {
                     id: item[0].userDetail.id.toString(),
@@ -264,7 +264,7 @@ export const getComments = async (novelId: string, page: number, pageSize: numbe
             item?.slice(1).forEach((reply) => {
                 father.reply?.push({
                     id: reply.id.toString(),
-                    time: reply.timestamp,
+                    time: reply.timestamp.replace(/-/g, "/").replace("T", " ").replace(/\.\d+/, ""),
                     content: reply.content,
                     replyTo: {
                         id: reply.toUserDetail?.id.toString() || "0",

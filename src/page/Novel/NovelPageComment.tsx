@@ -198,6 +198,16 @@ const NovelPageCommentInput = memo((props: {
         ref.current!.blur();
 
         return addComment(props.nid, props.toId, content).then((res) => {
+            if (res.code === 401) {
+                showMessage({children: '请先登录'});
+                return;
+            }
+
+            if (res.code !== 200) {
+                showMessage({children: '评论失败'});
+                return;
+            }
+
             if (props.toId !== '-1') {
                 const item = findCommentItem(comment, props.toId);
                 item?.parent.reply.push({
@@ -278,9 +288,10 @@ const NovelPageComment = memo(({novelId}: { novelId: string }) => {
             <h2>评论</h2>
             <div>
                 <NovelPageCommentInput nid={novelId} toId={'-1'}/>
-                <InfinityList onIntersect={getCommentList}
-                              limit={total}
-                              itemnum={comment ? comment.length : 0}>
+                <InfinityList style={{
+                    display: 'flex',
+                    flexDirection: 'column-reverse',
+                }} onIntersect={getCommentList} limit={total} itemNum={comment ? comment.length : 0}>
                     {comment.map((_comment, index) => {
                         return (
                             <NovelPageCommentBox key={index} novelId={novelId} {..._comment}/>

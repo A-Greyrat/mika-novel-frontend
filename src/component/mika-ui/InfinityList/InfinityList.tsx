@@ -7,7 +7,7 @@ export interface InfinityListProps extends React.HTMLAttributes<HTMLDivElement> 
     loading?: React.ReactElement;
 
     limit?: number;
-    itemnum?: number;
+    itemNum?: number;
 
     options?: IntersectionObserverInit;
 }
@@ -19,14 +19,14 @@ const DefaultLoading = memo(() => {
 const InfinityList = memo(forwardRef((props: InfinityListProps, ref: React.Ref<HTMLDivElement>) => {
     const [loading, setLoading] = useState(false);
     const detectRef = useRef<HTMLDivElement>(null);
-    const {children, onIntersect, loading: loadingEle, limit, options, ...rest} = props;
+    const {children, onIntersect, loading: loadingEle, itemNum, limit, options, ...rest} = props;
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 if (loading) return;
                 setLoading(true);
-                if (limit !== undefined && props.itemnum !== undefined && limit <= props.itemnum) {
+                if (limit !== undefined && itemNum !== undefined && limit <= itemNum) {
                     observer.disconnect();
                     setLoading(false);
                 } else {
@@ -43,7 +43,7 @@ const InfinityList = memo(forwardRef((props: InfinityListProps, ref: React.Ref<H
         return () => {
             observer.disconnect();
         }
-    }, [limit, loading, onIntersect, options, props.itemnum]);
+    }, [limit, loading, onIntersect, options, itemNum]);
 
 
     return (

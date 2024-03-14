@@ -43,6 +43,7 @@
         display: flex;
         gap: 10px;
 
+
         > :first-child {
           border-radius: 50%;
           box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
@@ -71,10 +72,20 @@
         }
       }
 
-      .mika-novel-page-comment-box-content > p {
-        font-size: 16px;
-        line-height: 1.5;
-        margin: 3px 0;
+      .mika-novel-page-comment-box-content {
+        > p {
+          font-size: 16px;
+          line-height: 1.5;
+          margin: 3px 0;
+          word-break: break-all;
+        }
+
+        span {
+          color: @primary-color;
+          font-weight: 500;
+          cursor: pointer;
+          width: 90%;
+        }
       }
 
       .mika-novel-page-comment-reply-box {
@@ -93,11 +104,6 @@
             font-size: 14px;
           }
 
-          .mika-novel-page-comment-box-content span {
-            color: @primary-color;
-            font-weight: 500;
-            cursor: pointer;
-          }
         }
       }
     }
@@ -118,7 +124,7 @@
 }
 
 :has(> .reply) > :last-child {
-    margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .mika-novel-page-comment-input {
