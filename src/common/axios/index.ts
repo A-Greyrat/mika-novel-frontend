@@ -7,7 +7,7 @@ export const baseURL = 'https://www.abdecd.xyz/api';
 
 const instance = axios.create({
     baseURL: baseURL,
-    timeout: 10000,
+    timeout: 3000,
 });
 
 const retryTimes = 3;
@@ -47,6 +47,10 @@ instance.interceptors.response.use(response => {
     const { config, code, message } = error;
     if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
         const { retry } = config as { retry: number };
+        if (isNaN(retry)) {
+            config.retry = 0;
+        }
+        console.log('timeout', config.retry );
         if (retry >= retryTimes) {
             return Promise.reject(error);
         }

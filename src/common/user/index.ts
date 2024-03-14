@@ -93,6 +93,10 @@ let userInfo: {
 } | null = null;
 
 export const getUserInfo = async () => {
+    if (!isUserLoggedIn) {
+        return null;
+    }
+
     if (userInfo) {
         return userInfo;
     }
