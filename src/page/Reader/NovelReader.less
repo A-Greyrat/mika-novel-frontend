@@ -78,6 +78,10 @@
     background: var(--content-background-color);
     color: var(--text-color);
     padding: 50px;
+    box-sizing: border-box;
+    @media (max-width: 768px) {
+      width: 100%;
+    }
 
     > .mika-novel-reader-divider {
       background-color: var(--text-color);
@@ -95,11 +99,16 @@
       margin-bottom: 6px;
     }
 
-    p {
-      font-weight: var(--text-font-weight);
-      margin-top: var(--paragraph-spacing);
-      margin-bottom: 0;
+    > .mika-novel-reader-content-container {
+      p {
+        font-weight: var(--text-font-weight);
+        margin-top: var(--paragraph-spacing);
+        margin-bottom: 0;
+        overflow-wrap: anywhere;
+        text-wrap: normal;
+      }
     }
+
   }
 
   .mika-novel-reader-menu-panel {
