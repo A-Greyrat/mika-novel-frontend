@@ -1,8 +1,7 @@
 import {memo, useState} from "react";
-import {TabList} from "../../component/mika-ui";
+import {Skeleton, TabList} from "../../component/mika-ui";
 import './RankList.less';
 import {NovelInfo} from "../../common/novel";
-import Skeleton from "../../component/mika-ui/Skeleton/Skeleton";
 import {useNavigate} from "react-router-dom";
 
 type RankListProps = {

@@ -31,4 +31,7 @@ export type {InfinityListProps} from './InfinityList';
 export {default as showMessage} from './Message';
 export type {MessageProps} from './Message';
 
+export {default as Skeleton} from './Skeleton';
+export type {SkeletonProps} from './Skeleton';
+
 export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";

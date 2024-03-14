@@ -14,12 +14,12 @@ import {
 } from "../../common/novel";
 
 import $404 from "../404/404";
-import NovelPageDetail from "./NovelPageDetail.tsx";
-import NovelPageDesc from "./NovelPageDesc.tsx";
-import NovelPageVolume from "./NovelPageVolume.tsx";
-import NovelPageComment from "./NovelPageComment.tsx";
-import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
-import Skeleton from "../../component/mika-ui/Skeleton/Skeleton.tsx";
+import NovelPageDetail from "./NovelPageDetail";
+import NovelPageDesc from "./NovelPageDesc";
+import NovelPageVolume from "./NovelPageVolume";
+import NovelPageComment from "./NovelPageComment";
+import SkeletonCard from "../../component/SkeletonCard/SkeletonCard";
+import {Skeleton} from "../../component/mika-ui";
 import {useStore} from "../../common/mika-store";
 
 

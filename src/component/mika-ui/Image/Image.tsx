@@ -120,7 +120,7 @@ const useLoad = (_src?: string | null, onLoaded?: () => void, onError?: () => vo
             setError();
         });
     }, [_src, setError, setLoaded, setLoading]);
-    
+
     const observer = useMemo(() => new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
             loadImage(_src);
@@ -129,7 +129,7 @@ const useLoad = (_src?: string | null, onLoaded?: () => void, onError?: () => vo
     }, {
         threshold: 0.1
     }), [_src, loadImage]);
-    
+
     useEffect(() => {
         if (lazy) {
             const element = elementRef.current!;

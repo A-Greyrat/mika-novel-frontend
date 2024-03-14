@@ -1,5 +1,5 @@
 import './SkeletonCard.less';
-import Skeleton from "../mika-ui/Skeleton/Skeleton";
+import {Skeleton} from "../mika-ui";
 import React from "react";
 
 interface SkeletonCardProps {

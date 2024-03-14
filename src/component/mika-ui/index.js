@@ -9,5 +9,6 @@ export {default as TabList} from './TabList';
 export {default as Carousel} from './Carousel';
 export {default as InfinityList} from './InfinityList';
 export {default as showMessage} from './Message';
+export {default as Skeleton} from './Skeleton';
 
 export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";

@@ -1,4 +1,4 @@
-import {useMemo} from "react";
+import React, {useMemo} from "react";
 import './Skeleton.less';
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -39,7 +39,7 @@ const Skeleton = (props: SkeletonProps) => {
         }
         
         return style;
-    }, [props.width, props.height, props.style]);
+    }, [loading, props.style, props.width, props.height, props.borderRadius, type]);
 
     return (
         <div className="mika-skeleton" style={style} {...rest}>
