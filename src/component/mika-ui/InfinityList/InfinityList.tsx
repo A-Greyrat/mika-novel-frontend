@@ -26,7 +26,6 @@ const InfinityList = memo(forwardRef((props: InfinityListProps, ref: React.Ref<H
             if (entries[0].isIntersecting) {
                 if (loading) return;
                 setLoading(true);
-                console.log(limit, props.itemnum)
                 if (limit !== undefined && props.itemnum !== undefined && limit <= props.itemnum) {
                     observer.disconnect();
                     setLoading(false);

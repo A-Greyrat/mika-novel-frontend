@@ -252,7 +252,6 @@ const NovelPageComment = memo(({novelId}: { novelId: string }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const getCommentList = useCallback(withLockTime((unloading: () => unknown) => {
-        console.log(total, comment, novelId)
         const curPage = comment ? Math.floor(comment.length / 10) + 1 : 1;
         if (total !== 0 && comment && comment.length >= total) {
             unloading();

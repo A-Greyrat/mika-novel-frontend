@@ -7,7 +7,10 @@ export const baseURL = 'https://www.abdecd.xyz/api';
 
 const instance = axios.create({
     baseURL: baseURL,
+    timeout: 10000,
 });
+
+const retryTimes = 3;
 
 instance.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
@@ -41,6 +44,16 @@ instance.interceptors.response.use(response => {
 
     return response;
 }, error => {
+    const { config, code, message } = error;
+    if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
+        const { retry } = config as { retry: number };
+        if (retry >= retryTimes) {
+            return Promise.reject(error);
+        }
+        config.retry = retry + 1;
+        return instance(config);
+    }
+
     if (error.response.status === 401) {
         if (isUserLoggedIn) {
             expireModal();
