@@ -1,6 +1,7 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import React, {Suspense} from "react";
 import LoadingPage from "../Loading/LoadingPage";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const Home = React.lazy(() => import('../Home/Home'));
 const Login = React.lazy(() => import('../Login/Login'));
@@ -72,7 +73,9 @@ const router = createBrowserRouter([
 
 const App = () => {
     return (
+
         <Suspense fallback={<LoadingPage/>}>
+        <SpeedInsights />
             <RouterProvider router={router}/>
         </Suspense>
     )
