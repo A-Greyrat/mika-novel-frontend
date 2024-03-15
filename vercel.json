@@ -3,13 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://118.31.42.183/api/:path*"
-    }
-  ],
-  "routes": [
+    },
     {
-      "src": "/[^.]+",
-      "dest": "/",
-      "status": 200
+      "source": "/:path*",
+      "destination": "/"
     }
   ]
 }
