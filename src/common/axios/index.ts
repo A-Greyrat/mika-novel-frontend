@@ -3,7 +3,7 @@ import {showModal} from "../../component/mika-ui";
 import {isUserLoggedIn} from "../user";
 import {withLock} from "../../component/mika-ui/utils/utils.ts";
 
-export const baseURL = '/';
+export const baseURL = '/api/';
 
 const instance = axios.create({
     baseURL: baseURL,
