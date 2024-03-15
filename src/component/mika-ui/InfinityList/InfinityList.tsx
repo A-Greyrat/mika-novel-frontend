@@ -50,7 +50,7 @@ const InfinityList = memo(forwardRef((props: InfinityListProps, ref: React.Ref<H
         <div ref={ref} className={"mika-infinity-list-root" + (props.className ? " " + props.className : "")}{...rest}>
             {children}
             {loading && (loadingEle ? loadingEle : <DefaultLoading/>)}
-            <div ref={detectRef}/>
+            <div className="mika-infinity-list-observer" ref={detectRef}/>
         </div>
     );
 }));

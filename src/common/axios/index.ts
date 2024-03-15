@@ -3,14 +3,10 @@ import {showModal} from "../../component/mika-ui";
 import {isUserLoggedIn} from "../user";
 import {withLock} from "../../component/mika-ui/utils/utils.ts";
 
-export const baseURL = '/api/';
-
+export const baseURL = import.meta.env.VITE_BASE_URL;
 const instance = axios.create({
     baseURL: baseURL,
-    timeout: 3000,
 });
-
-const retryTimes = 3;
 
 instance.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
@@ -43,22 +39,6 @@ instance.interceptors.response.use(response => {
     }
     return response;
 }, error => {
-    const {config, code, message} = error;
-    if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
-        let {retry} = config as { retry: number };
-        if (isNaN(retry)) {
-            retry = config.retry = 0;
-        }
-        console.log('timeout', config.url, retry, config);
-        if (retry >= retryTimes) {
-            return Promise.reject(error);
-        }
-        config.retry = retry + 1;
-        return new Promise(resolve => {
-            resolve(axios(config));
-        });
-    }
-
     if (error.response.status === 401) {
         if (isUserLoggedIn) {
             expireModal();
