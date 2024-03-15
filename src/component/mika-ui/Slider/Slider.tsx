@@ -1,4 +1,4 @@
-import React, {forwardRef, memo} from "react";
+import React, {forwardRef, memo, useEffect} from "react";
 import './Slider.less';
 
 
@@ -28,6 +28,10 @@ const SliderInput = memo((props: SliderProps & {
 const Slider = memo(forwardRef((props: SliderProps, ref: React.Ref<HTMLInputElement>) => {
     const {className, value: _value, width, showValue, onChange, ...rest} = props;
     const [value, setValue] = React.useState(_value ?? '0');
+
+    useEffect(() => {
+        setValue(_value ?? '0');
+    }, [_value]);
 
     if (!showValue) {
         return <SliderInput value={value} ref={ref} setValue={setValue} className={className} width={width}

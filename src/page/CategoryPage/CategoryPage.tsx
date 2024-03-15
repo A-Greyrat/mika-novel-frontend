@@ -1,9 +1,29 @@
 import './CategoryPage.less';
-import {useEffect, useState} from "react";
+import {memo, useEffect, useState} from "react";
 import {getHotTagDisplayBlocks, HotTagDisplayBlock} from "../../common/novel";
+import Header from "../../component/header/Header.tsx";
+import Footer from "../../component/footer/Footer.tsx";
+import NovelCard from "../../component/NovelCard/NovelCard.tsx";
+import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
+
+const Loading = memo(() => {
+    return (
+        <div className="mika-novel-loading">
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+        </div>
+    );
+});
 
 const CategoryPage = () => {
     const [tagBlocks, setTagBlocks] = useState<HotTagDisplayBlock[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         document.title = "热门分类";
@@ -11,36 +31,29 @@ const CategoryPage = () => {
 
         getHotTagDisplayBlocks().then((blocks) => {
             setTagBlocks(blocks);
+            setLoading(false);
         });
     }, []);
 
-    return (
-        <div className="mika-novel-category-page-root">
-            <div className="mika-novel-category-page-title">热门分类</div>
-            <div className="mika-novel-category-page-tag-blocks">
-                {
-                    tagBlocks && tagBlocks.map((block) => {
-                        return (
-                            <div key={block.tag.id} className="mika-novel-category-page-tag-block">
-                                <div className="mika-novel-category-page-tag-name">{block.tag.tagName}</div>
-                                <div className="mika-novel-category-page-tag-novels">
-                                    {
-                                        block.list.map((novel) => {
-                                            return (
-                                                <div key={novel.id} className="mika-novel-category-page-tag-novel">
-                                                    <img src={novel.cover} alt={novel.title} />
-                                                    <div className="mika-novel-category-page-tag-novel-title">{novel.title}</div>
-                                                </div>
-                                            );
-                                        })
-                                    }
-                                </div>
+    return (<>
+            <Header/>
+            {loading && <Loading/>}
+            <div className="mika-novel-category-page-root">
+                <div className="mika-novel-category-page-tag-blocks">
+                    {tagBlocks && tagBlocks.map((block) => {
+                        return (<>
+                            <div className="mika-novel-category-page-tag-block-title">{block.tag.tagName}</div>
+                            <div className="mika-novel-category-page-tag-block">
+                                {block.list.map((novel) => {
+                                    return <NovelCard key={novel.id} {...novel} padding={6}/>;
+                                })}
                             </div>
-                        );
-                    })
-                }
+                        </>);
+                    })}
+                </div>
             </div>
-        </div>
+            <Footer/>
+        </>
     );
 };
 

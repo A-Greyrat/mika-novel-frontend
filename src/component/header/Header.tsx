@@ -61,7 +61,7 @@ const SearchSection = () => {
         }
         const res = await getSearchAutoComplete(keyword);
         setDataSrc(res);
-    }, 500), []);
+    }, 200), []);
 
     useEffect(() => {
         if (location.pathname.startsWith("/search")) {
@@ -73,7 +73,7 @@ const SearchSection = () => {
 
     return (
         <div className="mika-novel-header-search">
-            <AutoComplete placeholder="搜你想搜" size='large' type='filled'
+            <AutoComplete placeholder="搜索" size='large' type='filled'
                 dataSrc={dataSrc} onValueChange={(key) => {
                 return _getSearchAutoComplete(key);
             }} onOptionClick={(item) => {

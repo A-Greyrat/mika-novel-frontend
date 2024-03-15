@@ -22,6 +22,7 @@ const SettingPanel = () => {
         setReaderSetting({...setting, [key]: value});
     }, [setting, setSetting]);
 
+    console.log(setting)
     return (
         <div className="mika-novel-reader-setting-panel">
             <label>字体大小</label>

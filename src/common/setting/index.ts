@@ -58,9 +58,11 @@ export const getReaderSetting = (): NovelReaderSetting => {
 
 export const setReaderSetting = (setting: NovelReaderSetting) => {
     localStorage.setItem("readerSetting", JSON.stringify(setting));
+    readerSetting = setting;
 }
 
 export const resetReaderSetting = () => {
-    readerSetting = defaultReaderSetting;
+    readerSetting = JSON.parse(JSON.stringify(defaultReaderSetting));
     localStorage.removeItem("readerSetting");
+    localStorage.setItem("readerSetting", JSON.stringify(readerSetting));
 }

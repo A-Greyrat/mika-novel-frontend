@@ -1,1 +1,57 @@
 @import "../../common/theme/theme";
+
+
+.mika-novel-loading {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mika-novel-category-page-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .mika-novel-category-page-tag-block-title {
+    font-size: 36px;
+    @media (max-width: 768px) {
+      font-size: calc(12px + 3.5vw);
+    }
+    font-weight: 500;
+    color: var(--mika-font-color);
+    margin: 1rem 0;
+  }
+
+  .mika-novel-category-page-tag-block {
+    display: grid;
+    gap: 1rem;
+
+    grid-template-columns: repeat(2, 1fr);
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    .mika-novel-novel-card {
+      box-shadow: 3px 3px 3px 0 mix(@primary-color, transparent, 15%),
+        -3px -3px 15px 0 mix(@primary-color, transparent, 15%);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 3px 3px 3px 0 mix(@primary-color, transparent, 35%),
+          -3px -3px 15px 0 mix(@primary-color, transparent, 35%);
+      }
+    }
+  }
+
+
+}

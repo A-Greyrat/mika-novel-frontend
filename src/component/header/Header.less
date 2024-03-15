@@ -15,9 +15,12 @@
 
   display: grid;
   grid-template-areas: ". icon . search . right .";
-  grid-template-columns: minmax(10px, 100px) auto 65px auto 50px min-content minmax(10px, auto);
+  grid-template-columns: minmax(10px, 100px) auto 65px minmax(50px, auto)  50px min-content minmax(10px, auto);
   @media (max-width: 768px) {
-    grid-template-columns: minmax(0, 20px) min-content 50px auto 20px min-content minmax(0, 20px);
+    grid-template-columns: minmax(0, 20px) min-content 50px minmax(50px, auto) 20px min-content minmax(0, 20px);
+  }
+  @media (max-width: 300px) {
+    grid-template-columns: minmax(0, 20px) min-content 50px minmax(50px, auto) 20px 0 0;
   }
 
   grid-template-rows: 50pt;
@@ -66,7 +69,7 @@
     }
   }
 
-  &:has(.mika-novel-header-search > form > input[type="text"]:focus) {
+  &:has(.mika-novel-header-search input[type="text"]:focus) {
     display: flex;
     justify-content: center;
 
@@ -88,25 +91,8 @@
     grid-area: search;
     max-width: 300px;
 
-    > form > input[type="text"] {
+    .mika-dropdown {
       width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: mix(white, grey, 95%);
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.3s;
-      outline: none;
-      box-sizing: border-box;
-
-      &:focus {
-        background: mix(white, grey, 90%);
-      }
-
-      &::placeholder {
-        color: #888;
-      }
     }
   }
 
