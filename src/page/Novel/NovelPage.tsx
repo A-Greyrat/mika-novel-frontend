@@ -9,7 +9,8 @@ import {
     getNovelInfo,
     getNovelVolumes,
     getRelatedNovels,
-    NovelInfo, NovelPageCommentProps,
+    NovelInfo,
+    NovelPageCommentProps,
     NovelPageVolumeInfo
 } from "../../common/novel";
 
@@ -75,6 +76,12 @@ const NovelPage = () => {
     const [_total, setTotal] = useStore<number>(`novel-page-comment-total`, 0);
 
     useEffect(() => {
+        setNovelData(undefined);
+        setVolumeData(undefined);
+        setRecommendNovels([]);
+    }, [novelId]);
+
+    useEffect(() => {
         window.scrollTo(0, 0);
 
         getNovelInfo(novelId!).then(setNovelData);
@@ -104,7 +111,7 @@ const NovelPage = () => {
                 <NovelPageDetail {...novelData} />
                 <NovelPageDesc desc={novelData.description}/>
                 <NovelPageVolume volumeData={volumeData} nid={novelId}/>
-                <NovelPageComment novelId={novelId} />
+                <NovelPageComment novelId={novelId}/>
                 <NovelPageRecommend novels={recommendNovels}/>
             </div>
             <Footer/>

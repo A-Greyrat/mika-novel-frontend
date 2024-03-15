@@ -23,6 +23,7 @@ const SearchPage = () => {
         document.title = `搜索 - ${keyword}`;
 
         loading.current = true;
+        setSearchResult([]);
         getSearchedNovels(keyword, 1, 10).then((res) => {
             setSearchResult(res.records);
             totalRef.current = res.total;

@@ -37,10 +37,7 @@ const NovelCard = memo((props: NovelCardProps) => {
                 {props.tags && props.tags.map((tag, _index) => (
                     <span key={tag.id} onClick={e => {
                         e.stopPropagation();
-                        nav('/');
-                        setTimeout(() => {
-                            nav(`/search/${tag.tagName}`);
-                        }, 10);
+                        nav(`/search/${tag.tagName}`);
                     }}>{tag.tagName}</span>
                 ))}
             </div>

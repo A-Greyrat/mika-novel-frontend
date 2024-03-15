@@ -5,7 +5,7 @@ import {AutoComplete, Button, Dropdown, Image, withLockTime} from "../mika-ui";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getFavoriteList, getHistoryList, getSearchAutoComplete, HistoryItem, NovelInfo} from "../../common/novel";
 import {baseURL} from "../../common/axios";
-import {debounceAsync} from "../mika-ui/utils/utils.ts";
+import {debounceAsync} from "../mika-ui";
 
 const UserSection = () => {
     const [avatar] = useState("/defaultAvatar.webp");

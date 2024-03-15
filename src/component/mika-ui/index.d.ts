@@ -43,4 +43,4 @@ export type {SliderProps} from './Slider';
 export {default as AutoComplete} from './AutoComplete';
 export type {AutoCompleteProps} from './AutoComplete';
 
-export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";
+export {withLockTime, useTimer, isMobile, debounce, debounceAsync, throttle} from "./utils";
