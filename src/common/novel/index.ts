@@ -313,3 +313,25 @@ export const getPrevChapter = async (novelId: string, volumeId: string, chapterI
         };
     });
 }
+
+
+export interface HotTagDisplayBlock {
+    tag: {
+        id: string;
+        tagName: string;
+    };
+    list: NovelInfo[];
+}
+
+export const getHotTagDisplayBlocks = async (num: number = 10) => {
+    return httpGet<HotTagDisplayBlock[]>(`/novel/hot?num=${num}`).then(res => {
+        return res.data as HotTagDisplayBlock[];
+    })
+};
+
+export const getHotTags = async () => {
+    return httpGet<{ id: string; tagName: string; }[]>(`/novel/hot-tags?`).then(res => {
+        return res.data;
+    });
+}
+

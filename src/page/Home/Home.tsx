@@ -18,6 +18,7 @@ const Home = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        document.title = "首页";
 
         getCarouselNovelList().then(setCarouselList);
         getRankList("day", 1, 12).then((res) => {

@@ -171,9 +171,10 @@ const Space = () => {
     const nav = useNavigate();
 
     useEffect(() => {
+        document.title = "个人中心";
+
         if (!isUserLoggedIn)
             redirect('/login');
-
     }, [nav]);
 
     return (

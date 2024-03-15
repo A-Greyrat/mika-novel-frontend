@@ -1,5 +1,6 @@
 import './404.less';
 import {useTypePrint} from "../../common/hooks";
+import {useEffect} from "react";
 
 const text = [
     "什么都没有",
@@ -16,6 +17,10 @@ const text = [
 
 const $404 = () => {
     const display = useTypePrint(text, 50);
+
+    useEffect(() => {
+        document.title = "404";
+    }, []);
 
     return (
         <div className="mika-novel-404-root">

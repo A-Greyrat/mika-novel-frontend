@@ -87,6 +87,8 @@ const NovelPage = () => {
         });
     }, [novelId, setComment, setTotal]);
 
+    document.title = novelData?.title || "小说";
+
     if (!novelId) {
         return <$404/>;
     }

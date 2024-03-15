@@ -9,7 +9,7 @@ import {
     NovelPageVolumeInfo
 } from "../../common/novel";
 import {getReaderSetting, resetReaderSetting, setReaderSetting} from "../../common/setting";
-import {Button, showMessage} from "../../component/mika-ui";
+import {Button, showMessage, Slider} from "../../component/mika-ui";
 import {useStore} from "../../common/mika-store";
 import LoadingPage from "../Loading/LoadingPage.tsx";
 
@@ -24,27 +24,27 @@ const SettingPanel = () => {
     return (
         <div className="mika-novel-reader-setting-panel">
             <label>字体大小</label>
-            <input type="range" min={14} max={32} step={1} value={parseInt(setting.fontSize)} onChange={(e) => {
+            <Slider showValue min={14} max={32} step={1} value={parseInt(setting.fontSize)} onChange={(e) => {
                 changeSetting('fontSize', e.target.value + 'px');
             }}/>
             <label>字体粗细</label>
-            <input type="range" min={100} max={900} step={100} value={parseInt(setting['--text-font-weight'])}
+            <Slider showValue min={100} max={900} step={100} value={parseInt(setting['--text-font-weight'])}
                    onChange={(e) => {
                        changeSetting('--text-font-weight', e.target.value);
                    }}/>
 
             <label>行高</label>
-            <input type="range" min={1} max={3} step={0.1} value={parseFloat(setting.lineHeight)} onChange={(e) => {
+            <Slider showValue min={1} max={3} step={0.1} value={parseFloat(setting.lineHeight)} onChange={(e) => {
                 changeSetting('lineHeight', e.target.value);
             }}/>
             <label>字间距</label>
-            <input type="range" min={0} max={2} step={0.1} value={parseFloat(setting.letterSpacing)}
+            <Slider showValue min={0} max={2} step={0.1} value={parseFloat(setting.letterSpacing)}
                    onChange={(e) => {
                        changeSetting('letterSpacing', e.target.value + 'px');
                    }}/>
 
             <label>段间距</label>
-            <input type="range" min={0} max={60} step={2} value={parseFloat(setting['--paragraph-spacing'])}
+            <Slider showValue min={0} max={60} step={2} value={parseFloat(setting['--paragraph-spacing'])}
                    onChange={(e) => {
                        changeSetting('--paragraph-spacing', e.target.value + 'px');
                    }}/>
@@ -59,18 +59,18 @@ const SettingPanel = () => {
             }}/>
 
             <label>标题字体大小</label>
-            <input type="range" min={14} max={32} step={1} value={parseInt(setting['--title-font-size'])}
+            <Slider showValue min={14} max={32} step={1} value={parseInt(setting['--title-font-size'])}
                    onChange={(e) => {
                        changeSetting('--title-font-size', e.target.value + 'px');
                    }}/>
             <label>标题字体粗细</label>
-            <input type="range" min={100} max={900} step={100} value={parseInt(setting['--title-font-weight'])}
+            <Slider showValue min={100} max={900} step={100} value={parseInt(setting['--title-font-weight'])}
                    onChange={(e) => {
                        changeSetting('--title-font-weight', e.target.value);
                    }}/>
 
             <label>内容宽度</label>
-            <input type="range" min={20} max={100} step={1}
+            <Slider showValue min={20} max={100} step={1}
                    value={parseInt(setting['--content-width'].replace('%', ''))} onChange={(e) => {
                 changeSetting('--content-width', e.target.value + '%');
             }}/>
@@ -196,7 +196,7 @@ const ToolBar = memo(({novelId, volumeId, chapterId, setTitle, setContent, isFro
         <div className='mika-novel-reader-toolbar-container'>
             <div className="mika-novel-reader-toolbar">
                 <Button styleType='text' onClick={() => {
-                    nav(`/novel/${novelId}`);
+                    nav(`/novel/${novelId}`, {replace: true});
                 }}>返回</Button>
                 <Button styleType='text' onClick={goPrev} disabled={isSwitching}>上一章</Button>
                 <Button styleType='text' onClick={() => {
@@ -230,6 +230,7 @@ const NovelReader = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
+
         if (isFromRedirect.current) {
             isFromRedirect.current = false;
             return;
@@ -250,6 +251,7 @@ const NovelReader = () => {
     if (loading) {
         return <LoadingPage/>;
     }
+    document.title = title || "小说阅读";
 
     return (
         <div className="mika-novel-reader-root" style={{

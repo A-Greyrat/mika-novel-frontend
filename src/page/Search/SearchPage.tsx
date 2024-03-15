@@ -19,6 +19,8 @@ const SearchPage = () => {
 
     useEffect(() => {
         if (!keyword) return;
+        window.scrollTo(0, 0);
+        document.title = `搜索 - ${keyword}`;
 
         loading.current = true;
         getSearchedNovels(keyword, 1, 10).then((res) => {
@@ -28,8 +30,6 @@ const SearchPage = () => {
             loading.current = false;
         });
     }, [keyword]);
-
-    window.scrollTo(0, 0);
 
     if (loading.current) {
         return <div>

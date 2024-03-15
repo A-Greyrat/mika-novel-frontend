@@ -19,6 +19,7 @@ export type ThemeConfig = {
     successColor?: string;
     // 警告色
     primaryButtonFontColor?: string;
+    disabledColor?: string;
 
     smallFontSize?: string;
     mediumFontSize?: string;
@@ -51,6 +52,8 @@ const defaultTheme: ThemeConfig = {
     successColor: '#00ff00',
     // Primary Button 字体颜色
     primaryButtonFontColor: '#ffffff',
+    // 禁用色
+    disabledColor: '#f4f4f4',
 
     // 字体大小
     smallFontSize: '12px',

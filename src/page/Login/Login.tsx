@@ -136,6 +136,8 @@ export const Captcha = () => {
     const renewCaptcha = useCallback(throttle(resetCaptcha, 1000), [resetCaptcha]);
 
     useEffect(() => {
+        document.title = "登录";
+
         resetCaptcha();
     }, [resetCaptcha]);
 

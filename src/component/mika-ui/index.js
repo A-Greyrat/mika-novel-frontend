@@ -10,5 +10,7 @@ export {default as Carousel} from './Carousel';
 export {default as InfinityList} from './InfinityList';
 export {default as showMessage} from './Message';
 export {default as Skeleton} from './Skeleton';
+export {default as Input} from './Input';
+export {default as Slider} from './Slider';
 
 export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";

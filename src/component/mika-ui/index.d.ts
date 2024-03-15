@@ -34,4 +34,10 @@ export type {MessageProps} from './Message';
 export {default as Skeleton} from './Skeleton';
 export type {SkeletonProps} from './Skeleton';
 
+export {default as Input} from './Input';
+export type {InputProps} from './Input';
+
+export {default as Slider} from './Slider';
+export type {SliderProps} from './Slider';
+
 export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";
