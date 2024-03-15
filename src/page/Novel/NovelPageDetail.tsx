@@ -22,6 +22,8 @@ const NovelPageDetail = (novelData: NovelInfo) => {
     } | null>("mika-novel-last-read", null);
 
     useEffect(() => {
+        setIsFavorite(false);
+
         getIsFavorite(Number(novelData.id)).then((res) => {
             setIsFavorite(res);
         });
@@ -40,7 +42,7 @@ const NovelPageDetail = (novelData: NovelInfo) => {
             <div className="mika-novel-page-novel-tags">
                 {novelData?.tags.map((tag, _index) => {
                     return <span key={tag.id} onClick={() => {
-                        nav(`/search/${tag.tagName}`);
+                        nav(`/search/${tag.tagName}/1`);
                     }}>{tag.tagName}</span>
                 })}
             </div>

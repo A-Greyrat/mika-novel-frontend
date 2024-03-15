@@ -1,9 +1,10 @@
 import './ReadingNovelList.less';
 import {Image} from "../../component/mika-ui";
-import {memo, useEffect, useState} from "react";
+import {memo, useEffect} from "react";
 import {getFavoriteList, NovelInfo} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
 import {baseURL} from "../../common/axios";
+import {useStore} from "../../common/mika-store";
 
 const ReadingNovelListItem = (props: NovelInfo) => {
     const nav = useNavigate();
@@ -19,13 +20,13 @@ const ReadingNovelListItem = (props: NovelInfo) => {
 }
 
 const ReadingNovelList = memo(() => {
-    const [items, setItems] = useState<(NovelInfo & {novelId: number})[]>([]);
+    const [items, setItems] = useStore<(NovelInfo & {novelId: number})[]>('mika-novel-favorite-list', []);
 
     useEffect(() => {
         getFavoriteList().then((res) => {
             res && setItems(res.records);
         });
-    }, []);
+    }, [setItems]);
 
     if (!items || items.length === 0) {
         return null;

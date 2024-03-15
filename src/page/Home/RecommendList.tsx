@@ -1,10 +1,11 @@
 import NovelCard from "../../component/NovelCard/NovelCard";
 import './RecommendList.less';
-import {memo, useCallback, useState} from "react";
+import {memo, useCallback} from "react";
 import {getRecommendNovelList, NovelInfo} from "../../common/novel";
 import {withLockTime} from "../../component/mika-ui";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
 import InfinityList from "../../component/mika-ui/InfinityList/InfinityList.tsx";
+import {useStore} from "../../common/mika-store";
 
 const Loading = memo(() => {
     return (
@@ -17,7 +18,7 @@ const Loading = memo(() => {
 });
 
 const RecommendList = memo(() => {
-    const [items, setItems] = useState<NovelInfo[]>();
+    const [items, setItems] = useStore<NovelInfo[]>('recommendList', []);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const getMore = useCallback(withLockTime((unloading: () => void) => {
@@ -27,12 +28,11 @@ const RecommendList = memo(() => {
                     resolve(null);
                 }, 500);
             });
-            setItems((prev) => {
-                return prev ? prev.concat(res) : res;
-            });
+            const newItems = [...items, ...res];
+            setItems(newItems);
             unloading();
         });
-    }, 500), []);
+    }, 500), [items]);
 
     return (
         <div className="mika-novel-recommend-list-root">

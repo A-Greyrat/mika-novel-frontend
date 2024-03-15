@@ -20,7 +20,7 @@ const NovelPageRecommend = ({novels}: { novels: NovelInfo[] }) => {
                 {novels.map((novel, _index) => {
                     return (
                         <div key={novel.id} className="mika-novel-page-novel-recommend-item" onClick={() => {
-                            nav(`/novel/${novel.id}`, {replace: true});
+                            nav(`/novel/${novel.id}`);
                         }}>
                             <Image src={baseURL + novel.cover} width={100} height={150}/>
                             <div>

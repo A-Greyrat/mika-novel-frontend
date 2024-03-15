@@ -77,11 +77,11 @@ const SearchSection = () => {
                 dataSrc={dataSrc} onValueChange={(key) => {
                 return _getSearchAutoComplete(key);
             }} onOptionClick={(item) => {
-                nav(`/search/${item}`);
+                nav(`/search/${item}/1`);
             }} onOptionKeyDown={(item) => {
-                nav(`/search/${item}`);
+                nav(`/search/${item}/1`);
             }} onSubmit={(item) => {
-                nav(`/search/${item}`);
+                nav(`/search/${item}/1`);
             }} ref={inputRef}/>
         </div>
     );

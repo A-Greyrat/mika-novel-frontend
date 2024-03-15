@@ -13,8 +13,10 @@
   box-sizing: border-box;
 
   .mika-novel-reader-toolbar-container {
-    background-color: inherit;
-    width: var(--content-width);
+    background-color: color-mix(in srgb, var(--content-background-color) 50%, transparent 50%);
+    backdrop-filter: blur(5px);
+    width: 50%;
+    min-width: 300px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
     position: fixed;
@@ -24,8 +26,9 @@
     border-radius: 10px;
     padding: 0 5px;
 
+    font-weight: 600;
+
     .mika-novel-reader-toolbar {
-      background-color: inherit;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -38,6 +41,8 @@
         box-sizing: border-box;
         white-space: nowrap;
         color: var(--text-color);
+
+        font-weight: 600;
       }
     }
 

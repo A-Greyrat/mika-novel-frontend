@@ -1,5 +1,5 @@
 import './SearchPage.less';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {getSearchedNovels, NovelInfo} from "../../common/novel";
 import Header from "../../component/header/Header";
@@ -9,13 +9,20 @@ import {isMobile, Pagination} from "../../component/mika-ui";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
 
 const SearchPage = () => {
-    const {keyword} = useParams();
+    const {keyword, p} = useParams();
     const [searchResult, setSearchResult] = useState<NovelInfo[]>([]);
     const loading = useRef(true);
+    const nav = useNavigate();
 
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(p);
     const totalRef = useRef(0);
     const curRef = useRef(0);
+
+    useEffect(() => {
+        if (p !== page) {
+            setPage(p);
+        }
+    }, [p, page]);
 
     useEffect(() => {
         if (!keyword) return;
@@ -23,14 +30,23 @@ const SearchPage = () => {
         document.title = `搜索 - ${keyword}`;
 
         loading.current = true;
+
         setSearchResult([]);
-        getSearchedNovels(keyword, 1, 10).then((res) => {
+        getSearchedNovels(keyword, parseInt(page || '1'), 10).then((res) => {
             setSearchResult(res.records);
             totalRef.current = res.total;
-            curRef.current = res.total > 10 ? 10 : res.total;
-            loading.current = false;
+            const totalPage = Math.ceil(res.total / 10);
+            if (parseInt(page || '1') > totalPage) {
+                nav(`/search/${keyword}/${totalPage}`);
+            } else if (parseInt(page || '1') < 1) {
+                nav(`/search/${keyword}/1`);
+            } else {
+                curRef.current = res.total > 10 ? 10 : res.total;
+                loading.current = false;
+            }
         });
-    }, [keyword]);
+    }, [keyword, nav, page]);
+
 
     if (loading.current) {
         return <div>
@@ -69,15 +85,9 @@ const SearchPage = () => {
             </div>
 
             <Pagination onChange={(index) => {
-                loading.current = true;
-                setPage(index);
-                if (!keyword) return;
-                getSearchedNovels(keyword, index, 10).then((res) => {
-                    loading.current = false;
-                    setSearchResult(res.records);
-                    curRef.current += res.records.length;
-                });
-            }} pageNum={Math.ceil(totalRef.current / 10)} maxDisplayNumber={isMobile() ? 3 : 5} initIndex={page}/>
+                nav(`/search/${keyword}/${index}`);
+            }} pageNum={Math.ceil(totalRef.current / 10)} maxDisplayNumber={isMobile() ? 3 : 5}
+                        initIndex={parseInt(page || '0')}/>
             <Footer/>
         </div>
     )

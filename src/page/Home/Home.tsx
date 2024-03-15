@@ -6,18 +6,18 @@ import './Home.less';
 import ReadingNovelList from "./ReadingNovelList";
 import RecommendList from "./RecommendList";
 import {getCarouselNovelList, getRankList, NovelInfo} from "../../common/novel/";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import RankList from "./RankList";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
+import {useStore} from "../../common/mika-store";
 
 const Home = () => {
-    const [carouselList, setCarouselList] = useState<NovelInfo[]>([]);
-    const [dayRankList, setDayRankList] = useState<NovelInfo[]>([]);
-    const [monthRankList, setMonthRankList] = useState<NovelInfo[]>([]);
-    const [weekRankList, setWeekRankList] = useState<NovelInfo[]>([]);
+    const [carouselList, setCarouselList] = useStore<NovelInfo[]>(`mika-novel-home-carousel-list`, []);
+    const [dayRankList, setDayRankList] = useStore<NovelInfo[]>('mika-novel-home-day-rank-list', []);
+    const [monthRankList, setMonthRankList] = useStore<NovelInfo[]>(`mika-novel-home-month-rank-list`, []);
+    const [weekRankList, setWeekRankList] = useStore<NovelInfo[]>(`mika-novel-home-week-rank-list`, []);
 
     useEffect(() => {
-        window.scrollTo(0, 0);
         document.title = "首页";
 
         getCarouselNovelList().then(setCarouselList);
@@ -30,7 +30,7 @@ const Home = () => {
         getRankList("week", 1, 12).then((res) => {
             setWeekRankList(res.records);
         });
-    }, []);
+    }, [setCarouselList, setDayRankList, setMonthRankList, setWeekRankList]);
 
     return (<div className="mika-novel-home-page-root">
             <Header/>

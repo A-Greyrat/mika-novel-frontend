@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         element: <NovelReader/>,
     },
     {
-        path: '/search/:keyword',
+        path: '/search/:keyword/:p',
         element: <SearchPage/>,
     },
     {
@@ -49,10 +49,6 @@ const router = createBrowserRouter([
     {
         path: '/category',
         element: <CategoryPage/>,
-    },
-    {
-        path: '/test',
-        element: <Test/>,
     },
     {
         path: '*',
