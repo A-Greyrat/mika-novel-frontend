@@ -24,7 +24,7 @@ const Dropdown = memo(forwardRef((props: DropdownProps, ref: React.Ref<HTMLDivEl
 
     React.useEffect(() => {
         const dropdown = dropdownRef?.current;
-        const trigger = dropdown?.nextElementSibling as HTMLElement
+        const trigger = dropdown?.nextElementSibling as HTMLElement;
         const fn = () => {
             const style = getComputedStyle(dropdownRef.current!);
             if (style.opacity === '1') {

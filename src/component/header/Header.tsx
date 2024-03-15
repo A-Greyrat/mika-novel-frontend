@@ -1,10 +1,11 @@
 import './Header.less';
-import {memo, useCallback, useEffect, useRef, useState} from "react";
+import React, {memo, useCallback, useEffect, useRef, useState} from "react";
 import {isUserLoggedIn, logout, useUser} from "../../common/user";
-import {Button, Dropdown, Image, withLockTime} from "../mika-ui";
+import {AutoComplete, Button, Dropdown, Image, withLockTime} from "../mika-ui";
 import {useLocation, useNavigate} from "react-router-dom";
-import {getFavoriteList, getHistoryList, HistoryItem, NovelInfo} from "../../common/novel";
+import {getFavoriteList, getHistoryList, getSearchAutoComplete, HistoryItem, NovelInfo} from "../../common/novel";
 import {baseURL} from "../../common/axios";
+import {debounceAsync} from "../mika-ui/utils/utils.ts";
 
 const UserSection = () => {
     const [avatar] = useState("/defaultAvatar.webp");
@@ -50,6 +51,17 @@ const SearchSection = () => {
     const nav = useNavigate();
     const location = useLocation();
     const inputRef = useRef<HTMLInputElement>(null);
+    const [dataSrc, setDataSrc] = React.useState<string[]>([]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const _getSearchAutoComplete = useCallback(debounceAsync(async (keyword: string) => {
+        if (!keyword) {
+            setDataSrc([]);
+            return Promise.resolve();
+        }
+        const res = await getSearchAutoComplete(keyword);
+        setDataSrc(res);
+    }, 500), []);
 
     useEffect(() => {
         if (location.pathname.startsWith("/search")) {
@@ -61,18 +73,16 @@ const SearchSection = () => {
 
     return (
         <div className="mika-novel-header-search">
-            <form onSubmit={e => {
-                e.preventDefault();
-                if (inputRef.current) {
-                    nav('/');
-                    setTimeout(() => {
-                        const formData = new FormData(e.target as HTMLFormElement);
-                        nav(`/search/${(formData.get("search") as string)}`, {replace: true});
-                    }, 10);
-                }
-            }}>
-                <input type="text" name='search' placeholder="搜索" ref={inputRef}/>
-            </form>
+            <AutoComplete placeholder="搜你想搜" size='large' type='filled'
+                dataSrc={dataSrc} onValueChange={(key) => {
+                return _getSearchAutoComplete(key);
+            }} onOptionClick={(item) => {
+                nav(`/search/${item}`);
+            }} onOptionKeyDown={(item) => {
+                nav(`/search/${item}`);
+            }} onSubmit={(item) => {
+                nav(`/search/${item}`);
+            }} ref={inputRef}/>
         </div>
     );
 }
@@ -154,7 +164,8 @@ const HistoryDropdown = () => {
         }}>
             {historyList && historyList.map((item, _index) => {
                 return (
-                    <div className="mika-novel-header-history-item" key={item.novelId + item.volumeNumber + item.chapterNumber} onClick={() => {
+                    <div className="mika-novel-header-history-item"
+                         key={item.novelId + item.volumeNumber + item.chapterNumber} onClick={() => {
                         nav(`/novel/${item.novelId}`);
                     }}>
                         <Image src={baseURL + item.cover} width={40} height={40} alt=""/>

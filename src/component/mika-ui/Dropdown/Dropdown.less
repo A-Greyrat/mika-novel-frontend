@@ -15,6 +15,7 @@
     display: none;
     z-index: inherit;
 
+    width: 100%;
     animation: mika-dropdown-fade-out 0.2s ease-in-out;
 }
 
@@ -43,6 +44,7 @@
 }
 
 .mika-dropdown:has(+.mika-dropdown-trigger:hover),
+.mika-dropdown:has(+.mika-dropdown-trigger-click:focus-within),
 .mika-dropdown:has(+.mika-dropdown-trigger-click:focus),
 .mika-dropdown:hover {
     display: block;

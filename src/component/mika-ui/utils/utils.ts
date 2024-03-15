@@ -38,6 +38,22 @@ export const debounce = <T extends unknown[]>(fn: (...args: T) => unknown, delay
     }
 }
 
+export const debounceAsync = <T extends unknown[]>(fn: (...args: T) => Promise<unknown>, delay: number) => {
+    let timer: number | null = null;
+    return (...args: T) => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        return new Promise((resolve) => {
+            timer = setTimeout(async () => {
+                const res = await fn.call(null, ...args);
+                timer = null;
+                resolve(res);
+            }, delay);
+        });
+    };
+}
+
 export const throttle = <T extends unknown[]>(fn: (...args: T) => unknown, delay: number) => {
     let timer: number | null = null;
     return (arg: T) => {

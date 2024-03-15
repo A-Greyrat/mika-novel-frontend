@@ -1,92 +1,100 @@
-import React, {forwardRef, memo, ReactNode, useCallback, useEffect} from "react";
+import React, {forwardRef, memo, ReactNode, useCallback, useMemo, useRef, useState} from "react";
 import Input from "../Input";
 import './AutoComplete.less';
+import Dropdown from "../Dropdown";
 
 export interface AutoCompleteProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'onSubmit'> {
     type?: 'outline' | 'filled' | 'borderless';
     size?: 'small' | 'medium' | 'large';
 
-    onSubmit?: (e: React.FormEvent) => void;
+    onSubmit?: (item: string) => void;
     dataSrc: string[];
-    changeDataSrc?: (keyword: string) => void;
+    onValueChange?: (keyword: string) => Promise<unknown>;
     children?: ReactNode;
+
+    onOptionClick?: (item: string) => void;
+    onOptionKeyDown?: (item: string) => void;
 }
 
 const AutoComplete = memo(forwardRef((props: AutoCompleteProps, ref: React.Ref<HTMLInputElement>) => {
-    const {children, dataSrc, className, changeDataSrc, ...rest} = props;
-    const olRef = React.useRef<HTMLOListElement>(null);
-    const [value, setValue] = React.useState('');
-    const [showList, setShowList] = React.useState(false);
-    const curIndex = React.useRef(0);
-    const onComposition = React.useRef(false);
+    const {children, dataSrc, className, onSubmit, onValueChange, onOptionClick, onOptionKeyDown, ...rest} = props;
+    const olRef = useRef<HTMLOListElement>(null);
+    const [value, setValue] = useState('');
+    const [curIndex, setCurIndex] = useState(-1);
+    const onComposition = useRef(false);
+    const [showList, setShowList] = useState(true);
 
-    useEffect(() => {
-        const handleBlur = () => {
-            setShowList(false);
-        };
-
-        const handleFocus = () => {
-            setShowList(true);
-        };
-
-        const input = ref as React.MutableRefObject<HTMLInputElement>;
-
-        input && input.current?.addEventListener('blur', handleBlur);
-        input && input.current?.addEventListener('focus', handleFocus);
-        return () => {
-            input && input.current?.removeEventListener('blur', handleBlur);
-            input && input.current?.removeEventListener('focus', handleFocus);
-        };
-    }, [ref]);
-
-
-    const handleKeyUp = useCallback((e: React.KeyboardEvent) => {
-        e.preventDefault();
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
             const ol = olRef.current;
-            ol && ol.children[curIndex.current]?.classList.remove('active');
-            curIndex.current = e.key === 'ArrowDown' ? Math.min(curIndex.current + 1, dataSrc.length - 1) : Math.max(curIndex.current - 1, 0);
-            ol && ol.children[curIndex.current]?.classList.add('active');
+            ol && ol.children[curIndex]?.classList.remove('active');
+            setCurIndex(e.key === 'ArrowDown' ? Math.min(curIndex + 1, dataSrc.length - 1) : Math.max(curIndex - 1, 0));
+            ol && ol.children[curIndex]?.classList.add('active');
+            setShowList(true);
         } else if (e.key === 'Enter') {
-            setValue(dataSrc[curIndex.current]);
-            olRef.current?.children[curIndex.current]?.classList.remove('active');
+            if (curIndex !== -1) {
+                e.preventDefault();
+                onOptionKeyDown?.(dataSrc[curIndex]);
+                setShowList(false);
+                setCurIndex(-1);
+            }
         }
-    }, [dataSrc]);
+    }, [curIndex, dataSrc, onOptionKeyDown]);
 
-    return (<div className='mika-auto-complete-root'>
-        <Input ref={ref} {...rest} onKeyUp={handleKeyUp}
-               className={`mika-auto-complete-input ${className ?? ''}`}
-               onSubmit={(e) => {
-                   e.preventDefault();
-               }}
-               value={value}
-               onCompositionStart={() => {
-                   onComposition.current = true;
-                   console.log('start');
-               }}
-               onCompositionEnd={(e) => {
-                   onComposition.current = false;
-                   console.log('end');
-                   changeDataSrc?.(e.currentTarget.value);
-                   curIndex.current = 0;
-               }}
-
-               onInput={(e) => {
-                   setValue(e.currentTarget.value);
-                   if (onComposition.current) return;
-                   console.log('input')
-
-                   changeDataSrc?.(e.currentTarget.value);
-                   curIndex.current = 0;
-               }}>
-            {children}
-        </Input>
-        {showList && dataSrc && <ol className='mika-auto-complete-list' ref={olRef}>
-            {dataSrc.map((_, index) => {
-                return <li key={index} tabIndex={index} className='mika-auto-complete-item' autoFocus>{_}</li>;
+    const DropdownList = useMemo(() => {
+        return <ol className='mika-auto-complete-list' ref={olRef} >
+            {showList && dataSrc && dataSrc.map((item, index) => {
+                return <li key={index} className={curIndex === index ? 'active' : ''}
+                           onClick={() => {
+                               onOptionClick?.(item);
+                               olRef.current?.children[curIndex]?.classList.remove('active');
+                               setShowList(false);
+                               setCurIndex(-1);
+                           }}>{item}</li>;
             })}
-        </ol>}
-    </div>);
+        </ol>;
+    }, [curIndex, dataSrc, onOptionClick, showList]);
+
+    const onCompositionStart = useCallback(() => {
+        onComposition.current = true;
+    }, []);
+
+    const onCompositionEnd = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        onComposition.current = false;
+
+        onValueChange?.(e.currentTarget.value).then(() => {
+            setShowList(true);
+            setCurIndex(-1);
+        });
+    }, [onValueChange]);
+
+    const _onSubmit = useCallback((e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit?.(value);
+    }, [onSubmit, value]);
+
+    const onInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        setValue(e.currentTarget.value);
+        if (onComposition.current) return;
+        onValueChange?.(e.currentTarget.value).then(() => {
+            setShowList(true);
+            setCurIndex(-1);
+        });
+    }, [onValueChange]);
+
+    return (
+        <Dropdown menu={DropdownList} type='click'>
+            <Input ref={ref} {...rest} onKeyDown={handleKeyDown}
+                   className={`mika-auto-complete-input ${className ?? ''}`}
+                   onSubmit={_onSubmit}
+                   value={value}
+                   onCompositionStart={onCompositionStart}
+                   onCompositionEnd={onCompositionEnd}
+                   onInput={onInput}>
+                {children}
+            </Input>
+        </Dropdown>);
 }));
 
 export default AutoComplete;
