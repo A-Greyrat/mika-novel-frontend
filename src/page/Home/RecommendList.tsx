@@ -41,8 +41,8 @@ const RecommendList = memo(() => {
                 onIntersect={getMore}
                 loading={<Loading/>}
                 className="mika-novel-recommend-list-container">
-                {items?.map((item, index) => (
-                    <NovelCard key={index} {...item} height={240} padding={12} maxDisplayLines={3}/>
+                {items?.map((item, _index) => (
+                    <NovelCard key={item.id} {...item} height={240} padding={12} maxDisplayLines={3}/>
                 ))}
             </InfinityList>
         </div>

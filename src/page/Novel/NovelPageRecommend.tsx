@@ -17,9 +17,9 @@ const NovelPageRecommend = ({novels}: { novels: NovelInfo[] }) => {
         <div className="mika-novel-page-novel-recommend">
             <h2>相关推荐</h2>
             <div>
-                {novels.map((novel, index) => {
+                {novels.map((novel, _index) => {
                     return (
-                        <div key={index} className="mika-novel-page-novel-recommend-item" onClick={() => {
+                        <div key={novel.id} className="mika-novel-page-novel-recommend-item" onClick={() => {
                             nav('/');
                             setTimeout(() => {
                                 nav(`/novel/${novel.id}`, {replace: true});

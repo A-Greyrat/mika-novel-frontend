@@ -38,9 +38,12 @@ const NovelPageDetail = (novelData: NovelInfo) => {
                 {novelData?.author}
             </div>
             <div className="mika-novel-page-novel-tags">
-                {novelData?.tags.map((tag, index) => {
-                    return <span key={index} onClick={() => {
-                        nav(`/search/${tag.tagName}`);
+                {novelData?.tags.map((tag, _index) => {
+                    return <span key={tag.id} onClick={() => {
+                        nav("/");
+                        setTimeout(() => {
+                            nav(`/search/${tag.tagName}`);
+                        }, 10);
                     }}>{tag.tagName}</span>
                 })}
             </div>

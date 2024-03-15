@@ -40,4 +40,7 @@ export type {InputProps} from './Input';
 export {default as Slider} from './Slider';
 export type {SliderProps} from './Slider';
 
+export {default as AutoComplete} from './AutoComplete';
+export type {AutoCompleteProps} from './AutoComplete';
+
 export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";

@@ -61,8 +61,8 @@ const SearchPage = () => {
             <div className='mika-novel-search-page-container'>
                 <h1>共有 {totalRef.current} 条搜索结果</h1>
                 <div className="mika-novel-search-page-list">
-                    {searchResult && searchResult.map((item, index) => (
-                        <NovelCard {...item} key={index}/>
+                    {searchResult && searchResult.map((item, _index) => (
+                        <NovelCard {...item} key={item.id}/>
                     ))}
                 </div>
             </div>

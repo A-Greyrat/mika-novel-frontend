@@ -36,7 +36,7 @@ const RankList = memo((props: RankListProps) => {
                      onChange={setActiveIndex}/>
             <div className="mika-novel-rank-list-content">
                 {!isActiveEmpty && props.items[activeIndex].map((item, index) => (
-                    <div key={index} className="mika-novel-rank-list-item" onClick={() => {
+                    <div key={item.id} className="mika-novel-rank-list-item" onClick={() => {
                         nav(`/novel/${item.id}`);
                     }}>
                         <span>{index + 1}</span>

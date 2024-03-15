@@ -9,9 +9,10 @@ import {
     NovelPageVolumeInfo
 } from "../../common/novel";
 import {getReaderSetting, resetReaderSetting, setReaderSetting} from "../../common/setting";
-import {Button, showMessage, Slider} from "../../component/mika-ui";
+import {Button, Image, showMessage, Slider} from "../../component/mika-ui";
 import {useStore} from "../../common/mika-store";
 import LoadingPage from "../Loading/LoadingPage.tsx";
+import {baseURL} from "../../common/axios";
 
 const SettingPanel = () => {
     const [setting, setSetting] = useStore("mika-novel-reader-setting", getReaderSetting());
@@ -29,9 +30,9 @@ const SettingPanel = () => {
             }}/>
             <label>字体粗细</label>
             <Slider showValue min={100} max={900} step={100} value={parseInt(setting['--text-font-weight'])}
-                   onChange={(e) => {
-                       changeSetting('--text-font-weight', e.target.value);
-                   }}/>
+                    onChange={(e) => {
+                        changeSetting('--text-font-weight', e.target.value);
+                    }}/>
 
             <label>行高</label>
             <Slider showValue min={1} max={3} step={0.1} value={parseFloat(setting.lineHeight)} onChange={(e) => {
@@ -39,15 +40,15 @@ const SettingPanel = () => {
             }}/>
             <label>字间距</label>
             <Slider showValue min={0} max={2} step={0.1} value={parseFloat(setting.letterSpacing)}
-                   onChange={(e) => {
-                       changeSetting('letterSpacing', e.target.value + 'px');
-                   }}/>
+                    onChange={(e) => {
+                        changeSetting('letterSpacing', e.target.value + 'px');
+                    }}/>
 
             <label>段间距</label>
             <Slider showValue min={0} max={60} step={2} value={parseFloat(setting['--paragraph-spacing'])}
-                   onChange={(e) => {
-                       changeSetting('--paragraph-spacing', e.target.value + 'px');
-                   }}/>
+                    onChange={(e) => {
+                        changeSetting('--paragraph-spacing', e.target.value + 'px');
+                    }}/>
 
             <label>背景颜色</label>
             <input type="color" value={setting.backgroundColor} onChange={(e) => {
@@ -60,18 +61,18 @@ const SettingPanel = () => {
 
             <label>标题字体大小</label>
             <Slider showValue min={14} max={32} step={1} value={parseInt(setting['--title-font-size'])}
-                   onChange={(e) => {
-                       changeSetting('--title-font-size', e.target.value + 'px');
-                   }}/>
+                    onChange={(e) => {
+                        changeSetting('--title-font-size', e.target.value + 'px');
+                    }}/>
             <label>标题字体粗细</label>
             <Slider showValue min={100} max={900} step={100} value={parseInt(setting['--title-font-weight'])}
-                   onChange={(e) => {
-                       changeSetting('--title-font-weight', e.target.value);
-                   }}/>
+                    onChange={(e) => {
+                        changeSetting('--title-font-weight', e.target.value);
+                    }}/>
 
             <label>内容宽度</label>
             <Slider showValue min={20} max={100} step={1}
-                   value={parseInt(setting['--content-width'].replace('%', ''))} onChange={(e) => {
+                    value={parseInt(setting['--content-width'].replace('%', ''))} onChange={(e) => {
                 changeSetting('--content-width', e.target.value + '%');
             }}/>
 
@@ -117,17 +118,17 @@ const MenuPanel = memo(({novelId, volumeId, chapterId}: {
                 margin: "20px auto",
                 color: "#666"
             }}>加载中...</div>}
-            {menu && menu.map((item, index) => {
+            {menu && menu.map((item, _index) => {
                 return (
-                    <div key={index} className="mika-novel-reader-menu-item">
+                    <div key={item.id} className="mika-novel-reader-menu-item">
                         <h3>{item.title}</h3>
                         <div>
-                            {item.chapters.map((chapter, index) => {
+                            {item.chapters.map((chapter, _index) => {
                                 return (
-                                    <Button key={index} size='large' styleType='text' onClick={() => {
+                                    <Button key={chapter.id} size='large' styleType='text' onClick={() => {
                                         nav(`/novel/${novelId}/${chapter.volumeId}/${chapter.id}`);
                                         window.location.reload();
-                                    } }>{chapter.title}</Button>
+                                    }}>{chapter.title}</Button>
                                 );
                             })}
                         </div>
@@ -264,6 +265,16 @@ const NovelReader = () => {
                 <div className="mika-novel-reader-divider"/>
                 <div className="mika-novel-reader-content-container">
                     {novelContent?.map((content, index) => {
+                        if (content.startsWith('!{ImageUrl}')) {
+                            const imageUrl = baseURL + `/common/image/novel_data/${novelId}/${volumeId}/${chapterId}/${content.replace('!{ImageUrl}', '')}.jpg`;
+                            return (
+                                <Image lazy
+                                       style={{margin: "2vh auto"}} key={index}
+                                       src={imageUrl}
+                                       occupyStyle={{margin: "2vh auto", aspectRatio: "2 / 3"}}
+                                       alt="" width='100%'/>
+                            );
+                        }
                         return (
                             <p key={index}>{content}</p>
                         )

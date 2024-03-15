@@ -1,8 +1,16 @@
 @import "../Config/theme.less";
 
-.mika-input-outline[type="text"] {
+.mika-input-form {
+  display: flex;
+  align-items: center;
+
+  > input {
+    flex: 1;
+  }
+}
+
+.mika-input-form:has(.mika-input-outline[type="text"]) {
   border: 1px solid var(--mika-primary-color);
-  color: var(--mika-emphasis-color);
   border-radius: var(--mika-border-radius);
   transition: all 0.3s;
 
@@ -10,9 +18,40 @@
     border-color: color-mix(in srgb, var(--mika-primary-color) 70%, var(--mika-emphasis-color) 30%);
   }
 
+  &:focus-within {
+    border-color: var(--mika-emphasis-color);
+  }
+}
+
+.mika-input-form:has(.mika-input-filled[type="text"]) {
+  color: #333;
+  background-color: #f5f5f5;
+  border-radius: var(--mika-border-radius);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  &:focus-within {
+    background-color: #e5e5e5;
+  }
+}
+
+.mika-input-form:has(.mika-input-borderless[type="text"]) {
+  color: var(--mika-emphasis-color);
+  background-color: var(--mika-background-color);
+  border-radius: var(--mika-border-radius);
+  transition: all 0.3s ease;
+}
+
+.mika-input-outline[type="text"] {
+  border: none;
+  color: var(--mika-emphasis-color);
+  border-radius: var(--mika-border-radius);
+
   &:focus {
     outline: none;
-    border-color: var(--mika-emphasis-color);
   }
 }
 
@@ -25,22 +64,15 @@
   border: 1px solid color-mix(in srgb, black 10%, var(--mika-disabled-color) 90%);
 }
 
-
 .mika-input-filled[type="text"] {
   border: none;
-  color: var(--mika-emphasis-color);
-  background-color: #f5f5f5;
+  color: #333;
+  background-color: transparent;
   border-radius: var(--mika-border-radius);
   transition: all 0.3s ease;
 
-  &:hover {
-    background-color: #eee;
-  }
-
   &:focus {
     outline: none;
-    background-color: var(--mika-background-color);
-    border: 1px solid var(--mika-primary-color);
   }
 }
 
@@ -56,9 +88,8 @@
 .mika-input-borderless[type="text"] {
   border: none;
   color: var(--mika-emphasis-color);
-  background-color: var(--mika-background-color);
+  background-color: transparent;
   border-radius: var(--mika-border-radius);
-  transition: all 0.3s ease;
 
   &:focus {
     outline: none;

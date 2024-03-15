@@ -146,9 +146,9 @@ const NovelPageCommentReplyBox = (props: { reply?: NovelPageCommentReply[], id: 
 
     return (
         <div className="mika-novel-page-comment-reply-box">
-            {props.reply.slice((activePage - 1) * 5, activePage * 5).map((reply, index) => {
+            {props.reply.slice((activePage - 1) * 5, activePage * 5).map((reply, _index) => {
                 return (
-                    <NovelPageCommentReply key={index} {...reply} parent={props.id}/>
+                    <NovelPageCommentReply key={reply.id} {...reply} parent={props.id}/>
                 )
             })}
             {props.reply && props.reply.length > 5 &&
@@ -292,9 +292,9 @@ const NovelPageComment = memo(({novelId}: { novelId: string }) => {
                     display: 'flex',
                     flexDirection: 'column-reverse',
                 }} onIntersect={getCommentList} limit={total} itemNum={comment ? comment.length : 0}>
-                    {comment.map((_comment, index) => {
+                    {comment.map((comment, _index) => {
                         return (
-                            <NovelPageCommentBox key={index} novelId={novelId} {..._comment}/>
+                            <NovelPageCommentBox key={comment.id} novelId={novelId} {...comment}/>
                         )
                     })}
                 </InfinityList>

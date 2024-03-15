@@ -31,14 +31,14 @@ const NovelPageVolume = ({nid, volumeData}: { nid: string, volumeData: NovelPage
 
     return (
         <div className="mika-novel-page-volume">
-            {volumeData.map((volume, index) => {
+            {volumeData.map((volume, _index) => {
                 return (
-                    <div key={index}>
+                    <div key={volume.id}>
                         <h2>{volume.title}</h2>
                         <div className="mika-novel-page-volume-chapters">
-                            {volume.chapters.map((chapter: NovelPageVolumeInfo['chapters'][number], index) => {
+                            {volume.chapters.map((chapter: NovelPageVolumeInfo['chapters'][number], _index) => {
                                 return (
-                                    <Button key={index}
+                                    <Button key={chapter.id}
                                             styleType={lastRead && lastRead.volumeId === parseInt(chapter.volumeId) && lastRead.chapterId === parseInt(chapter.id) ? 'primary' : 'default'}
                                             size='large' onClick={() => {
                                         nav(`/novel/${chapter.novelId}/${chapter.volumeId}/${chapter.id}`);

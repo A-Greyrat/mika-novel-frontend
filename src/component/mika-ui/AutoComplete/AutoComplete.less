@@ -1,0 +1,45 @@
+@import '../Config/theme';
+
+.mika-auto-complete-root {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mika-auto-complete-list {
+  position: absolute;
+  background-color: var(--mika-background-color);
+  border: 1px solid var(--mika-border-color);
+  border-radius: var(--mika-border-radius);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: var(--mika-small-font-size);
+  color: var(--mika-font-color);
+  cursor: pointer;
+  user-select: none;
+
+  li {
+    padding: 10px;
+
+    &:hover {
+      background-color: var(--mika-primary-color);
+      color: var(--mika-primary-button-font-color);
+    }
+  }
+
+  .active {
+    background-color: var(--mika-primary-color);
+    color: var(--mika-primary-button-font-color);
+  }
+
+  .mika-auto-complete-highlight {
+    color: var(--mika-primary-color);
+  }
+}

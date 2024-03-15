@@ -4,8 +4,8 @@ import "./Image.less";
 interface ImageProps extends React.HTMLAttributes<HTMLImageElement> {
     src?: string | null;
 
-    width: number;
-    height: number;
+    width?: number | string;
+    height?: number | string;
     alt?: string;
 
     loading?: React.ReactElement;
@@ -16,16 +16,24 @@ interface ImageProps extends React.HTMLAttributes<HTMLImageElement> {
 
     onLoaded?: () => unknown;
     onError?: () => unknown;
+
+    occupyStyle?: React.CSSProperties;
 }
 
-const DefaultLoading = forwardRef(({width, height}: {
-    width: number;
-    height: number;
-}, ref: React.Ref<HTMLDivElement>) => {
+interface OccupyImageProps extends React.HTMLAttributes<HTMLDivElement> {
+    width?: number | string;
+    height?: number | string;
+
+    occupyStyle?: React.CSSProperties;
+}
+
+
+const DefaultLoading = forwardRef(({width, height, occupyStyle}: OccupyImageProps, ref: React.Ref<HTMLDivElement>) => {
     return (
         <div className='mika-image-loading' style={{
-            "--width": width + "px",
-            "--height": height + "px",
+            "--width": width ? (typeof width === "number" ? width + "px" : width) : "auto",
+            "--height": height ? (typeof height === "number" ? height + "px" : height) : "auto",
+            ...occupyStyle
         } as React.CSSProperties} ref={ref}>
             <svg viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
@@ -37,14 +45,12 @@ const DefaultLoading = forwardRef(({width, height}: {
     );
 });
 
-const DefaultError = forwardRef(({width, height}: {
-    width: number;
-    height: number;
-}, ref: React.Ref<HTMLDivElement>) => {
+const DefaultError = forwardRef(({width, height, occupyStyle}: OccupyImageProps, ref: React.Ref<HTMLDivElement>) => {
     return (
         <div className='mika-image-error' style={{
-            "--width": width + "px",
-            "--height": height + "px",
+            "--width": width ? (typeof width === "number" ? width + "px" : width) : "auto",
+            "--height": height ? (typeof height === "number" ? height + "px" : height) : "auto",
+            ...occupyStyle
         } as React.CSSProperties} ref={ref}>
             <svg viewBox="0 0 1024 1024" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
@@ -155,6 +161,9 @@ const Image = memo(React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImage
         onLoaded,
         onError,
         lazy,
+        height,
+        width,
+        occupyStyle,
         ...rest
     } = props;
 
@@ -167,19 +176,19 @@ const Image = memo(React.forwardRef((props: ImageProps, ref: React.Ref<HTMLImage
 
     useImperativeHandle(ref, () => elementRef.current!, [elementRef]);
     if (_loading) {
-        return (<>{loading ?? <DefaultLoading ref={elementRef} width={props.width} height={props.height}/>}</>);
+        return (<>{loading ?? <DefaultLoading ref={elementRef} width={width} height={height} occupyStyle={occupyStyle}/>}</>);
     }
 
     if (_error) {
         if (typeof error === 'string') {
-            return <img src={error} alt={alt} ref={elementRef} {...rest} />;
+            return <img src={error} alt={alt} ref={elementRef} width={width} height={height} {...rest} />;
         }
 
-        return (<>{error ?? <DefaultError ref={elementRef} width={props.width} height={props.height}/>}</>);
+        return (<>{error ?? <DefaultError ref={elementRef} width={width} height={height} occupyStyle={occupyStyle}/>}</>);
     }
 
     return (
-        <img src={_src} alt={alt} ref={elementRef} {...rest} />
+        <img src={_src} alt={alt} ref={elementRef} width={width} height={height} {...rest} />
     );
 }), (prev, next) => {
     return prev.src === next.src

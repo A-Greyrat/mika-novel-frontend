@@ -38,7 +38,7 @@ const Home = () => {
                 <Carousel items={
                     carouselList && carouselList.length > 0 ?
                         carouselList.map((item) => (
-                            <NovelCard {...item}/>
+                            <NovelCard {...item} key={item.id}/>
                         )) : [1, 2, 3, 4, 5].map((item) => (<SkeletonCard key={item} padding='20px'/>))
                 } className='mika-novel-carouse-list' autoSwitchByTime={3000}/>
                 <ReadingNovelList/>

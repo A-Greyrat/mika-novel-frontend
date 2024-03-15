@@ -35,8 +35,8 @@ const ReadingNovelList = memo(() => {
             <h1>我的收藏</h1>
             <div className="mika-novel-reading-novel-list-wrapper">
                 <div className="mika-novel-reading-novel-list-container">
-                    {items.map((item, index) => (
-                        <ReadingNovelListItem key={index} {...item} id={item.novelId.toString()}/>
+                    {items.map((item, _index) => (
+                        <ReadingNovelListItem key={item.id} {...item} id={item.novelId.toString()}/>
                     ))}
                 </div>
             </div>

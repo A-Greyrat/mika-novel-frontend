@@ -12,5 +12,6 @@ export {default as showMessage} from './Message';
 export {default as Skeleton} from './Skeleton';
 export {default as Input} from './Input';
 export {default as Slider} from './Slider';
+export {default as AutoComplete} from './AutoComplete';
 
 export {withLockTime, useTimer, isMobile, debounce, throttle} from "./utils";

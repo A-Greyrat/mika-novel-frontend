@@ -99,9 +99,9 @@ const FavorDropdown = () => {
             overflowY: "auto",
             maxHeight: "80vh"
         }}>
-            {favorList && favorList.length > 0 && favorList.map((item, index) => {
+            {favorList && favorList.length > 0 && favorList.map((item, _index) => {
                 return (
-                    <div className="mika-novel-header-favor-item" key={index} onClick={() => {
+                    <div className="mika-novel-header-favor-item" key={item.id} onClick={() => {
                         nav(`/novel/${item.novelId}`);
                     }}>
                         <Image src={baseURL + item.cover} width={40} height={40} alt=""/>
@@ -152,9 +152,9 @@ const HistoryDropdown = () => {
             overflowY: "auto",
             maxHeight: "80vh"
         }}>
-            {historyList && historyList.map((item, index) => {
+            {historyList && historyList.map((item, _index) => {
                 return (
-                    <div className="mika-novel-header-history-item" key={index} onClick={() => {
+                    <div className="mika-novel-header-history-item" key={item.novelId + item.volumeNumber + item.chapterNumber} onClick={() => {
                         nav(`/novel/${item.novelId}`);
                     }}>
                         <Image src={baseURL + item.cover} width={40} height={40} alt=""/>

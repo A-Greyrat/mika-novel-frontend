@@ -48,8 +48,8 @@ const FavorList = memo(() => {
 
     return (<>
             <div className="mika-novel-space-individual-favor-list">
-                {!loading && favorList && favorList.map((item, index) => {
-                    return (<div className="mika-novel-space-individual-favor-item" key={index}>
+                {!loading && favorList && favorList.map((item, _index) => {
+                    return (<div className="mika-novel-space-individual-favor-item" key={item.id}>
                             <Image lazy src={baseURL + item.cover} width={40} height={40} alt=""/>
                             <div className="mika-novel-space-individual-favor-item-info">
                                 <div>{item.title}</div>
@@ -110,9 +110,9 @@ const HistoryList = memo(() => {
 
     return (<>
         <div className="mika-novel-space-individual-history-list">
-            {!loading && historyList && historyList.map((item, index) => {
+            {!loading && historyList && historyList.map((item, _index) => {
                 return (
-                    <div className="mika-novel-space-individual-history-item" key={index}>
+                    <div className="mika-novel-space-individual-history-item" key={item.novelId + item.volumeNumber + item.chapterNumber}>
                         <Image lazy src={baseURL + item.cover} width={40} height={40} alt=""/>
                         <div className="mika-novel-space-individual-history-item-info">
                             <div>{item.novelTitle}</div>

@@ -92,11 +92,17 @@ export const getNovelContent = async (novelId: string, volumeId: string, chapter
 }
 
 export const getSearchedNovels = async (keyword: string, page: number, pageSize: number) => {
-    return httpGet(`/search/book?title=${keyword}&page=${page}&pageSize=${pageSize}`).then((res) => {
+    return httpGet(`/search?q=${keyword}&page=${page}&pageSize=${pageSize}`).then((res) => {
         return res.data as {
             total: number;
             records: NovelInfo[];
         };
+    });
+}
+
+export const getSearchAutoComplete = async (keyword: string, num: number = 5): Promise<string[]> => {
+    return httpGet<string[]>(`/search/suggestion?q=${keyword}&num=${num}`).then((res) => {
+        return res.data || [];
     });
 }
 
@@ -173,7 +179,6 @@ export const removeHistory = async (novelId: string) => {
     });
 }
 
-// return all tags list
 export const getAvailableTags = async () => {
     return httpGet("/novel/available-tags").then((res) => {
         return res.data as {
