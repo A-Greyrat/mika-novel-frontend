@@ -112,7 +112,8 @@ const HistoryList = memo(() => {
         <div className="mika-novel-space-individual-history-list">
             {!loading && historyList && historyList.map((item, _index) => {
                 return (
-                    <div className="mika-novel-space-individual-history-item" key={item.novelId + item.volumeNumber + item.chapterNumber}>
+                    <div className="mika-novel-space-individual-history-item"
+                         key={item.novelId + item.volumeNumber + item.chapterNumber}>
                         <Image lazy src={baseURL + item.cover} width={40} height={40} alt=""/>
                         <div className="mika-novel-space-individual-history-item-info">
                             <div>{item.novelTitle}</div>
@@ -197,7 +198,10 @@ const Space = () => {
 
                     {activeIndex === 0 && <FavorList/>}
                     {activeIndex === 1 && <HistoryList/>}
-                    {activeIndex === 2 && <div>设置</div>}
+                    {activeIndex === 2 && <div style={{
+                        fontSize: "1.3rem",
+                        fontWeight: "bold",
+                    }}>设置</div>}
                 </div>
             </div>
             <Footer/>

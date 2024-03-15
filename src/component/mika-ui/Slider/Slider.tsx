@@ -5,6 +5,8 @@ import './Slider.less';
 export interface SliderProps extends React.InputHTMLAttributes<HTMLInputElement> {
     showValue?: boolean;
     width?: string;
+    thumbColor?: string;
+    trackColor?: string;
 }
 
 
@@ -20,7 +22,11 @@ const SliderInput = memo((props: SliderProps & {
                       setValue(e.target.value);
                       onChange && onChange(e);
                   }}
-                  style={{width: width}}
+                  style={{
+                      width: width,
+                      '--thumb-color': props.thumbColor,
+                      '--track-color': props.trackColor,
+                  } as React.CSSProperties}
                   type='range' {...rest} />;
 });
 
@@ -41,7 +47,9 @@ const Slider = memo(forwardRef((props: SliderProps, ref: React.Ref<HTMLInputElem
     return (<div className='mika-slider-root'>
             <SliderInput value={value} ref={ref} setValue={setValue} className={className} width={width}
                          onChange={onChange} {...rest} />
-            {showValue && <span>{value}</span>}
+            {showValue && <span style={{
+                color: props.thumbColor,
+            }}>{value}</span>}
         </div>
     );
 }));

@@ -26,27 +26,33 @@ const SettingPanel = () => {
     return (
         <div className="mika-novel-reader-setting-panel">
             <label>字体大小</label>
-            <Slider showValue min={14} max={32} step={1} value={parseInt(setting.fontSize)} onChange={(e) => {
+            <Slider trackColor={setting["--text-color"]}
+                    thumbColor={setting['--text-color']}
+                    showValue min={14} max={32} step={1} value={parseInt(setting.fontSize)} onChange={(e) => {
                 changeSetting('fontSize', e.target.value + 'px');
             }}/>
             <label>字体粗细</label>
-            <Slider showValue min={100} max={900} step={100} value={parseInt(setting['--text-font-weight'])}
+            <Slider trackColor={setting["--text-color"]}
+                    thumbColor={setting['--text-color']} showValue min={100} max={900} step={100} value={parseInt(setting['--text-font-weight'])}
                     onChange={(e) => {
                         changeSetting('--text-font-weight', e.target.value);
                     }}/>
 
             <label>行高</label>
-            <Slider showValue min={1} max={3} step={0.1} value={parseFloat(setting.lineHeight)} onChange={(e) => {
+            <Slider trackColor={setting["--text-color"]}
+                    thumbColor={setting['--text-color']} showValue min={1} max={3} step={0.1} value={parseFloat(setting.lineHeight)} onChange={(e) => {
                 changeSetting('lineHeight', e.target.value);
             }}/>
             <label>字间距</label>
-            <Slider showValue min={0} max={2} step={0.1} value={parseFloat(setting.letterSpacing)}
+            <Slider trackColor={setting["--text-color"]}
+                    thumbColor={setting['--text-color']} showValue min={0} max={2} step={0.1} value={parseFloat(setting.letterSpacing)}
                     onChange={(e) => {
                         changeSetting('letterSpacing', e.target.value + 'px');
                     }}/>
 
             <label>段间距</label>
-            <Slider showValue min={0} max={60} step={2} value={parseFloat(setting['--paragraph-spacing'])}
+            <Slider trackColor={setting["--text-color"]}
+                    thumbColor={setting['--text-color']} showValue min={0} max={60} step={2} value={parseFloat(setting['--paragraph-spacing'])}
                     onChange={(e) => {
                         changeSetting('--paragraph-spacing', e.target.value + 'px');
                     }}/>
@@ -61,18 +67,21 @@ const SettingPanel = () => {
             }}/>
 
             <label>标题字体大小</label>
-            <Slider showValue min={14} max={32} step={1} value={parseInt(setting['--title-font-size'])}
+            <Slider trackColor={setting["--text-color"]}
+                    thumbColor={setting['--text-color']} showValue min={14} max={32} step={1} value={parseInt(setting['--title-font-size'])}
                     onChange={(e) => {
                         changeSetting('--title-font-size', e.target.value + 'px');
                     }}/>
             <label>标题字体粗细</label>
-            <Slider showValue min={100} max={900} step={100} value={parseInt(setting['--title-font-weight'])}
+            <Slider trackColor={setting["--text-color"]}
+                    thumbColor={setting['--text-color']} showValue min={100} max={900} step={100} value={parseInt(setting['--title-font-weight'])}
                     onChange={(e) => {
                         changeSetting('--title-font-weight', e.target.value);
                     }}/>
 
             <label>内容宽度</label>
-            <Slider showValue min={20} max={100} step={1}
+            <Slider trackColor={setting["--text-color"]}
+                    thumbColor={setting['--text-color']} showValue min={20} max={100} step={1}
                     value={parseInt(setting['--content-width'].replace('%', ''))} onChange={(e) => {
                 changeSetting('--content-width', e.target.value + '%');
             }}/>
@@ -156,6 +165,9 @@ const ToolBar = memo(({novelId, volumeId, chapterId, setTitle, setContent, isFro
 
     const goPrev = useCallback(async () => {
         setIsSwitching(true);
+        setMenuVisible(false);
+        setSettingPanelVisible(false);
+
         return getPrevChapter(novelId, volumeId, chapterId).then((res) => {
             if (res) {
                 nav(`/novel/${novelId}/${res.volumeNumber}/${res.chapterNumber}`);
@@ -171,6 +183,9 @@ const ToolBar = memo(({novelId, volumeId, chapterId, setTitle, setContent, isFro
 
     const goNext = useCallback(async () => {
         setIsSwitching(true);
+        setMenuVisible(false);
+        setSettingPanelVisible(false);
+
         return getNextChapter(novelId, volumeId, chapterId).then((res) => {
             if (res) {
                 nav(`/novel/${novelId}/${res.volumeNumber}/${res.chapterNumber}`);
