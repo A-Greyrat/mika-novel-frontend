@@ -274,8 +274,6 @@ const NovelReader = () => {
         <div className="mika-novel-reader-root" style={{
             ...setting,
         }}>
-            <ToolBar novelId={novelId} volumeId={volumeId} chapterId={chapterId} setTitle={setTitle}
-                     setContent={setNovelContent} isFromRedirect={isFromRedirect}/>
             <div className="mika-novel-reader-content">
                 <h1>{title}</h1>
                 <div className="mika-novel-reader-divider"/>
@@ -297,6 +295,8 @@ const NovelReader = () => {
                     })}
                 </div>
             </div>
+            <ToolBar novelId={novelId} volumeId={volumeId} chapterId={chapterId} setTitle={setTitle}
+                     setContent={setNovelContent} isFromRedirect={isFromRedirect}/>
         </div>
     );
 }
