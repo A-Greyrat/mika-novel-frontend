@@ -36,7 +36,7 @@ const SearchPage = () => {
             setSearchResult(res.records);
             totalRef.current = res.total;
             const totalPage = Math.ceil(res.total / 10);
-            if (parseInt(page || '1') > totalPage) {
+            if (totalPage !== 0 && parseInt(page || '1') > totalPage) {
                 nav(`/search/${keyword}/${totalPage}`);
             } else if (parseInt(page || '1') < 1) {
                 nav(`/search/${keyword}/1`);
