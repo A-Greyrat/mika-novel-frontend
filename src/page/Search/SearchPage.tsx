@@ -36,17 +36,16 @@ const SearchPage = () => {
             setSearchResult(res.records);
             totalRef.current = res.total;
             const totalPage = Math.ceil(res.total / 10);
-            if (totalPage !== 0 && parseInt(page || '1') > totalPage) {
+            if (totalPage !== 0 && parseInt(p || '1') > totalPage) {
                 nav(`/search/${keyword}/${totalPage}`);
-            } else if (parseInt(page || '1') < 1) {
+            } else if (parseInt(p || '1') < 1) {
                 nav(`/search/${keyword}/1`);
             } else {
                 curRef.current = res.total > 10 ? 10 : res.total;
                 loading.current = false;
             }
         });
-    }, [keyword, nav, page]);
-
+    }, [keyword, nav, p, page]);
 
     if (loading.current) {
         return <div>
