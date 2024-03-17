@@ -4,6 +4,7 @@
   grid-area: novel-detail;
   width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
 
   @coverHeight: 270px;
   @coverMobileHeight: 180px;
@@ -23,11 +24,11 @@
         "novel-cover . novel-action";
   grid-template-rows: 42px 6px 16px 12px 24px 12px auto auto auto;
 
-  grid-template-columns: @coverWidth 20px auto;
+  grid-template-columns: @coverWidth 20px minmax(0, auto);
   height: @coverHeight + 12px * 2;
 
   @media (max-width: 768px) {
-    grid-template-columns: @coverMobileWidth 15px auto;
+    grid-template-columns: @coverMobileWidth 15px minmax(0, auto);
     height: @coverMobileHeight + 12px * 2;
     grid-template-areas:
         "novel-cover . novel-title"
@@ -133,6 +134,7 @@
     }
 
     grid-area: novel-tags;
+
     > span {
       color: @primary-color;
       border: 1px solid @primary-color;
@@ -182,9 +184,15 @@
     align-items: center;
     grid-area: novel-action;
     height: fit-content;
+    box-sizing: border-box;
+    width: 100%;
 
     :is(button) {
       white-space: nowrap;
+      @media (max-width: 768px) {
+        font-size: 0.85rem;
+        padding: 0.2rem 0.5rem;
+      }
     }
   }
 }

@@ -69,7 +69,8 @@
     }
   }
 
-  &:has(.mika-novel-header-search input[type="text"]:focus) {
+  &:has(.mika-novel-header-search input[type="text"]:focus),
+  &:has(.mika-novel-header-search input[type="text"]:not(:placeholder-shown)) {
     display: flex;
     justify-content: center;
 
