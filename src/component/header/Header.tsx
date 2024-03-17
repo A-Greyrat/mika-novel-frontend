@@ -52,7 +52,6 @@ const SearchSection = () => {
     const location = useLocation();
     const inputRef = useRef<HTMLInputElement>(null);
     const [dataSrc, setDataSrc] = React.useState<string[]>([]);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const _getSearchAutoComplete = useCallback(debounceAsync(async (keyword: string) => {
         if (!keyword) {
@@ -81,6 +80,7 @@ const SearchSection = () => {
             }} onOptionKeyDown={(item) => {
                 nav(`/search/${item}/1`);
             }} onSubmit={(item) => {
+                if (!item) return;
                 nav(`/search/${item}/1`);
             }} ref={inputRef}/>
         </div>
