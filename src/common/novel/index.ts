@@ -100,7 +100,7 @@ export const getSearchedNovels = async (keyword: string, page: number, pageSize:
     });
 }
 
-export const getSearchAutoComplete = async (keyword: string, num: number = 5): Promise<string[]> => {
+export const getSearchAutoComplete = async (keyword: string, num: number = 10): Promise<string[]> => {
     return httpGet<string[]>(`/search/suggestion?q=${keyword}&num=${num}`).then((res) => {
         return res.data || [];
     });

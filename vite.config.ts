@@ -1,7 +1,7 @@
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
 import {visualizer} from 'rollup-plugin-visualizer';
-import {autoComplete, Plugin as importToCDN} from 'vite-plugin-cdn-import';
+import {Plugin as importToCDN} from 'vite-plugin-cdn-import';
 import reactRefresh from '@vitejs/plugin-react-refresh';
 
 // https://vitejs.dev/config/
