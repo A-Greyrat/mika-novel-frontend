@@ -11,7 +11,7 @@ import {
 import {getReaderSetting, resetReaderSetting, setReaderSetting} from "../../common/setting";
 import {Button, Image, showMessage, Slider} from "../../component/mika-ui";
 import {useStore} from "../../common/mika-store";
-import LoadingPage from "../Loading/LoadingPage.tsx";
+import LoadingPage from "../Loading/LoadingPage";
 import {baseURL} from "../../common/axios";
 
 const SettingPanel = () => {
@@ -26,13 +26,13 @@ const SettingPanel = () => {
     return (
         <div className="mika-novel-reader-setting-panel">
             <label>字体大小</label>
-            <Slider trackColor={setting["--text-color"]}
+            <Slider trackColor={setting['--text-color']}
                     thumbColor={setting['--text-color']}
                     showValue min={14} max={32} step={1} value={parseInt(setting.fontSize)} onChange={(e) => {
                 changeSetting('fontSize', e.target.value + 'px');
             }}/>
             <label>字体粗细</label>
-            <Slider trackColor={setting["--text-color"]}
+            <Slider trackColor={setting['--text-color']}
                     thumbColor={setting['--text-color']} showValue min={100} max={900} step={100} value={parseInt(setting['--text-font-weight'])}
                     onChange={(e) => {
                         changeSetting('--text-font-weight', e.target.value);
