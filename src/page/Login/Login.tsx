@@ -1,4 +1,4 @@
-import {Button, Image} from "../../component/mika-ui";
+import {Button, Image, showModal} from "../../component/mika-ui";
 import "./Login.less";
 import {useTypePrint} from "../../common/hooks";
 import React, {useCallback, useEffect, useRef, useState} from "react";
@@ -198,7 +198,15 @@ export const SubmitButton = () => {
                 <Button disabled={disable} type="submit" styleType="primary" size="large"
                         onClick={loginCallback}>登录</Button>
                 <div>
-                    <Button styleType="link" size="medium">忘记密码</Button>
+                    <Button styleType="link" size="medium" onClick={e => {
+                        e.preventDefault();
+                        showModal({
+                            title: "忘记密码",
+                            content: "请联系管理员重置密码",
+                            closeOnClickMask: true,
+                            closeIcon: false,
+                        });
+                    }}>忘记密码</Button>
                     <Button styleType="link" size="medium" onClick={e => {
                         e.preventDefault();
                         nav("/register");
