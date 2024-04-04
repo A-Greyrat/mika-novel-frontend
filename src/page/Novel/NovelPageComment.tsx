@@ -34,7 +34,7 @@ type NovelPageCommentProps = {
         avatar: string;
     };
     reply: NovelPageCommentReply[];
-}
+};
 
 const NovelPageCommentBox = memo((props: NovelPageCommentProps & { novelId: string }) => {
     const [currentInputIndex, setCurrentInputIndex] = useStore('novel-page-current-input-index', -1);
@@ -136,7 +136,7 @@ const NovelPageCommentReply = (props: NovelPageCommentReply) => {
             </div>
         </div>
     );
-}
+};
 
 const NovelPageCommentReplyBox = (props: { reply?: NovelPageCommentReply[], id: string }) => {
     const [activePage, setActivePage] = useState(1);
@@ -154,11 +154,10 @@ const NovelPageCommentReplyBox = (props: { reply?: NovelPageCommentReply[], id: 
             {props.reply && props.reply.length > 5 &&
                 <Pagination style={{
                     width: "fit-content",
-                }}
-                            onChange={(page) => setActivePage(page)} pageNum={Math.ceil(props.reply.length / 5)}/>}
+                }} onChange={(page) => setActivePage(page)} pageNum={Math.ceil(props.reply.length / 5)}/>}
         </div>
     );
-}
+};
 
 const findCommentItem = (comment: NovelPageCommentProps[], toId: string) => {
     for (let i = 0; i < comment.length; i++) {
@@ -180,7 +179,7 @@ const findCommentItem = (comment: NovelPageCommentProps[], toId: string) => {
         }
     }
     return undefined;
-}
+};
 
 const NovelPageCommentInput = memo((props: {
     toId: string,

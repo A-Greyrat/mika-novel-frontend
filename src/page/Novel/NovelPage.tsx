@@ -64,7 +64,7 @@ const Loading = memo(() => {
         </div>
         <Footer/>
     </div>);
-})
+});
 
 const NovelPage = () => {
     const {novelId} = useParams();
@@ -117,6 +117,6 @@ const NovelPage = () => {
             <Footer/>
         </div>
     )
-}
+};
 
 export default NovelPage;
