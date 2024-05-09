@@ -1,10 +1,10 @@
 import './ReadingNovelList.less';
-import {Image} from "../../component/mika-ui";
+import {Image} from  "@natsume_shiki/mika-ui";
 import {memo, useEffect} from "react";
 import {getFavoriteList, NovelInfo} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
 import {baseURL} from "../../common/axios";
-import {useStore} from "../../common/mika-store";
+import {useStore} from "mika-store";
 
 const ReadingNovelListItem = (props: NovelInfo) => {
     const nav = useNavigate();

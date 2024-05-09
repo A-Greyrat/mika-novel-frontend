@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://118.31.42.183/api/:path*"
+      "destination": "https://fast.abdecd.xyz/api/:path*"
     },
     {
       "source": "/:path*",

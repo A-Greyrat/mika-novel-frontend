@@ -1,7 +1,7 @@
 import './Space.less';
 import Header from "../../component/header/Header";
 import Footer from "../../component/footer/Footer";
-import {Button, Image, Pagination, TabList} from "../../component/mika-ui";
+import {Button, Image, Pagination, TabList} from "@natsume_shiki/mika-ui";
 import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {isUserLoggedIn, useUser} from "../../common/user";
 import {

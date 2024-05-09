@@ -1,5 +1,5 @@
 import {memo, useState} from "react";
-import {Skeleton, TabList} from "../../component/mika-ui";
+import {Skeleton, TabList} from "@natsume_shiki/mika-ui";
 import './RankList.less';
 import {NovelInfo} from "../../common/novel";
 import {useNavigate} from "react-router-dom";

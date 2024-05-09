@@ -1,11 +1,10 @@
 import './Header.less';
 import React, {memo, useCallback, useEffect, useRef, useState} from "react";
 import {isUserLoggedIn, logout, useUser} from "../../common/user";
-import {AutoComplete, Button, Dropdown, Image, withLockTime} from "../mika-ui";
+import {AutoComplete, Button, debounceAsync, Dropdown, Image, withLockTime} from "@natsume_shiki/mika-ui";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getFavoriteList, getHistoryList, getSearchAutoComplete, HistoryItem, NovelInfo} from "../../common/novel";
 import {baseURL} from "../../common/axios";
-import {debounceAsync} from "../mika-ui";
 
 const UserSection = () => {
     const [avatar] = useState("/defaultAvatar.webp");
@@ -73,7 +72,7 @@ const SearchSection = () => {
     return (
         <div className="mika-novel-header-search">
             <AutoComplete placeholder="搜索" size='large' type='filled'
-                dataSrc={dataSrc} onValueChange={(key) => {
+                          dataSrc={dataSrc} onValueChange={(key) => {
                 return _getSearchAutoComplete(key);
             }} onOptionClick={(item) => {
                 nav(`/search/${item}/1`);

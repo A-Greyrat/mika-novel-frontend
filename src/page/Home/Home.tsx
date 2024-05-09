@@ -1,6 +1,6 @@
 import Header from "../../component/header/Header";
 import Footer from "../../component/footer/Footer";
-import {Carousel} from "../../component/mika-ui";
+import {Carousel} from "@natsume_shiki/mika-ui";
 import NovelCard from "../../component/NovelCard/NovelCard";
 import './Home.less';
 import ReadingNovelList from "./ReadingNovelList";
@@ -9,7 +9,7 @@ import {getCarouselNovelList, getRankList, NovelInfo} from "../../common/novel/"
 import {useEffect} from "react";
 import RankList from "./RankList";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
-import {useStore} from "../../common/mika-store";
+import {useStore} from "mika-store";
 
 const Home = () => {
     const [carouselList, setCarouselList] = useStore<NovelInfo[]>(`mika-novel-home-carousel-list`, []);

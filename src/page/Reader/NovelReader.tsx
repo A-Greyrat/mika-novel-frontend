@@ -9,8 +9,8 @@ import {
     NovelPageVolumeInfo
 } from "../../common/novel";
 import {getReaderSetting, resetReaderSetting, setReaderSetting} from "../../common/setting";
-import {Button, Image, showMessage, Slider} from "../../component/mika-ui";
-import {useStore} from "../../common/mika-store";
+import {Button, Image, showMessage, Slider}  from "@natsume_shiki/mika-ui";
+import {useStore} from "mika-store";
 import LoadingPage from "../Loading/LoadingPage";
 import {baseURL} from "../../common/axios";
 
@@ -22,7 +22,6 @@ const SettingPanel = () => {
         setReaderSetting({...setting, [key]: value});
     }, [setting, setSetting]);
 
-    console.log(setting)
     return (
         <div className="mika-novel-reader-setting-panel">
             <label>字体大小</label>
@@ -30,32 +29,32 @@ const SettingPanel = () => {
                     thumbColor={setting['--text-color']}
                     showValue min={14} max={32} step={1} value={parseInt(setting.fontSize)} onChange={(e) => {
                 changeSetting('fontSize', e.target.value + 'px');
-            }}/>
+            }} orient={"horizontal"}/>
             <label>字体粗细</label>
             <Slider trackColor={setting['--text-color']}
                     thumbColor={setting['--text-color']} showValue min={100} max={900} step={100} value={parseInt(setting['--text-font-weight'])}
                     onChange={(e) => {
                         changeSetting('--text-font-weight', e.target.value);
-                    }}/>
+                    }} orient={"horizontal"}/>
 
             <label>行高</label>
             <Slider trackColor={setting["--text-color"]}
                     thumbColor={setting['--text-color']} showValue min={1} max={3} step={0.1} value={parseFloat(setting.lineHeight)} onChange={(e) => {
                 changeSetting('lineHeight', e.target.value);
-            }}/>
+            }} orient={"horizontal"}/>
             <label>字间距</label>
             <Slider trackColor={setting["--text-color"]}
                     thumbColor={setting['--text-color']} showValue min={0} max={2} step={0.1} value={parseFloat(setting.letterSpacing)}
                     onChange={(e) => {
                         changeSetting('letterSpacing', e.target.value + 'px');
-                    }}/>
+                    }} orient={"horizontal"}/>
 
             <label>段间距</label>
             <Slider trackColor={setting["--text-color"]}
                     thumbColor={setting['--text-color']} showValue min={0} max={60} step={2} value={parseFloat(setting['--paragraph-spacing'])}
                     onChange={(e) => {
                         changeSetting('--paragraph-spacing', e.target.value + 'px');
-                    }}/>
+                    }} orient={"horizontal"}/>
 
             <label>背景颜色</label>
             <input type="color" value={setting.backgroundColor} onChange={(e) => {
@@ -71,20 +70,20 @@ const SettingPanel = () => {
                     thumbColor={setting['--text-color']} showValue min={14} max={32} step={1} value={parseInt(setting['--title-font-size'])}
                     onChange={(e) => {
                         changeSetting('--title-font-size', e.target.value + 'px');
-                    }}/>
+                    }} orient={"horizontal"}/>
             <label>标题字体粗细</label>
             <Slider trackColor={setting["--text-color"]}
                     thumbColor={setting['--text-color']} showValue min={100} max={900} step={100} value={parseInt(setting['--title-font-weight'])}
                     onChange={(e) => {
                         changeSetting('--title-font-weight', e.target.value);
-                    }}/>
+                    }} orient={"horizontal"}/>
 
             <label>内容宽度</label>
             <Slider trackColor={setting["--text-color"]}
                     thumbColor={setting['--text-color']} showValue min={20} max={100} step={1}
                     value={parseInt(setting['--content-width'].replace('%', ''))} onChange={(e) => {
                 changeSetting('--content-width', e.target.value + '%');
-            }}/>
+            }} orient={"horizontal"}/>
 
             <label>内容背景颜色</label>
             <input type="color" value={setting['--content-background-color']} onChange={(e) => {

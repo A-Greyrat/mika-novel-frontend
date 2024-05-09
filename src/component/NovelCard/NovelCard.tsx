@@ -1,5 +1,5 @@
 import './NovelCard.less';
-import {Image} from "../../component/mika-ui";
+import {Image} from "@natsume_shiki/mika-ui";
 import React, {memo, useMemo} from "react";
 import {useNavigate} from "react-router-dom";
 import {NovelInfo} from "../../common/novel";

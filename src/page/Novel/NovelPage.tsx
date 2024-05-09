@@ -20,8 +20,8 @@ import NovelPageDesc from "./NovelPageDesc";
 import NovelPageVolume from "./NovelPageVolume";
 import NovelPageComment from "./NovelPageComment";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard";
-import {Skeleton} from "../../component/mika-ui";
-import {useStore} from "../../common/mika-store";
+import {Skeleton} from "@natsume_shiki/mika-ui";
+import {useStore} from "mika-store";
 
 
 const Loading = memo(() => {

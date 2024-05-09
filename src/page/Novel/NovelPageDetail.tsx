@@ -1,9 +1,9 @@
-import {Button, Image, showMessage} from "../../component/mika-ui";
+import {Button, Image, showMessage} from "@natsume_shiki/mika-ui";
 import "./NovelPageDetail.less";
 import {memo, useEffect, useState} from "react";
 import {addFavorite, getIsFavorite, NovelInfo, removeFavorite} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
-import {useStore} from "../../common/mika-store";
+import {useStore} from "mika-store";
 import {baseURL} from "../../common/axios";
 
 const AuthorIcon = memo(() => {

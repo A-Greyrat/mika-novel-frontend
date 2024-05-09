@@ -1,9 +1,9 @@
 import './NovelPageVolume.less';
-import {Button} from "../../component/mika-ui";
+import {Button}  from "@natsume_shiki/mika-ui";
 import {getHistory, NovelPageVolumeInfo} from "../../common/novel";
 import {useNavigate} from 'react-router-dom';
 import {useEffect} from "react";
-import {useStore} from "../../common/mika-store";
+import {useStore} from "mika-store";
 
 const NovelPageVolume = ({nid, volumeData}: { nid: string, volumeData: NovelPageVolumeInfo[] }) => {
     const nav = useNavigate();

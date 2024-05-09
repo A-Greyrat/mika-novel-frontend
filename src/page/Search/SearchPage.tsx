@@ -5,7 +5,7 @@ import {getSearchedNovels, NovelInfo} from "../../common/novel";
 import Header from "../../component/header/Header";
 import Footer from "../../component/footer/Footer";
 import NovelCard from "../../component/NovelCard/NovelCard";
-import {isMobile, Pagination} from "../../component/mika-ui";
+import {isMobile, Pagination} from "@natsume_shiki/mika-ui";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
 
 const SearchPage = () => {

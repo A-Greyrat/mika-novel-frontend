@@ -1,5 +1,5 @@
 import './NovelPageRecommend.less';
-import {Image} from "../../component/mika-ui";
+import {Image}  from "@natsume_shiki/mika-ui";
 import {NovelInfo} from "../../common/novel";
 import {useNavigate} from "react-router-dom";
 import {baseURL} from "../../common/axios";

@@ -1,9 +1,8 @@
 import './NovelPageComment.less';
-import {Button, Image, Pagination, showMessage, withLockTime} from "../../component/mika-ui";
-import {useStore} from "../../common/mika-store";
+import {Button, Image, InfinityList, Pagination, showMessage, withLockTime} from "@natsume_shiki/mika-ui";
+import {useStore} from "mika-store";
 import {memo, useCallback, useRef, useState} from "react";
 import {addComment, deleteComment, getComments} from "../../common/novel";
-import InfinityList from "../../component/mika-ui/InfinityList/InfinityList.tsx";
 import {useUser} from "../../common/user";
 
 type NovelPageCommentReply = {

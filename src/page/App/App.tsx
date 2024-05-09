@@ -6,7 +6,7 @@ const Home = React.lazy(() => import('../Home/Home'));
 const Login = React.lazy(() => import('../Login/Login'));
 const Register = React.lazy(() => import('../Login/Register'));
 const $404 = React.lazy(() => import('../404/404'));
-const NovelPage = React.lazy(() => import('../Novel/NovelPage'));
+const NovelPage  = React.lazy(() => import('../Novel/NovelPage'));
 const NovelReader = React.lazy(() => import('../Reader/NovelReader'));
 const Test = React.lazy(() => import('../Test/Test'));
 const SearchPage = React.lazy(() => import('../Search/SearchPage'));

@@ -2,10 +2,9 @@ import NovelCard from "../../component/NovelCard/NovelCard";
 import './RecommendList.less';
 import {memo, useCallback} from "react";
 import {getRecommendNovelList, NovelInfo} from "../../common/novel";
-import {withLockTime} from "../../component/mika-ui";
+import {InfinityList, withLockTime} from "@natsume_shiki/mika-ui";
 import SkeletonCard from "../../component/SkeletonCard/SkeletonCard.tsx";
-import InfinityList from "../../component/mika-ui/InfinityList/InfinityList.tsx";
-import {useStore} from "../../common/mika-store";
+import {useStore} from "mika-store";
 
 const Loading = memo(() => {
     return (

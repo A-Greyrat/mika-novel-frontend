@@ -1,11 +1,11 @@
-import {Button, Image, showModal} from "../../component/mika-ui";
+import {Button, Image, showModal} from "@natsume_shiki/mika-ui";
 import "./Login.less";
 import {useTypePrint} from "../../common/hooks";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {getCaptcha, isUserLoggedIn, login} from "../../common/user";
 import {throttle} from "../../common/utils";
 import {useNavigate} from "react-router-dom";
-import {useStore} from "../../common/mika-store";
+import {useStore} from "mika-store";
 
 const text =
     "無敵の笑顔で荒らすメディア\n" +
@@ -133,7 +133,7 @@ export const Captcha = () => {
     const [_resetCaptchaCallback, _setResetCaptchaCallback] = useStore<() => unknown>('reset-captcha', resetCaptcha);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const renewCaptcha = useCallback(throttle(resetCaptcha, 1000), [resetCaptcha]);
+    const renewCaptcha: (arg: unknown) => void = useCallback(throttle(resetCaptcha, 1000), [resetCaptcha]);
 
     useEffect(() => {
         document.title = "登录";
