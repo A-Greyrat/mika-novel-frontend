@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://abdecd.xyz/novel/:path*"
+      "destination": "https://m3tr.top/novel/:path*"
     },
     {
       "source": "/:path*",
